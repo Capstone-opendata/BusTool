@@ -1,5 +1,6 @@
 package capstone2015project.bustool;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -8,8 +9,24 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.util.concurrent.TimeUnit;
 
 public class BusStopInfoActivity extends AppCompatActivity {
+
+    HttpURLConnection urlConnection;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,4 +66,59 @@ public class BusStopInfoActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    public void GetStopData(View view)
+    {
+        System.out.println("Get Data button was pressed");
+
+        String url = "http://data.foli.fi/siri/sm/870";
+        new ProcessJSON().execute(url);
+    }
+
+
+    private class ProcessJSON extends AsyncTask<String, Void, String> {
+        protected String doInBackground(String... strings){
+            String stream = null;
+            String urlString = strings[0];
+
+            HTTPDataHandler hh = new HTTPDataHandler();
+            stream = hh.GetHTTPData(urlString);
+
+            // Return the data from specified url
+            return stream;
+        }
+
+        protected void onPostExecute(String stream){
+            TextView tv = (TextView) findViewById(R.id.textView3);
+            tv.setText("ETA of the next bus:\n");
+
+            if(stream !=null){
+                try{
+                    // Get the full HTTP Data as JSONObject
+                    JSONObject reader= new JSONObject(stream);
+
+                    // Get the JSONArray busses
+                    JSONArray bussesArray = reader.getJSONArray("result");
+                    // Get the busses array first JSONObject
+                    JSONObject busses_object_0 = bussesArray.getJSONObject(0);
+                    String busses_0_expectedTime = busses_object_0.getString("expectedarrivaltime");
+
+                    long timestamp = System.currentTimeMillis();
+                    long eta = Long.parseLong(busses_0_expectedTime)*1000 - timestamp;
+
+                    int seconds = (int) (eta / 1000) % 60 ;
+                    int minutes = (int) ((eta / (1000*60)) % 60);
+
+                    String etaString = minutes+"min " +seconds+"sec";
+
+                    tv.setText(tv.getText()+ "\n"+etaString);
+
+                }catch(JSONException e){
+                    e.printStackTrace();
+                }
+
+            } // if statement end
+        } // onPostExecute() end
+    } // ProcessJSON class end
+
 }
