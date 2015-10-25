@@ -9,6 +9,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import org.json.JSONArray;
@@ -69,20 +70,19 @@ public class BusStopInfoActivity extends AppCompatActivity {
 
     public void GetStopData(View view)
     {
-        System.out.println("Get Data button was pressed");
-
-        String url = "http://data.foli.fi/siri/sm/870";
+        EditText userInput = (EditText) findViewById(R.id.editText);
+        String url = "http://data.foli.fi/siri/sm/"+userInput.getText();
         new ProcessJSON().execute(url);
     }
 
 
     private class ProcessJSON extends AsyncTask<String, Void, String> {
         protected String doInBackground(String... strings){
-            String stream = null;
+            //String stream = null;
             String urlString = strings[0];
 
             HTTPDataHandler hh = new HTTPDataHandler();
-            stream = hh.GetHTTPData(urlString);
+            String stream = hh.GetHTTPData(urlString);
 
             // Return the data from specified url
             return stream;
@@ -90,7 +90,7 @@ public class BusStopInfoActivity extends AppCompatActivity {
 
         protected void onPostExecute(String stream){
             TextView tv = (TextView) findViewById(R.id.textView3);
-            tv.setText("ETA of the next bus:\n");
+            tv.setText("Next incoming busses:\n");
 
             if(stream !=null){
                 try{
@@ -99,19 +99,31 @@ public class BusStopInfoActivity extends AppCompatActivity {
 
                     // Get the JSONArray busses
                     JSONArray bussesArray = reader.getJSONArray("result");
-                    // Get the busses array first JSONObject
-                    JSONObject busses_object_0 = bussesArray.getJSONObject(0);
-                    String busses_0_expectedTime = busses_object_0.getString("expectedarrivaltime");
 
-                    long timestamp = System.currentTimeMillis();
-                    long eta = Long.parseLong(busses_0_expectedTime)*1000 - timestamp;
+                    for(int i = 0; i<3; i++)
+                    {
+                        if(i<bussesArray.length())
+                        {
+                            // Get the busses array first JSONObject
+                            JSONObject busses_object_0 = bussesArray.getJSONObject(i);
+                            String busses_0_lineNumber = busses_object_0.getString("lineref");
+                            String busses_0_lineDestination = busses_object_0.getString("destinationdisplay");
+                            String busses_0_expectedTime = busses_object_0.getString("expectedarrivaltime");
 
-                    int seconds = (int) (eta / 1000) % 60 ;
-                    int minutes = (int) ((eta / (1000*60)) % 60);
+                            long timestamp = System.currentTimeMillis();
+                            long eta = Long.parseLong(busses_0_expectedTime)*1000 - timestamp;
 
-                    String etaString = minutes+"min " +seconds+"sec";
+                            int seconds = (int) (eta / 1000) % 60 ;
+                            int minutes = (int) ((eta / (1000*60)) % 60);
 
-                    tv.setText(tv.getText()+ "\n"+etaString);
+                            String etaString = minutes+"m " +seconds+"s";
+
+                            tv.setText(tv.getText()+"\nLine "+busses_0_lineNumber+" "+busses_0_lineDestination+ " "+etaString);
+                        }
+
+                    }
+
+
 
                 }catch(JSONException e){
                     e.printStackTrace();
