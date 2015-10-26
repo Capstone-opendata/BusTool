@@ -1,5 +1,6 @@
 package capstone2015project.bustool;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -73,6 +74,12 @@ public class BusStopInfoActivity extends AppCompatActivity {
         EditText userInput = (EditText) findViewById(R.id.editText);
         String url = "http://data.foli.fi/siri/sm/"+userInput.getText();
         new ProcessJSON().execute(url);
+    }
+
+    public void GoToToolSelectionActivity(View view)
+    {
+        Intent i = new Intent(BusStopInfoActivity.this, StopToolSelectionActivity.class);
+        startActivity(i);
     }
 
 
