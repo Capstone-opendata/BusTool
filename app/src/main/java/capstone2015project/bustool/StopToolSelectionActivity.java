@@ -1,5 +1,6 @@
 package capstone2015project.bustool;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -26,9 +27,11 @@ public class StopToolSelectionActivity extends AppCompatActivity {
         });
     }
 
-    public void GoToListSelectActivity(View view)
+    //changes the active activity to NearbyStopsActivity
+    public void GoToNearbyStopsActivity(View view)
     {
-
+        Intent i = new Intent(StopToolSelectionActivity.this, NearbyStopsActivity.class);
+        startActivity(i);
     }
 
 }

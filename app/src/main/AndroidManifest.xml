@@ -25,6 +25,11 @@
             android:label="@string/title_activity_stop_tool_selection"
             android:theme="@style/AppTheme.NoActionBar" >
         </activity>
+        <activity
+            android:name=".NearbyStopsActivity"
+            android:label="@string/title_activity_nearby_stops"
+            android:theme="@style/AppTheme.NoActionBar" >
+        </activity>
     </application>
 
 </manifest>

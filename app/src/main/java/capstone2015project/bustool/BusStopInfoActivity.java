@@ -45,6 +45,15 @@ public class BusStopInfoActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+
+        //getting the passed bus number
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            String busNumValue = extras.getString("busStopNumber");
+            EditText userInput = (EditText) findViewById(R.id.editText);
+            userInput.setText(busNumValue);
+        }
+
     }
 
     @Override

@@ -31,28 +31,20 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Select using lines"
-        android:id="@+id/button2"
-        android:layout_marginTop="29dp"
-        android:layout_below="@+id/textView4"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:text="Select using nearby stops"
         android:id="@+id/button3"
-        android:layout_above="@+id/button4"
+        android:layout_below="@+id/textView4"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="49dp"
+        android:onClick="GoToNearbyStopsActivity" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Select by using map"
         android:id="@+id/button4"
-        android:layout_above="@+id/button5"
+        android:layout_below="@+id/button3"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
@@ -61,7 +53,7 @@
         android:layout_height="wrap_content"
         android:text="Select by choosing a favourite"
         android:id="@+id/button5"
-        android:layout_centerVertical="true"
+        android:layout_below="@+id/button4"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
