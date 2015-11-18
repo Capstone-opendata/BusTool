@@ -9,25 +9,15 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:showIn="@layout/activity_bus_stop_info" tools:context=".BusStopInfoActivity">
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="GET INFO"
-        android:id="@+id/button"
-        android:clickable="true"
-        android:onClick="GetStopData"
-        android:layout_below="@+id/editText"
-        android:layout_centerHorizontal="true" />
-
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:id="@+id/textView3"
         android:layout_marginTop="27dp"
-        android:layout_below="@+id/button"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/editText" />
 
     <EditText
         android:layout_width="wrap_content"
