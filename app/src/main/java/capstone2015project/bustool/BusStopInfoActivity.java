@@ -32,6 +32,7 @@ import java.util.concurrent.TimeUnit;
 public class BusStopInfoActivity extends AppCompatActivity {
 
     HttpURLConnection urlConnection;
+    Timer timer;
     String busNumber;
 
     @Override
@@ -62,9 +63,18 @@ public class BusStopInfoActivity extends AppCompatActivity {
             userInput.setText(busNumValue);
         }
 
+
+
+    }
+
+    @Override
+    protected void onStart()
+    {
+        super.onStart();
+
         //start the timed refresh for getting new stop info
         final Handler timerHandler = new Handler();
-        Timer timer = new Timer();
+        timer = new Timer();
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
@@ -74,8 +84,16 @@ public class BusStopInfoActivity extends AppCompatActivity {
                     }
                 });
             }
-        },0, 1000*60);
+        }, 0, 1000 * 60);
+    }
 
+    @Override
+    protected void onStop()
+    {
+        super.onStop();
+
+        //stopping the timed refresh for bus stop info
+        timer.cancel();
     }
 
     @Override
