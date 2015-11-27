@@ -1,9 +1,9 @@
 package capstone2015project.bustool;
 
 import android.content.Intent;
+import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.view.View;
@@ -15,28 +15,27 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.EditText;
-import android.widget.TextView;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.net.HttpURLConnection;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.ArrayList;
 
-public class ResultActivity extends AppCompatActivity
+public class NearbyActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    HttpURLConnection urlConnection;
-    Timer timer;
-    String busNumber;
+    ListView stopsListView ;
+    Location myLocation;
+    ArrayList<String> stopList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_result);
+        setContentView(R.layout.activity_nearby);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -58,17 +57,17 @@ public class ResultActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        //getting the passed bus number
-        Bundle extras = getIntent().getExtras();
-        if (extras != null) {
-            String busNumValue = extras.getString("busStopNumber");
+        //hard coding myLocation for testing
+        myLocation = new Location("MyLoc");
+        myLocation.setLatitude(60.4491652);
+        myLocation.setLongitude(22.2933068);
 
-            busNumber = busNumValue;
-
-            //redundant now
-            EditText userInput = (EditText) findViewById(R.id.editText);
-            userInput.setText(busNumValue);
-        }
+        // Get ListView object from xml
+        stopsListView = (ListView) findViewById(R.id.listView);
+        stopList = new ArrayList<String>();
+        //location of the stops data
+        String url = "http://data.foli.fi/gtfs/v0/stops";
+        new ProcessJSON().execute(url);
     }
 
     @Override
@@ -84,7 +83,7 @@ public class ResultActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.result, menu);
+        getMenuInflater().inflate(R.menu.nearby, menu);
         return true;
     }
 
@@ -133,50 +132,8 @@ public class ResultActivity extends AppCompatActivity
         return true;
     }
 
-    @Override
-    protected void onStart()
-    {
-        super.onStart();
 
-        //start the timed refresh for getting new stop info
-        final Handler timerHandler = new Handler();
-        timer = new Timer();
-        timer.scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-                timerHandler.post(new Runnable() {
-                    public void run() {
-                        GetStopData();
-                    }
-                });
-            }
-        }, 0, 1000 * 60);
-    }
-
-    @Override
-    protected void onStop()
-    {
-        super.onStop();
-
-        //stopping the timed refresh for bus stop info
-        timer.cancel();
-    }
-
-    //starts the stop data retrieval from foli
-    public void GetStopData()
-    {
-        String url = "http://data.foli.fi/siri/sm/"+busNumber;
-        //EditText userInput = (EditText) findViewById(R.id.editText);
-        //String url = "http://data.foli.fi/siri/sm/"+userInput.getText();
-        new ProcessJSON().execute(url);
-    }
-
-    public void GoToToolSelectionActivity(View view)
-    {
-        Intent i = new Intent(this, StopToolSelectionActivity.class);
-        startActivity(i);
-    }
-
+    //this class will handle processing the incoming json data
     private class ProcessJSON extends AsyncTask<String, Void, String> {
         protected String doInBackground(String... strings){
             //String stream = null;
@@ -190,45 +147,71 @@ public class ResultActivity extends AppCompatActivity
         }
 
         protected void onPostExecute(String stream){
-            TextView tv = (TextView) findViewById(R.id.textView3);
-            tv.setText("Next incoming busses:\n");
+
 
             if(stream !=null){
                 try{
-                    // Get the full HTTP Data as JSONObject
-                    JSONObject reader= new JSONObject(stream);
 
-                    // Get the JSONArray busses
-                    JSONArray bussesArray = reader.getJSONArray("result");
+                    JSONObject stopsObject = new JSONObject(stream);
+                    // Get the JSONArray stops
+                    JSONArray stopsArray = stopsObject.toJSONArray(stopsObject.names());
 
-                    for(int i = 0; i<3; i++)
+                    Location stopLocation = new Location("StopLoc");
+
+                    for(int i = 0; i<stopsArray.length(); i++)
                     {
-                        if(i<bussesArray.length())
+                        JSONObject stop = stopsArray.getJSONObject(i);
+
+                        stopLocation.setLatitude(Double.parseDouble(stop.getString("stop_lat")));
+                        stopLocation.setLongitude(Double.parseDouble(stop.getString("stop_lon")));
+                        float distance = myLocation.distanceTo(stopLocation);
+
+                        //System.out.println("DISTANCE "+ distance);
+                        //using hard coded distance filter of 500m
+                        if(distance <= 500)
                         {
-                            // Get the busses array first JSONObject
-                            JSONObject busses_object_0 = bussesArray.getJSONObject(i);
-                            String busses_0_lineNumber = busses_object_0.getString("lineref");
-                            String busses_0_lineDestination = busses_object_0.getString("destinationdisplay");
-                            String busses_0_expectedTime = busses_object_0.getString("expectedarrivaltime");
-
-                            long timestamp = System.currentTimeMillis();
-                            long eta = Long.parseLong(busses_0_expectedTime)*1000 - timestamp;
-
-                            int seconds = (int) (eta / 1000) % 60 ;
-                            int minutes = (int) ((eta / (1000*60)) % 60);
-
-                            String etaString = minutes+"m " +seconds+"s";
-
-                            tv.setText(tv.getText()+"\nLine "+busses_0_lineNumber+" "+busses_0_lineDestination+ " "+etaString);
+                            String stopNumber = (String)stopsObject.names().get(i);
+                            String stopName = stop.getString("stop_name");
+                            String stopDistance = ""+Math.round(distance);
+                            stopList.add(stopNumber + " " + stopName + " " + stopDistance + "m");
+                            //System.out.println("STOPLIST SIZE "+ stopList.size());
                         }
 
                     }
 
-
-
                 }catch(JSONException e){
                     e.printStackTrace();
                 }
+
+                //Collections.sort(stopList);
+                //Collections.reverse(stopList);
+                String[] values = stopList.toArray(new String[0]);
+                //System.out.println("VALUES LENGTH "+values.length);
+
+                ArrayAdapter<String> adapter = new ArrayAdapter<String>(NearbyActivity.this,
+                        android.R.layout.simple_list_item_1, android.R.id.text1, values);
+
+
+                // Assign adapter to ListView
+                stopsListView.setAdapter(adapter);
+
+                // ListView Item Click Listener
+                stopsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view,
+                                            int position, long id) {
+                        Intent i = new Intent(getApplicationContext(), ResultActivity.class);
+
+                        String numberString = (String) stopsListView.getItemAtPosition(position);
+                        String arr[] = numberString.split(" ", 2);
+
+                        i.putExtra("busStopNumber",(String) arr[0]);
+                        startActivity(i);
+
+                    }
+
+                });
 
             } // if statement end
         } // onPostExecute() end

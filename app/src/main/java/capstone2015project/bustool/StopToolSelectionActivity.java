@@ -51,7 +51,7 @@ public class StopToolSelectionActivity extends AppCompatActivity {
     //changes the active activity to NearbyStopsActivity
     public void GoToNearbyStopsActivity(View view)
     {
-        Intent i = new Intent(StopToolSelectionActivity.this, NearbyStopsActivity.class);
+        Intent i = new Intent(StopToolSelectionActivity.this, NearbyActivity.class);
         startActivity(i);
     }
 
