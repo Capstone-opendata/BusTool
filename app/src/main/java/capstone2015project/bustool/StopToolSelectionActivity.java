@@ -36,7 +36,7 @@ public class StopToolSelectionActivity extends AppCompatActivity {
                     //...
                     // Perform your action on key press here
                     // ...
-                    Intent i = new Intent(getApplicationContext(), BusStopInfoActivity.class);
+                    Intent i = new Intent(getApplicationContext(), ResultActivity.class);
                     String numberString = userInput.getText().toString();
 
                     i.putExtra("busStopNumber", numberString);
