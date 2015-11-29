@@ -1,11 +1,14 @@
 package capstone2015project.bustool;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.util.TypedValue;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -228,14 +231,36 @@ public class ResultActivity extends AppCompatActivity
 
                             // using row plus 1 means that we dont mess with the title row
                             TableRow row = (TableRow)table.getChildAt(i+1);
+
                             TextView tvLine = (TextView)row.getChildAt(0);  //the first column of this row
                             TextView tvDest = (TextView)row.getChildAt(1);  //the second
                             TextView tvEta = (TextView)row.getChildAt(2);   //the third
 
+
                             // setting the text data in the table cells
                             tvLine.setText(busses_0_lineNumber);
+
+                            //applying styles on first column
+                            tvLine.setTypeface(Typeface.SANS_SERIF, Typeface.BOLD);
+                            tvLine.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
+                            tvLine.setTextColor(Color.parseColor("#FFFFFF"));
+                            tvLine.setBackgroundResource(R.drawable.ic_bus_bg);
+                            tvLine.setPadding(20, 15, 0, 0);
+                            tvLine.setHeight(70);
+                            tvLine.setWidth(70);
+
+                            //trim the string destination
                             tvDest.setText(busses_0_lineDestination);
+                            //second column
+                            tvDest.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
+                            tvDest.setMinWidth(450);
+                            tvDest.setPadding(25, 0, 25, 0);
+
                             tvEta.setText(etaString);
+                            //third column
+                            tvEta.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
+                            tvEta.setMinWidth(250);
+
                         }
 
                     }
