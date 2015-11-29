@@ -39,7 +39,7 @@ public class ResultActivity extends AppCompatActivity
         setContentView(R.layout.activity_result);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
+/*
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -48,7 +48,7 @@ public class ResultActivity extends AppCompatActivity
                         .setAction("Action", null).show();
             }
         });
-
+*/
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -121,11 +121,11 @@ public class ResultActivity extends AppCompatActivity
         } else if (id == R.id.nav_map) {
 
         } else if (id == R.id.nav_favorites) {
-
+/*
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {
-
+*/
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -191,16 +191,17 @@ public class ResultActivity extends AppCompatActivity
 
         protected void onPostExecute(String stream){
             TextView tv = (TextView) findViewById(R.id.textView3);
-            tv.setText("Next incoming busses:\n");
+            tv.setText("");
 
             if(stream !=null){
                 try{
                     // Get the full HTTP Data as JSONObject
                     JSONObject reader= new JSONObject(stream);
-
+                    //tv.setText("."+reader+".");
                     // Get the JSONArray busses
                     JSONArray bussesArray = reader.getJSONArray("result");
 
+                    // using i<3 means that only 3 next busses will be displayed
                     for(int i = 0; i<3; i++)
                     {
                         if(i<bussesArray.length())

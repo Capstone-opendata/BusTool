@@ -18,7 +18,7 @@ public class StopToolSelectionActivity extends AppCompatActivity {
         setContentView(R.layout.activity_stop_tool_selection);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
+/*
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -27,7 +27,7 @@ public class StopToolSelectionActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
-
+*/
         final EditText userInput = (EditText) findViewById(R.id.editText_busID);
         userInput.setOnKeyListener(new View.OnKeyListener() {
             public boolean onKey(View view, int keyCode, KeyEvent keyevent) {
