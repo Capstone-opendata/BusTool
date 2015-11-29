@@ -1,11 +1,14 @@
 package capstone2015project.bustool;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.util.TypedValue;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -41,7 +44,7 @@ public class ResultActivity extends AppCompatActivity
         setContentView(R.layout.activity_result);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-/***
+/*
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -235,7 +238,7 @@ public class ResultActivity extends AppCompatActivity
                             // setting the text data in the table cells
                             tvLine.setText(busses_0_lineNumber);
 
-			    //applying styles on first column
+			                //applying styles on first column
                             tvLine.setTypeface(Typeface.SANS_SERIF, Typeface.BOLD);
                             tvLine.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
                             tvLine.setTextColor(Color.parseColor("#FFFFFF"));
@@ -245,15 +248,15 @@ public class ResultActivity extends AppCompatActivity
                             tvLine.setWidth(70);
                             		    	
 
-				tvDest.setText(busses_0_lineDestination);
+				            tvDest.setText(busses_0_lineDestination);
 
-				tvDest.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
-                           tvDest.setMinWidth(450);
-                           tvDest.setPadding(25, 0, 25, 0);
+				            tvDest.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
+                            tvDest.setMinWidth(450);
+                            tvDest.setPadding(25, 0, 25, 0);
                             
-				tvEta.setText(etaString);
+				            tvEta.setText(etaString);
 
-				tvEta.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
+				            tvEta.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
                             tvEta.setMinWidth(250);
 
                         }
