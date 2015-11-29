@@ -12,21 +12,12 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:id="@+id/textView3"
-        android:layout_marginTop="27dp"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/editText" />
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/editText"
-        android:text="bus stop id"
+        android:id="@+id/stop_number_text"
+        android:text="00"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="38dp" />
+        android:layout_marginTop="38dp"
+        android:textStyle="bold" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -46,4 +37,77 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="42dp"
         android:onClick="GoToToolSelectionActivity" />
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/stop_number_text"
+        android:layout_toStartOf="@+id/stop_number_text"
+        android:layout_toLeftOf="@id/stop_number_text"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:id="@+id/result_table_layout">
+
+        <!-- The first title row -->
+        <TableRow>
+            <TextView
+                android:text="Line"
+                android:padding="3dip" />
+            <TextView
+                android:text="Destination"
+                android:padding="3dip" />
+            <TextView
+                android:text="ETA"
+                android:padding="3dip" />
+        </TableRow>
+
+        <!-- The second row and first for stop data -->
+        <TableRow>
+            <TextView
+                android:text="47"
+                android:padding="3dip"
+                android:id="@+id/result_line_1"/>
+            <TextView
+                android:text="Varissuo"
+                android:padding="3dip"
+                android:id="@+id/result_destination_1"/>
+            <TextView
+                android:text="00m 00s"
+                android:padding="3dip"
+                android:id="@+id/result_eta_1"/>
+        </TableRow>
+
+        <!-- The third row and second for stop data -->
+        <TableRow>
+            <TextView
+                android:text="47"
+                android:padding="3dip"
+                android:id="@+id/result_line_2"/>
+            <TextView
+                android:text="Varissuo"
+                android:padding="3dip"
+                android:id="@+id/result_destination_2"/>
+            <TextView
+                android:text="00m 00s"
+                android:padding="3dip"
+                android:id="@+id/result_eta_2"/>
+        </TableRow>
+
+        <!-- The fourth row and third for stop data -->
+        <TableRow>
+            <TextView
+                android:text="47"
+                android:padding="3dip"
+                android:id="@+id/result_line_3"/>
+            <TextView
+                android:text="Varissuo"
+                android:padding="3dip"
+                android:id="@+id/result_destination_3"/>
+            <TextView
+                android:text="00m 00s"
+                android:padding="3dip"
+                android:id="@+id/result_eta_3"/>
+        </TableRow>
+
+    </TableLayout>
 </RelativeLayout>

@@ -16,6 +16,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 
 import org.json.JSONArray;
@@ -65,9 +67,9 @@ public class ResultActivity extends AppCompatActivity
 
             busNumber = busNumValue;
 
-            //redundant now
-            EditText userInput = (EditText) findViewById(R.id.editText);
-            userInput.setText(busNumValue);
+            // text field where the searched stop number is displayed
+            TextView stopNumberText = (TextView) findViewById(R.id.stop_number_text);
+            stopNumberText.setText(busNumValue);
         }
     }
 
@@ -190,8 +192,10 @@ public class ResultActivity extends AppCompatActivity
         }
 
         protected void onPostExecute(String stream){
-            TextView tv = (TextView) findViewById(R.id.textView3);
-            tv.setText("");
+
+            //  table is the 4x3 table which displays incoming bus data
+            // increasing the table size requires addition of rows in content_bus_stop_info.xml
+            TableLayout table = (TableLayout)findViewById(R.id.result_table_layout);
 
             if(stream !=null){
                 try{
@@ -220,7 +224,18 @@ public class ResultActivity extends AppCompatActivity
 
                             String etaString = minutes+"m " +seconds+"s";
 
-                            tv.setText(tv.getText()+"\nLine "+busses_0_lineNumber+" "+busses_0_lineDestination+ " "+etaString);
+                            //tv.setText(tv.getText()+"\nLine "+busses_0_lineNumber+" "+busses_0_lineDestination+ " "+etaString);
+
+                            // using row plus 1 means that we dont mess with the title row
+                            TableRow row = (TableRow)table.getChildAt(i+1);
+                            TextView tvLine = (TextView)row.getChildAt(0);  //the first column of this row
+                            TextView tvDest = (TextView)row.getChildAt(1);  //the second
+                            TextView tvEta = (TextView)row.getChildAt(2);   //the third
+
+                            // setting the text data in the table cells
+                            tvLine.setText(busses_0_lineNumber);
+                            tvDest.setText(busses_0_lineDestination);
+                            tvEta.setText(etaString);
                         }
 
                     }
