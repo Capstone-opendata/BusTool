@@ -41,7 +41,7 @@ public class ResultActivity extends AppCompatActivity
         setContentView(R.layout.activity_result);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-/*
+/***
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -234,8 +234,28 @@ public class ResultActivity extends AppCompatActivity
 
                             // setting the text data in the table cells
                             tvLine.setText(busses_0_lineNumber);
-                            tvDest.setText(busses_0_lineDestination);
-                            tvEta.setText(etaString);
+
+			    //applying styles on first column
+                            tvLine.setTypeface(Typeface.SANS_SERIF, Typeface.BOLD);
+                            tvLine.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
+                            tvLine.setTextColor(Color.parseColor("#FFFFFF"));
+                            tvLine.setBackgroundResource(R.drawable.ic_bus_bg);
+                            tvLine.setPadding(20, 15, 0, 0);
+                            tvLine.setHeight(70);
+                            tvLine.setWidth(70);
+                            		    	
+
+				tvDest.setText(busses_0_lineDestination);
+
+				tvDest.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
+                           tvDest.setMinWidth(450);
+                           tvDest.setPadding(25, 0, 25, 0);
+                            
+				tvEta.setText(etaString);
+
+				tvEta.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
+                            tvEta.setMinWidth(250);
+
                         }
 
                     }
