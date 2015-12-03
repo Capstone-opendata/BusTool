@@ -64,15 +64,15 @@
         <!-- The second row and first for stop data -->
         <TableRow>
             <TextView
-                android:text="47"
+                android:text=""
                 android:padding="3dip"
                 android:id="@+id/result_line_1"/>
             <TextView
-                android:text="Varissuo"
+                android:text=""
                 android:padding="3dip"
                 android:id="@+id/result_destination_1"/>
             <TextView
-                android:text="00m 00s"
+                android:text=""
                 android:padding="3dip"
                 android:id="@+id/result_eta_1"/>
         </TableRow>
@@ -80,15 +80,15 @@
         <!-- The third row and second for stop data -->
         <TableRow>
             <TextView
-                android:text="47"
+                android:text=""
                 android:padding="3dip"
                 android:id="@+id/result_line_2"/>
             <TextView
-                android:text="Varissuo"
+                android:text=""
                 android:padding="3dip"
                 android:id="@+id/result_destination_2"/>
             <TextView
-                android:text="00m 00s"
+                android:text=""
                 android:padding="3dip"
                 android:id="@+id/result_eta_2"/>
         </TableRow>
@@ -96,15 +96,15 @@
         <!-- The fourth row and third for stop data -->
         <TableRow>
             <TextView
-                android:text="47"
+                android:text=""
                 android:padding="3dip"
                 android:id="@+id/result_line_3"/>
             <TextView
-                android:text="Varissuo"
+                android:text=""
                 android:padding="3dip"
                 android:id="@+id/result_destination_3"/>
             <TextView
-                android:text="00m 00s"
+                android:text=""
                 android:padding="3dip"
                 android:id="@+id/result_eta_3"/>
         </TableRow>
