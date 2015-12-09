@@ -120,19 +120,11 @@ public class NearbyActivity extends AppCompatActivity
             }
             else
             {
-                spinner.setVisibility(View.VISIBLE);
-
                 // GPS is enabled on user's device
                 if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                    // TODO: Consider calling
-                    //    ActivityCompat#requestPermissions
-                    // here to request the missing permissions, and then overriding
-                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                    //                                          int[] grantResults)
-                    // to handle the case where the user grants the permission. See the documentation
-                    // for ActivityCompat#requestPermissions for more details.
+                    /*
                     if (ActivityCompat.shouldShowRequestPermissionRationale(NearbyActivity.this,
-                            Manifest.permission.READ_CONTACTS)) {
+                            Manifest.permission.ACCESS_FINE_LOCATION)) {
                         showMessageOKCancel("You need to allow access to GPS",
                                 new DialogInterface.OnClickListener() {
                                     @Override
@@ -145,12 +137,14 @@ public class NearbyActivity extends AppCompatActivity
                                 }, null);
                         return;
                     }
+                    */
                     ActivityCompat.requestPermissions(NearbyActivity.this,
                             new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                             REQUEST_CODE_ASK_PERMISSIONS);
                     return;
                 }
                 myLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
+                spinner.setVisibility(View.VISIBLE);
             }// else
 
         }//if JSONretrievalStarted
@@ -233,7 +227,7 @@ public class NearbyActivity extends AppCompatActivity
     @Override
     public void onLocationChanged(Location location) {
         myLocation = location;
-        //System.out.println("My coordinates: " + location.getLatitude() + " ," + location.getLongitude() + " Accuracy: " + location.getAccuracy());
+        System.out.println("My coordinates: " + location.getLatitude() + " ," + location.getLongitude() + " Accuracy: " + location.getAccuracy());
         //myLocationManager.removeUpdates(this);
         //if data retrieval from foli hasn't been started and location's accuracy is better than 60m
         if (JSONretrievalStarted == false && location.getAccuracy() < 60) {
