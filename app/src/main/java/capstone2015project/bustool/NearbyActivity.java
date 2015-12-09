@@ -1,11 +1,19 @@
 package capstone2015project.bustool;
 
+import android.Manifest;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -18,6 +26,7 @@ import android.view.MenuItem;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -26,11 +35,19 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 public class NearbyActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener,
+        LocationListener {
 
-    ListView stopsListView ;
+    final private int REQUEST_CODE_ASK_PERMISSIONS = 123;   // for permission requesting
+    private boolean JSONretrievalStarted = false;   // for stopping multiple data retrievals from foli
+
+    private boolean GPSenabled = false;     // is GPS enabled on user's device
+
+    ListView stopsListView;
     Location myLocation;
+    LocationManager myLocationManager;
     ArrayList<String> stopList;
+    private ProgressBar spinner;    // this will be displayed while retrieving data
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,18 +74,99 @@ public class NearbyActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        spinner = (ProgressBar)findViewById(R.id.progressBar);
+        spinner.setVisibility(View.GONE);
+
         //hard coding myLocation for testing
         myLocation = new Location("MyLoc");
-        myLocation.setLatitude(60.4491652);
-        myLocation.setLongitude(22.2933068);
+        //myLocation.setLatitude(60.4491652);
+        //myLocation.setLongitude(22.2933068);
 
         // Get ListView object from xml
         stopsListView = (ListView) findViewById(R.id.listView);
         stopList = new ArrayList<String>();
         //location of the stops data
-        String url = "http://data.foli.fi/gtfs/v0/stops";
-        new ProcessJSON().execute(url);
+        //String url = "http://data.foli.fi/gtfs/v0/stops";
+        //new ProcessJSON().execute(url);
     }
+
+    protected void onStart() {
+        super.onStart();
+
+        if(JSONretrievalStarted == false)
+        {
+            myLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+            GPSenabled = myLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+
+            if(GPSenabled == false)
+            {
+                // GPS is not enabled on user's device
+
+                showMessageOKCancel("You need to enable GPS",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+
+                            }
+                        },
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.cancel();
+                            }
+                        });
+                //return;
+            }
+            else
+            {
+                spinner.setVisibility(View.VISIBLE);
+
+                // GPS is enabled on user's device
+                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    // TODO: Consider calling
+                    //    ActivityCompat#requestPermissions
+                    // here to request the missing permissions, and then overriding
+                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                    //                                          int[] grantResults)
+                    // to handle the case where the user grants the permission. See the documentation
+                    // for ActivityCompat#requestPermissions for more details.
+                    if (ActivityCompat.shouldShowRequestPermissionRationale(NearbyActivity.this,
+                            Manifest.permission.READ_CONTACTS)) {
+                        showMessageOKCancel("You need to allow access to GPS",
+                                new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        ActivityCompat.requestPermissions(NearbyActivity.this,
+                                                new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                                                REQUEST_CODE_ASK_PERMISSIONS);
+
+                                    }
+                                }, null);
+                        return;
+                    }
+                    ActivityCompat.requestPermissions(NearbyActivity.this,
+                            new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                            REQUEST_CODE_ASK_PERMISSIONS);
+                    return;
+                }
+                myLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
+            }// else
+
+        }//if JSONretrievalStarted
+
+    }// onStart
+
+    private void showMessageOKCancel(String message, DialogInterface.OnClickListener okListener,
+                                     DialogInterface.OnClickListener cancelListener) {
+        new AlertDialog.Builder(NearbyActivity.this)
+                .setMessage(message)
+                .setPositiveButton("OK", okListener)
+                .setNegativeButton("Cancel", null)
+                .create()
+                .show();
+    }
+
 
     @Override
     public void onBackPressed() {
@@ -132,6 +230,40 @@ public class NearbyActivity extends AppCompatActivity
         return true;
     }
 
+    @Override
+    public void onLocationChanged(Location location) {
+        myLocation = location;
+        //System.out.println("My coordinates: " + location.getLatitude() + " ," + location.getLongitude() + " Accuracy: " + location.getAccuracy());
+        //myLocationManager.removeUpdates(this);
+        //if data retrieval from foli hasn't been started and location's accuracy is better than 60m
+        if (JSONretrievalStarted == false && location.getAccuracy() < 60) {
+            String url = "http://data.foli.fi/gtfs/v0/stops";
+            new ProcessJSON().execute(url);
+            JSONretrievalStarted = true;
+
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                return;
+            }
+            myLocationManager.removeUpdates(this);
+        }
+
+    }
+
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+
+    }
+
+    @Override
+    public void onProviderEnabled(String provider) {
+
+    }
+
+    @Override
+    public void onProviderDisabled(String provider) {
+
+    }
+
 
     //this class will handle processing the incoming json data
     private class ProcessJSON extends AsyncTask<String, Void, String> {
@@ -183,10 +315,13 @@ public class NearbyActivity extends AppCompatActivity
                     e.printStackTrace();
                 }
 
+                spinner.setVisibility(View.GONE);
                 //Collections.sort(stopList);
                 //Collections.reverse(stopList);
                 String[] values = stopList.toArray(new String[0]);
                 //System.out.println("VALUES LENGTH "+values.length);
+
+
 
                 ArrayAdapter<String> adapter = new ArrayAdapter<String>(NearbyActivity.this,
                         android.R.layout.simple_list_item_1, android.R.id.text1, values);
