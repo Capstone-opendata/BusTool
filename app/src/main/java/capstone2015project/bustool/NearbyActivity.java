@@ -33,6 +33,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 public class NearbyActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
@@ -284,6 +286,9 @@ public class NearbyActivity extends AppCompatActivity
 
                     Location stopLocation = new Location("StopLoc");
 
+                    // using SortedMap to sort the nearby stops
+                    SortedMap<Integer, String> tempMap = new TreeMap<Integer, String>();
+
                     for(int i = 0; i<stopsArray.length(); i++)
                     {
                         JSONObject stop = stopsArray.getJSONObject(i);
@@ -299,10 +304,17 @@ public class NearbyActivity extends AppCompatActivity
                             String stopNumber = (String)stopsObject.names().get(i);
                             String stopName = stop.getString("stop_name");
                             String stopDistance = ""+Math.round(distance);
-                            stopList.add(stopNumber + " " + stopName + " " + stopDistance + "m");
+                            //stopList.add(stopNumber + " " + stopName + " " + stopDistance + "m");
                             //System.out.println("STOPLIST SIZE "+ stopList.size());
+
+                            tempMap.put(Integer.parseInt(stopDistance), stopNumber + " " + stopName + " " + stopDistance + "m");
                         }
 
+                    }
+                    for(Integer distance : tempMap.keySet())
+                    {
+                        String stop = tempMap.get(distance);
+                        stopList.add(stop);
                     }
 
                 }catch(JSONException e){
