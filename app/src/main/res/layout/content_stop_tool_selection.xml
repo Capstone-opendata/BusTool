@@ -43,10 +43,10 @@
         <EditText
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:inputType="number"
+            android:inputType=""
             android:ems="10"
             android:id="@+id/editText_busID"
-            android:hint="Stop Number"
+            android:hint="type name or number"
             android:layout_alignTop="@+id/input_layout_password"
             android:layout_centerHorizontal="true"
             android:clickable="false" />
@@ -80,5 +80,15 @@
         android:id="@+id/button5"
         android:layout_below="@+id/button4"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:onClick="GoToDbActivity"
+        />
+
+    <ListView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/listViewX"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/button5" />
 </RelativeLayout>

@@ -9,6 +9,7 @@ import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.util.TypedValue;
+import android.view.MenuInflater;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -37,6 +38,8 @@ public class ResultActivity extends AppCompatActivity
     HttpURLConnection urlConnection;
     Timer timer;
     String busNumber;
+    public String busStopNumber;
+    SQLiteHelper BsDb;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,13 +69,12 @@ public class ResultActivity extends AppCompatActivity
         //getting the passed bus number
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            String busNumValue = extras.getString("busStopNumber");
-
-            busNumber = busNumValue;
+            busStopNumber = extras.getString("busStopNumber");
+            busNumber = busStopNumber;
 
             // text field where the searched stop number is displayed
             TextView stopNumberText = (TextView) findViewById(R.id.stop_number_text);
-            stopNumberText.setText(busNumValue);
+            stopNumberText.setText(busStopNumber);
         }
     }
 
@@ -83,6 +85,7 @@ public class ResultActivity extends AppCompatActivity
             drawer.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
+            this.finish();
         }
     }
 
@@ -91,21 +94,6 @@ public class ResultActivity extends AppCompatActivity
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.result, menu);
         return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -167,6 +155,33 @@ public class ResultActivity extends AppCompatActivity
         timer.cancel();
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        switch (item.getItemId()) {
+            case R.id.action_addFavs:
+                remember();
+                return true;
+            case R.id.action_delFavs:
+                forget();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    public void remember(){
+        BsDb = new SQLiteHelper(ResultActivity.this);
+        Boolean del = BsDb.addFav(busStopNumber);
+    }
+
+    public void forget(){
+        BsDb = new SQLiteHelper(ResultActivity.this);
+        Boolean add = BsDb.delFav(busStopNumber);
+    }
+
     //starts the stop data retrieval from foli
     public void GetStopData()
     {
@@ -181,6 +196,7 @@ public class ResultActivity extends AppCompatActivity
         Intent i = new Intent(this, StopToolSelectionActivity.class);
         startActivity(i);
     }
+
 
     private class ProcessJSON extends AsyncTask<String, Void, String> {
         protected String doInBackground(String... strings){
