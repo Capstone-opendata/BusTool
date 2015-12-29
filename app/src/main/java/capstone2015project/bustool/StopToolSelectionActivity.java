@@ -106,7 +106,21 @@ public class StopToolSelectionActivity extends AppCompatActivity {
                     }
                     return true;
                 }
+                if (keyevent.getAction() == KeyEvent.ACTION_UP) {
+                    if (userInput.getText().toString().isEmpty()) {
+                        userInput.clearFocus();
+                        showFavorites();
+                    }
+                    return true;
+                }
+                if ((keyevent.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_BACK)) {
+                    userInput.clearFocus();
+                    userInput.setText("");
+                    showFavorites();
+                    return true;
+                }
                 return false;
+
             }
         });
         userInput.setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -146,6 +160,15 @@ public class StopToolSelectionActivity extends AppCompatActivity {
         userInput.setText("");
         userInput.clearFocus();
         super.onResume();
+        showFavorites();
+    }
+
+    @Override
+    public void onBackPressed(){
+        super.onBackPressed();
+        final EditText userInput = (EditText) findViewById(R.id.editText_busID);
+        userInput.clearFocus();
+        userInput.setText("");
         showFavorites();
     }
 
