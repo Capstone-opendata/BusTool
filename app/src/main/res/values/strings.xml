@@ -3,13 +3,17 @@
     <string name="action_addFavs">remember</string>
     <string name="action_delFavs">forget</string>
     <string name="action_settings">settings</string>
+    <string name="action_updatedb">re-download all</string>
+    <string name="action_deletedb">delete database</string>
     <string name="title_activity_stop_tool_selection">Search</string>
     <string name="title_activity_nearby_stops">Nearby Stops</string>
     <string name="title_activity_result">Results</string>
-
     <string name="navigation_drawer_open">Main Menu</string>
     <string name="navigation_drawer_close">Close Menu</string>
     <string name="title_activity_nearby">Nearby Stops</string>
     <string name="ic_menu_search">Search</string>
-    <string name="title_activity_busstop_db">BusstopDbActivity</string>
+    <string name="title_activity_busstop_db">Favorites Database</string>
+    <string name="string_favorites">list of favorites</string>
+    <string name="string_addfavorites">click to add</string>
+    <string name="string_delfavorites">click to remove</string>
 </resources>
