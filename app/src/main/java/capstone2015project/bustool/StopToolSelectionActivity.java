@@ -68,6 +68,7 @@ public class StopToolSelectionActivity extends AppCompatActivity {
                         // pick first one on the list
                         i.putExtra("busStopNumber", BsDb.BsIdList.get(0).toString());
                         startActivity(i);
+                        userInput.setText("");
                     }
                     return true;
                 }
@@ -132,6 +133,7 @@ public class StopToolSelectionActivity extends AppCompatActivity {
     @Override
     protected void onResume(){
         final EditText userInput = (EditText) findViewById(R.id.editText_busID);
+        userInput.setText("");
         userInput.clearFocus();
         super.onResume();
         showFavorites();
