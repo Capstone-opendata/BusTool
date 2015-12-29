@@ -182,6 +182,7 @@ public class StopToolSelectionActivity extends AppCompatActivity {
 
 
             if (stream != null) {
+                final EditText userInput = (EditText) findViewById(R.id.editText_busID);
                 try {
 
                     JSONObject stopsObject = new JSONObject(stream);
@@ -201,7 +202,6 @@ public class StopToolSelectionActivity extends AppCompatActivity {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                final EditText userInput = (EditText) findViewById(R.id.editText_busID);
                 userInput.setEnabled(true);
                 userInput.setText("");
             } // if statement end

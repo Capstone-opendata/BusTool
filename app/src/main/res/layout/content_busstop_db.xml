@@ -16,23 +16,18 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/DbView"
+        android:layout_below="@+id/headView"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/Button_GetJSON" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Update Database"
-        android:id="@+id/Button_GetJSON"
-        android:layout_alignTop="@+id/radioButton2"
-        android:layout_alignRight="@+id/DbView"
-        android:layout_alignEnd="@+id/DbView" />
+        android:layout_alignParentStart="true" />
 
     <RadioGroup
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:id="@+id/radioGroup">
         <RadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -52,4 +47,14 @@
             android:id="@+id/radioButton2"
             android:checked="false" />
     </RadioGroup>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/string_favorites"
+        android:id="@+id/headView"
+        android:layout_below="@+id/radioGroup"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 </RelativeLayout>

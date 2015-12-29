@@ -10,6 +10,8 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -18,6 +20,8 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.TextView;
 
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
@@ -70,17 +74,11 @@ public class BusstopDbActivity extends AppCompatActivity {
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
 
-        final Button GetJSON=(Button) findViewById(R.id.Button_GetJSON);
-        GetJSON.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                String url = "http://data.foli.fi/gtfs/v0/stops";
-                new ProcessJSON().execute(url);
-            }
-        });
-
+        final TextView headView = (TextView) findViewById(R.id.headView);
         final RadioButton rButton0=(RadioButton) findViewById(R.id.radioButton0);
         rButton0.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                headView.setText(R.string.string_favorites);
                 BsDb = new SQLiteHelper(BusstopDbActivity.this);
                 ArrayList array_list = BsDb.getQuery("SELECT * FROM busstops WHERE bs_fav = 1");
                 ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(BusstopDbActivity.this, android.R.layout.simple_list_item_1, array_list);
@@ -92,6 +90,7 @@ public class BusstopDbActivity extends AppCompatActivity {
         final RadioButton rButton1=(RadioButton) findViewById(R.id.radioButton1);
         rButton1.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                headView.setText(R.string.string_addfavorites);
                 BsDb = new SQLiteHelper(BusstopDbActivity.this);
                 ArrayList array_list = BsDb.getAllBSs();
                 ArrayAdapter<String> arrayAdapter=new ArrayAdapter<String>(BusstopDbActivity.this, android.R.layout.simple_list_item_1, array_list);
@@ -112,6 +111,7 @@ public class BusstopDbActivity extends AppCompatActivity {
         final RadioButton rButton2=(RadioButton) findViewById(R.id.radioButton2);
         rButton2.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                headView.setText(R.string.string_delfavorites);
                 BsDb = new SQLiteHelper(BusstopDbActivity.this);
                 ArrayList array_list = BsDb.getQuery("SELECT * FROM busstops WHERE bs_fav = 1");
                 ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(BusstopDbActivity.this, android.R.layout.simple_list_item_1, array_list);
@@ -169,6 +169,39 @@ public class BusstopDbActivity extends AppCompatActivity {
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.database, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        switch (item.getItemId()) {
+            case R.id.action_updatedb:
+                BsDb.DeleteAll();
+                final TextView headView = (TextView) findViewById(R.id.headView);
+                final RadioGroup group1 = (RadioGroup) findViewById(R.id.radioGroup);
+                final ListView lview = (ListView) findViewById(R.id.DbView);
+                group1.setVisibility(View.INVISIBLE);
+                lview.setVisibility(View.INVISIBLE);
+                headView.setText("Donwloading... please wait");
+                String url = "http://data.foli.fi/gtfs/v0/stops";
+                new ProcessJSON().execute(url);
+                return true;
+            case R.id.action_deletedb:
+                BsDb = new SQLiteHelper(BusstopDbActivity.this);
+                BsDb.DeleteAll();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
     public void onStop() {
         super.onStop();
 
@@ -204,6 +237,10 @@ public class BusstopDbActivity extends AppCompatActivity {
 
 
             if (stream != null) {
+                final TextView headView = (TextView) findViewById(R.id.headView);
+                final ListView lview = (ListView) findViewById(R.id.DbView);
+                final RadioGroup group1 = (RadioGroup) findViewById(R.id.radioGroup);
+                final RadioButton button = (RadioButton) findViewById(R.id.radioButton0);
                 try {
 
                     JSONObject stopsObject = new JSONObject(stream);
@@ -223,7 +260,9 @@ public class BusstopDbActivity extends AppCompatActivity {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
+                group1.setVisibility(View.VISIBLE);
+                lview.setVisibility(View.VISIBLE);
+                button.performClick();
             } // if statement end
         } // onPostExecute() end
     } // ProcessJSON class end
