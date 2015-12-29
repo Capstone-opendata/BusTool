@@ -3,10 +3,13 @@ package capstone2015project.bustool;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.FocusFinder;
 import android.view.KeyEvent;
 import android.view.View;
@@ -35,27 +38,58 @@ public class StopToolSelectionActivity extends AppCompatActivity {
         setContentView(R.layout.activity_stop_tool_selection);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-/*
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-*/
 
+/*        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setVisibility(View.INVISIBLE);
+           fab.setOnClickListener(new View.OnClickListener() {
+               @Override
+               public void onClick(View view) {
+                   Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                           .setAction("Action", null).show();
+               }
+          });*/
+
+        final Button DbButton = (Button) findViewById(R.id.button5);
         final EditText userInput = (EditText) findViewById(R.id.editText_busID);
         BsDb = new SQLiteHelper(StopToolSelectionActivity.this);
         if(BsDb.numberOfRows()==0) {
+            DbButton.setText("Download Database");
             userInput.setEnabled(false);
-            userInput.setText("Downloading... please wait");
-            String url = "http://data.foli.fi/gtfs/v0/stops";
-            new ProcessJSON().execute(url);
-        }else {
-            showFavorites();
         }
+        userInput.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (userInput.getText().toString().isEmpty()) {
+                    userInput.clearFocus();
+                    showFavorites();
+                } else {
+                    BsDb = new SQLiteHelper(StopToolSelectionActivity.this);
+                    String query = "SELECT * FROM busstops WHERE bs_id LIKE '%" + userInput.getText().toString() + "%' OR bs_nm LIKE '" + userInput.getText().toString() + "%' ";
+                    ArrayList array_list = BsDb.getQuery(query);
+                    ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(StopToolSelectionActivity.this, android.R.layout.simple_list_item_1, array_list);
+                    listViewX = (ListView) findViewById(R.id.listViewX);
+                    listViewX.setAdapter(arrayAdapter);
+                    listViewX.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+                            Intent i = new Intent(getApplicationContext(), ResultActivity.class);
+                            i.putExtra("busStopNumber", BsDb.BsIdList.get(arg2));
+                            startActivity(i);
+                        }
+                    });
+                }
+            }
+        });
         userInput.setOnKeyListener(new View.OnKeyListener() {
             public boolean onKey(View view, int keyCode, KeyEvent keyevent) {
                 //If the keyevent is a key-down event on the "enter" button
@@ -64,36 +98,11 @@ public class StopToolSelectionActivity extends AppCompatActivity {
                     // Perform your action on key press here
                     // ...
                     Intent i = new Intent(getApplicationContext(), ResultActivity.class);
-                    if(!BsDb.BsIdList.isEmpty()){
+                    if (!BsDb.BsIdList.isEmpty()) {
                         // pick first one on the list
                         i.putExtra("busStopNumber", BsDb.BsIdList.get(0).toString());
                         startActivity(i);
                         userInput.setText("");
-                    }
-                    return true;
-                }
-                if ((keyevent.getAction() == KeyEvent.ACTION_UP)) {
-                    //...
-                    // Perform your action on key press here
-                    // ...
-                    if(userInput.getText().toString().isEmpty()){
-                        userInput.clearFocus();
-                        showFavorites();
-                    }else {
-                        BsDb = new SQLiteHelper(StopToolSelectionActivity.this);
-                        String query = "SELECT * FROM busstops WHERE bs_id LIKE '%" + userInput.getText().toString() + "%' OR bs_nm LIKE '" + userInput.getText().toString() + "%' ";
-                        ArrayList array_list = BsDb.getQuery(query);
-                        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(StopToolSelectionActivity.this, android.R.layout.simple_list_item_1, array_list);
-                        listViewX = (ListView) findViewById(R.id.listViewX);
-                        listViewX.setAdapter(arrayAdapter);
-                        listViewX.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                            @Override
-                            public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-                                Intent i = new Intent(getApplicationContext(), ResultActivity.class);
-                                i.putExtra("busStopNumber", BsDb.BsIdList.get(arg2));
-                                startActivity(i);
-                            }
-                        });
                     }
                     return true;
                 }
@@ -130,6 +139,7 @@ public class StopToolSelectionActivity extends AppCompatActivity {
 
         });
     }
+
     @Override
     protected void onResume(){
         final EditText userInput = (EditText) findViewById(R.id.editText_busID);
@@ -148,8 +158,25 @@ public class StopToolSelectionActivity extends AppCompatActivity {
 
     public void GoToDbActivity(View view)
     {
-        Intent i = new Intent(StopToolSelectionActivity.this, BusstopDbActivity.class);
-        startActivity(i);
+        BsDb = new SQLiteHelper(StopToolSelectionActivity.this);
+        if(BsDb.numberOfRows()==0) {
+            BsDb.DeleteAll();
+            fetchDb();
+        }else {
+            Intent i = new Intent(StopToolSelectionActivity.this, BusstopDbActivity.class);
+            startActivity(i);
+        }
+    }
+
+    public void fetchDb(){
+        final EditText userInput = (EditText) findViewById(R.id.editText_busID);
+        final Button button3 = (Button) findViewById(R.id.button3);button3.setEnabled(false);
+        final Button button4 = (Button) findViewById(R.id.button4);button4.setEnabled(false);
+        final Button button5 = (Button) findViewById(R.id.button5);button5.setEnabled(false);
+        userInput.setEnabled(false);
+        userInput.setText(R.string.string_dl_wait);
+        String url = "http://data.foli.fi/gtfs/v0/stops";
+        new ProcessJSON().execute(url);
     }
 
     public void showFavorites(){
@@ -186,7 +213,6 @@ public class StopToolSelectionActivity extends AppCompatActivity {
 
 
             if (stream != null) {
-                final EditText userInput = (EditText) findViewById(R.id.editText_busID);
                 try {
 
                     JSONObject stopsObject = new JSONObject(stream);
@@ -206,6 +232,11 @@ public class StopToolSelectionActivity extends AppCompatActivity {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+                final EditText userInput = (EditText) findViewById(R.id.editText_busID);
+                final Button button3 = (Button) findViewById(R.id.button3);button3.setEnabled(true);
+                final Button button4 = (Button) findViewById(R.id.button4);button4.setEnabled(true);
+                final Button button5 = (Button) findViewById(R.id.button5);button5.setEnabled(true);
+                button5.setText(R.string.DbButton_text);
                 userInput.setEnabled(true);
                 userInput.setText("");
             } // if statement end

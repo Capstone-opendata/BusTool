@@ -62,14 +62,6 @@ public class BusstopDbActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
@@ -182,19 +174,22 @@ public class BusstopDbActivity extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         switch (item.getItemId()) {
             case R.id.action_updatedb:
+                BsDb = new SQLiteHelper(BusstopDbActivity.this);
                 BsDb.DeleteAll();
                 final TextView headView = (TextView) findViewById(R.id.headView);
                 final RadioGroup group1 = (RadioGroup) findViewById(R.id.radioGroup);
                 final ListView lview = (ListView) findViewById(R.id.DbView);
                 group1.setVisibility(View.INVISIBLE);
                 lview.setVisibility(View.INVISIBLE);
-                headView.setText("Donwloading... please wait");
+                headView.setText(R.string.string_dl_wait);
                 String url = "http://data.foli.fi/gtfs/v0/stops";
                 new ProcessJSON().execute(url);
                 return true;
             case R.id.action_deletedb:
                 BsDb = new SQLiteHelper(BusstopDbActivity.this);
+                RadioButton rbutton = (RadioButton) findViewById(R.id.radioButton0);
                 BsDb.DeleteAll();
+                rbutton.performClick();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

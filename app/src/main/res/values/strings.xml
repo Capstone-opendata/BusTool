@@ -16,4 +16,6 @@
     <string name="string_favorites">list of favorites</string>
     <string name="string_addfavorites">click to add</string>
     <string name="string_delfavorites">click to remove</string>
+    <string name="string_dl_wait">Downloading... please wait</string>
+    <string name="DbButton_text">Organize Favorites</string>
 </resources>
