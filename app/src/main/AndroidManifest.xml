@@ -28,7 +28,8 @@
         <activity
             android:name=".NearbyActivity"
             android:label="@string/title_activity_nearby"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
         <activity
             android:name=".BusstopDbActivity"
             android:label="@string/title_activity_busstop_db"
