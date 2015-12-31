@@ -1,8 +1,6 @@
 package capstone2015project.bustool;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Hashtable;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -24,6 +22,8 @@ public class SQLiteHelper extends SQLiteOpenHelper {
     public static final String BUSSTOP_NAME = "bs_nm";
     public static final String BUSSTOP_TAGS = "bs_tags";
     public static final String BUSSTOP_FAV = "bs_fav"; // true or false
+    public static final String BUSSTOP_LAT = "bs_lat";
+    public static final String BUSSTOP_LON = "bs_lon";
     public final ArrayList<String> BsIdList = new ArrayList<String>();
 
     public SQLiteHelper(Context context) {
@@ -32,7 +32,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("create table " + TABLE + " (" + ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + BUSSTOP_ID + " TEXT, " + BUSSTOP_NAME + " TEXT, " + BUSSTOP_TAGS + " TEXT, " + BUSSTOP_FAV + " INTEGER)");
+        db.execSQL("create table " + TABLE + " (" + ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + BUSSTOP_ID + " TEXT, " + BUSSTOP_NAME + " TEXT, " + BUSSTOP_TAGS + " TEXT, " + BUSSTOP_FAV + " INTEGER, " + BUSSTOP_LAT + " Decimal(9,6), " + BUSSTOP_LON + " Decimal(9,6))");
     }
 
     @Override
@@ -41,11 +41,20 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public Boolean insertBS(String bs_id, String bs_name){
+    public Cursor getData(String query)
+    {
+        SQLiteDatabase db = this.getReadableDatabase();
+        return db.rawQuery( query, null );
+    }
+
+    public Boolean insertBS(String bs_id, String bs_name, double bs_lat, double bs_lon){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put(BUSSTOP_ID,bs_id);contentValues.put(BUSSTOP_NAME, bs_name);
-        long result = db.insert(TABLE,null,contentValues);
+        contentValues.put(BUSSTOP_ID,bs_id);
+        contentValues.put(BUSSTOP_NAME, bs_name);
+        contentValues.put(BUSSTOP_LAT, bs_lat);
+        contentValues.put(BUSSTOP_LON, bs_lon);
+        long result = db.insert(TABLE, null, contentValues);
         return result != -1;
     }
 
@@ -59,10 +68,12 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         return (int) DatabaseUtils.queryNumEntries(db, TABLE);
     }
 
-    public boolean updateBS (Integer id, String name) {
+    public boolean updateBS (Integer id, String name, double bs_lat, double bs_lon) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(BUSSTOP_NAME, name);
+        contentValues.put(BUSSTOP_LAT, bs_lat);
+        contentValues.put(BUSSTOP_LON, bs_lon);
         db.update(TABLE, contentValues, "id = ? ", new String[]{Integer.toString(id)});
         return true;
     }
@@ -142,4 +153,3 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         return true;
     }
 }
-

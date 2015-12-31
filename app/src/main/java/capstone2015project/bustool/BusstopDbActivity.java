@@ -248,7 +248,13 @@ public class BusstopDbActivity extends AppCompatActivity {
 
                         String stopNumber = (String) stopsObject.names().get(i);
                         String stopName = stop.getString("stop_name");
-                        BsDb.insertBS(stopNumber, stopName);
+                        String lat = stop.getString("stop_lat");
+                        String lon = stop.getString("stop_lon");
+
+                        double lati = Double.parseDouble(lat);
+                        double longi = Double.parseDouble(lon);
+
+                        BsDb.insertBS(stopNumber, stopName,lati, longi);
 
                     }
 
