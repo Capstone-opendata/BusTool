@@ -10,7 +10,7 @@
     tools:showIn="@layout/activity_stop_tool_selection"
     tools:context="capstone2015project.bustool.StopToolSelectionActivity"
     android:descendantFocusability="beforeDescendants"
-    android:focusableInTouchMode="true" >>
+    android:focusableInTouchMode="true" >
 
     <TextView
         android:layout_width="wrap_content"
@@ -20,16 +20,16 @@
         android:id="@+id/textView2"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
-<!--
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Real time arrival times"
-        android:id="@+id/textView4"
-        android:layout_below="@+id/textView2"
-        android:layout_centerHorizontal="true" />
--->
+    <!--
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Real time arrival times"
+            android:id="@+id/textView4"
+            android:layout_below="@+id/textView2"
+            android:layout_centerHorizontal="true" />
+    -->
     <android.support.design.widget.TextInputLayout
         android:id="@+id/input_layout_busID"
         android:layout_width="fill_parent"
@@ -43,10 +43,10 @@
         <EditText
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:inputType="number"
+            android:inputType="textVisiblePassword"
             android:ems="10"
             android:id="@+id/editText_busID"
-            android:hint="Stop Number"
+            android:hint="stop name or number"
             android:layout_alignTop="@+id/input_layout_password"
             android:layout_centerHorizontal="true"
             android:clickable="false" />
@@ -67,18 +67,30 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="View on Map"
+        android:text="@string/MapButton_text"
         android:id="@+id/button4"
         android:layout_below="@+id/button3"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:onClick="GoToStopsMapActivity"
+        />
 
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Favorite Stops"
+        android:text="@string/DbButton_text"
         android:id="@+id/button5"
         android:layout_below="@+id/button4"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:onClick="GoToDbActivity"
+        />
+
+    <ListView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/listViewX"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/button5" />
 </RelativeLayout>

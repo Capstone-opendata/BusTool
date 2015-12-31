@@ -2,13 +2,13 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/action_addFavs"
+        android:id="@+id/action_updatedb"
         android:orderInCategory="100"
-        android:title="@string/action_addFavs"
+        android:title="@string/action_updatedb"
         app:showAsAction="never" />
     <item
-        android:id="@+id/action_delFavs"
+        android:id="@+id/action_deletedb"
         android:orderInCategory="100"
-        android:title="@string/action_delFavs"
+        android:title="@string/action_deletedb"
         app:showAsAction="never" />
 </menu>
