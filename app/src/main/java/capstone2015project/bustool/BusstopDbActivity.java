@@ -1,5 +1,6 @@
 package capstone2015project.bustool;
 
+import android.app.ActionBar;
 import android.content.Intent;
 import android.location.Location;
 import android.net.Uri;
@@ -9,10 +10,13 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -21,6 +25,7 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.android.gms.appindexing.Action;
@@ -64,33 +69,55 @@ public class BusstopDbActivity extends AppCompatActivity {
 
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
+        BsDb = new SQLiteHelper(BusstopDbActivity.this); //<-- Opens database Access
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
-
+        final EditText userInput = (EditText)findViewById(R.id.editTextDb);
         final TextView headView = (TextView) findViewById(R.id.headView);
         final RadioButton rButton0=(RadioButton) findViewById(R.id.radioButton0);
         rButton0.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                userInput.setVisibility(View.INVISIBLE);
+                //change layout
+                RelativeLayout.LayoutParams p = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT);p.addRule(RelativeLayout.BELOW,R.id.headView);
+                stopsListView.setLayoutParams(p);
                 headView.setText(R.string.string_favorites);
-                BsDb = new SQLiteHelper(BusstopDbActivity.this);
                 ArrayList array_list = BsDb.getQuery("SELECT * FROM busstops WHERE bs_fav = 1");
                 ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(BusstopDbActivity.this, android.R.layout.simple_list_item_1, array_list);
                 stopsListView = (ListView) findViewById(R.id.DbView);
                 stopsListView.setAdapter(arrayAdapter);
+                stopsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+                        Intent i = new Intent(getApplicationContext(), ResultActivity.class);
+                        i.putExtra("busStopNumber", BsDb.BsIdList.get(arg2));
+                        startActivity(i);
+                    }
+                });
+
             }
         });
 
         final RadioButton rButton1=(RadioButton) findViewById(R.id.radioButton1);
         rButton1.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                //When rButton is clicked:
+                //Changes layout
+                userInput.setVisibility(View.VISIBLE);
+                RelativeLayout.LayoutParams p = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT);p.addRule(RelativeLayout.BELOW, R.id.editTextDb);
+                stopsListView.setLayoutParams(p);
                 headView.setText(R.string.string_addfavorites);
-                BsDb = new SQLiteHelper(BusstopDbActivity.this);
+                // Db Control
                 ArrayList array_list = BsDb.getAllBSs();
                 ArrayAdapter<String> arrayAdapter=new ArrayAdapter<String>(BusstopDbActivity.this, android.R.layout.simple_list_item_1, array_list);
+                // Db to listView
                 stopsListView = (ListView) findViewById(R.id.DbView);
                 stopsListView.setAdapter(arrayAdapter);
                 stopsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+                        // when item on list is clicked
                         BsDb.addFav(BsDb.BsIdList.get(arg2));
                         rButton0.performClick();
 
@@ -103,8 +130,11 @@ public class BusstopDbActivity extends AppCompatActivity {
         final RadioButton rButton2=(RadioButton) findViewById(R.id.radioButton2);
         rButton2.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                userInput.setVisibility(View.INVISIBLE);
+                RelativeLayout.LayoutParams p = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT);p.addRule(RelativeLayout.BELOW, R.id.headView);
+                stopsListView.setLayoutParams(p);
                 headView.setText(R.string.string_delfavorites);
-                BsDb = new SQLiteHelper(BusstopDbActivity.this);
                 ArrayList array_list = BsDb.getQuery("SELECT * FROM busstops WHERE bs_fav = 1");
                 ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(BusstopDbActivity.this, android.R.layout.simple_list_item_1, array_list);
                 stopsListView = (ListView) findViewById(R.id.DbView);
@@ -121,7 +151,7 @@ public class BusstopDbActivity extends AppCompatActivity {
         });
 
 
-        BsDb = new SQLiteHelper(BusstopDbActivity.this);
+
         ArrayList array_list = BsDb.getQuery("SELECT * FROM busstops WHERE bs_fav = 1");
         ArrayAdapter<String> arrayAdapter=new ArrayAdapter<String>(BusstopDbActivity.this, android.R.layout.simple_list_item_1, array_list);
         stopsListView = (ListView) findViewById(R.id.DbView);
@@ -133,6 +163,74 @@ public class BusstopDbActivity extends AppCompatActivity {
                 stopsListView.setSelection(arg2);
             }
         });
+
+        userInput.setVisibility(View.INVISIBLE);
+        userInput.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (userInput.getText().toString().isEmpty()) {
+                    userInput.clearFocus();
+                } else {
+                    String query = "SELECT * FROM busstops WHERE bs_id LIKE '%" + userInput.getText().toString() + "%' OR bs_nm LIKE '" + userInput.getText().toString() + "%' ";
+                    ArrayList array_list = BsDb.getQuery(query);
+                    ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(BusstopDbActivity.this, android.R.layout.simple_list_item_1, array_list);
+                    stopsListView = (ListView) findViewById(R.id.DbView);
+                    stopsListView.setAdapter(arrayAdapter);
+                    stopsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+                            BsDb.addFav(BsDb.BsIdList.get(arg2));
+                            rButton0.performClick();
+                        }
+                    });
+                }
+            }
+        });
+        userInput.setOnKeyListener(new View.OnKeyListener() {
+            public boolean onKey(View view, int keyCode, KeyEvent keyevent) {
+                //If the keyevent is a key-down event on the "enter" button
+                if ((keyevent.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                    //...
+                    // Perform your action on key press here
+                    // ...
+                    Intent i = new Intent(getApplicationContext(), ResultActivity.class);
+                    if (!BsDb.BsIdList.isEmpty()) {
+                        // pick first one on the list
+                        i.putExtra("busStopNumber", BsDb.BsIdList.get(0).toString());
+                        startActivity(i);
+                        userInput.setText("");
+                    }
+                    return true;
+                }
+                if (keyevent.getAction() == KeyEvent.ACTION_UP) {
+                    if (userInput.getText().toString().isEmpty()) {
+                        userInput.clearFocus();
+                        rButton1.performClick();
+                    }
+                    return true;
+                }
+                if ((keyevent.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_BACK)) {
+                    userInput.clearFocus();
+                    userInput.setText("");
+                    rButton1.performClick();
+                    return true;
+                }
+                return false;
+
+            }
+        });
+
+        BsDb.close(); //<-- Closes database access!
     }
 
     @Override
@@ -172,9 +270,9 @@ public class BusstopDbActivity extends AppCompatActivity {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
+        BsDb = new SQLiteHelper(BusstopDbActivity.this);;
         switch (item.getItemId()) {
             case R.id.action_updatedb:
-                BsDb = new SQLiteHelper(BusstopDbActivity.this);
                 BsDb.DeleteAll();
                 final TextView headView = (TextView) findViewById(R.id.headView);
                 final RadioGroup group1 = (RadioGroup) findViewById(R.id.radioGroup);
@@ -184,16 +282,18 @@ public class BusstopDbActivity extends AppCompatActivity {
                 headView.setText(R.string.string_dl_wait);
                 String url = "http://data.foli.fi/gtfs/v0/stops";
                 new ProcessJSON().execute(url);
+                BsDb.close();
                 return true;
             case R.id.action_deletedb:
-                BsDb = new SQLiteHelper(BusstopDbActivity.this);
                 RadioButton rbutton = (RadioButton) findViewById(R.id.radioButton0);
                 BsDb.DeleteAll();
                 rbutton.performClick();
+                BsDb.close();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+
     }
 
     @Override

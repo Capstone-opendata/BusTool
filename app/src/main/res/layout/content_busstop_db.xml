@@ -12,16 +12,31 @@
     tools:context="capstone2015project.bustool.BusstopDbActivity"
     tools:showIn="@layout/activity_busstop_db">
 
-    <ListView
-        android:layout_width="wrap_content"
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/input_layout_busID"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/DbView"
-        android:layout_below="@+id/headView"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:layout_below="@+id/textView2"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true">
+
+    </android.support.design.widget.TextInputLayout>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textVisiblePassword"
+        android:ems="10"
+        android:id="@+id/editTextDb"
+        android:hint="stop name or number"
+        android:clickable="false"
+        android:layout_below="@+id/headView"
+        android:layout_centerHorizontal="true" />
 
     <RadioGroup
-    android:layout_width="fill_parent"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
         android:layout_alignParentTop="true"
@@ -57,4 +72,12 @@
         android:layout_below="@+id/radioGroup"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
+
+    <ListView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/DbView"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignTop="@+id/editTextDb" />
 </RelativeLayout>

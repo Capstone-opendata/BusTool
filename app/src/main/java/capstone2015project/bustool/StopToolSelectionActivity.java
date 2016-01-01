@@ -73,7 +73,6 @@ public class StopToolSelectionActivity extends AppCompatActivity {
                     userInput.clearFocus();
                     showFavorites();
                 } else {
-                    BsDb = new SQLiteHelper(StopToolSelectionActivity.this);
                     String query = "SELECT * FROM busstops WHERE bs_id LIKE '%" + userInput.getText().toString() + "%' OR bs_nm LIKE '" + userInput.getText().toString() + "%' ";
                     ArrayList array_list = BsDb.getQuery(query);
                     ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(StopToolSelectionActivity.this, android.R.layout.simple_list_item_1, array_list);
@@ -152,6 +151,7 @@ public class StopToolSelectionActivity extends AppCompatActivity {
             }
 
         });
+        BsDb.close();
     }
 
     @Override
@@ -189,6 +189,7 @@ public class StopToolSelectionActivity extends AppCompatActivity {
             Intent i = new Intent(StopToolSelectionActivity.this, StopsMapActivity.class);
             startActivity(i);
         }
+        BsDb.close();
     }
 
     public void GoToDbActivity(View view)
@@ -201,6 +202,7 @@ public class StopToolSelectionActivity extends AppCompatActivity {
             Intent i = new Intent(StopToolSelectionActivity.this, BusstopDbActivity.class);
             startActivity(i);
         }
+        BsDb.close();
     }
 
     public void fetchDb(){
@@ -246,7 +248,7 @@ public class StopToolSelectionActivity extends AppCompatActivity {
 
         protected void onPostExecute(String stream) {
 
-
+            BsDb = new SQLiteHelper(StopToolSelectionActivity.this);
             if (stream != null) {
                 try {
 
@@ -281,6 +283,7 @@ public class StopToolSelectionActivity extends AppCompatActivity {
                 userInput.setEnabled(true);
                 userInput.setText("");
             } // if statement end
+            BsDb.close();
         } // onPostExecute() end
     } // ProcessJSON class end
 }
