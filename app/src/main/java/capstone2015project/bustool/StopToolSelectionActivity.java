@@ -1,6 +1,7 @@
 package capstone2015project.bustool;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -83,6 +84,11 @@ public class StopToolSelectionActivity extends AppCompatActivity {
                         public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
                             Intent i = new Intent(getApplicationContext(), ResultActivity.class);
                             i.putExtra("busStopNumber", BsDb.BsIdList.get(arg2));
+                            Cursor res = BsDb.getData("SELECT bs_nm FROM busstops WHERE bs_id='"+BsDb.BsIdList.get(arg2)+"'");
+                            res.moveToFirst();
+                            //check
+                            String name = res.getString(res.getColumnIndex("bs_nm"));
+                            i.putExtra("busStopName", name);
                             startActivity(i);
                         }
                     });
@@ -100,6 +106,11 @@ public class StopToolSelectionActivity extends AppCompatActivity {
                     if (!BsDb.BsIdList.isEmpty()) {
                         // pick first one on the list
                         i.putExtra("busStopNumber", BsDb.BsIdList.get(0).toString());
+                        Cursor res = BsDb.getData("SELECT bs_nm FROM busstops WHERE bs_id='"+BsDb.BsIdList.get(0).toString()+"'");
+                        res.moveToFirst();
+                        //check
+                        String name = res.getString(res.getColumnIndex("bs_nm"));
+                        i.putExtra("busStopName", name);
                         startActivity(i);
                         userInput.setText("");
                     }
@@ -228,6 +239,11 @@ public class StopToolSelectionActivity extends AppCompatActivity {
                 String numberString = BsDb.BsIdList.get(arg2);
 
                 i.putExtra("busStopNumber", numberString);
+                Cursor res = BsDb.getData("SELECT bs_nm FROM busstops WHERE bs_id='"+numberString+"'");
+                res.moveToFirst();
+                //check
+                String name = res.getString(res.getColumnIndex("bs_nm"));
+                i.putExtra("busStopName", name);
                 startActivity(i);
 
             }

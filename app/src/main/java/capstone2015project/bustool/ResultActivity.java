@@ -39,6 +39,7 @@ public class ResultActivity extends AppCompatActivity
     Timer timer;
     String busNumber;
     public String busStopNumber;
+    public String busStopName;
     SQLiteHelper BsDb;
 
     @Override
@@ -70,11 +71,12 @@ public class ResultActivity extends AppCompatActivity
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             busStopNumber = extras.getString("busStopNumber");
+            busStopName = extras.getString("busStopName");
             busNumber = busStopNumber;
 
             // text field where the searched stop number is displayed
             TextView stopNumberText = (TextView) findViewById(R.id.stop_number_text);
-            stopNumberText.setText(busStopNumber);
+            stopNumberText.setText(busStopNumber+": "+busStopName);
         }
     }
 

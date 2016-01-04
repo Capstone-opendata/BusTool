@@ -346,9 +346,9 @@ public class NearbyActivity extends AppCompatActivity
                         Intent i = new Intent(getApplicationContext(), ResultActivity.class);
 
                         String numberString = (String) stopsListView.getItemAtPosition(position);
-                        String arr[] = numberString.split(" ", 2);
-
+                        String arr[] = numberString.split("\\s+");
                         i.putExtra("busStopNumber",(String) arr[0]);
+                        i.putExtra("busStopName",(String) arr[1]);
                         startActivity(i);
 
                     }

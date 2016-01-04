@@ -76,9 +76,11 @@ public class StopsMapActivity extends FragmentActivity implements OnMapReadyCall
     @Override
     public void onInfoWindowClick(Marker marker) {
         String s = marker.getSnippet();
+        String name = marker.getTitle();
         Intent i = new Intent(getApplicationContext(), ResultActivity.class);
         if (!s.isEmpty()) {
             i.putExtra("busStopNumber", s);
+            i.putExtra("busStopName",name);
             startActivity(i);
         }
         //Toast.makeText(getBaseContext(), "Stop Number: " + s,
