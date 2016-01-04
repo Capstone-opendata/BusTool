@@ -112,8 +112,12 @@ public class ResultActivity extends AppCompatActivity
             startActivity(i);
 
         } else if (id == R.id.nav_map) {
+            Intent i = new Intent(this, StopsMapActivity.class);
+            startActivity(i);
 
         } else if (id == R.id.nav_favorites) {
+            Intent i = new Intent(this, BusstopDbActivity.class);
+            startActivity(i);
 /*
         } else if (id == R.id.nav_share) {
 
