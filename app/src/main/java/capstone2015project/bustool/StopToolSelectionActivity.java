@@ -31,6 +31,7 @@ import java.util.ArrayList;
 public class StopToolSelectionActivity extends AppCompatActivity {
     SQLiteHelper BsDb;
     ListView listViewX;
+    boolean textChanged = true;
 
 
     @Override
@@ -65,14 +66,17 @@ public class StopToolSelectionActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
+                textChanged = true;
             }
 
             @Override
             public void afterTextChanged(Editable s) {
                 if (userInput.getText().toString().isEmpty()) {
-                    userInput.clearFocus();
-                    showFavorites();
+                    ArrayList array_list = new ArrayList();
+                    ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(StopToolSelectionActivity.this, android.R.layout.simple_list_item_1, array_list);
+                    listViewX = (ListView) findViewById(R.id.listViewX);
+                    listViewX.setAdapter(arrayAdapter);
+
                 } else {
                     String query = "SELECT * FROM busstops WHERE bs_id LIKE '%" + userInput.getText().toString() + "%' OR bs_nm LIKE '" + userInput.getText().toString() + "%' ";
                     ArrayList array_list = BsDb.getQuery(query);
@@ -116,12 +120,15 @@ public class StopToolSelectionActivity extends AppCompatActivity {
                     }
                     return true;
                 }
-                if (keyevent.getAction() == KeyEvent.ACTION_UP) {
+                if (keyevent.getAction() == KeyEvent.ACTION_UP && (keyCode == KeyEvent.KEYCODE_DEL) && !textChanged) {
                     if (userInput.getText().toString().isEmpty()) {
                         userInput.clearFocus();
                         showFavorites();
                     }
                     return true;
+                }
+                if (keyevent.getAction() == KeyEvent.ACTION_UP) {
+                    textChanged=false;
                 }
                 if ((keyevent.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_BACK)) {
                     userInput.clearFocus();
@@ -239,7 +246,7 @@ public class StopToolSelectionActivity extends AppCompatActivity {
                 String numberString = BsDb.BsIdList.get(arg2);
 
                 i.putExtra("busStopNumber", numberString);
-                Cursor res = BsDb.getData("SELECT bs_nm FROM busstops WHERE bs_id='"+numberString+"'");
+                Cursor res = BsDb.getData("SELECT bs_nm FROM busstops WHERE bs_id='" + numberString + "'");
                 res.moveToFirst();
                 //check
                 String name = res.getString(res.getColumnIndex("bs_nm"));
