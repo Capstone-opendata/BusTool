@@ -96,7 +96,7 @@ public class StopsMapActivity extends FragmentActivity implements OnMapReadyCall
 
         LatLng currentLoc = new LatLng(lat,lon);
         mMap.moveCamera(CameraUpdateFactory.newLatLng(currentLoc));
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLoc, 14));
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLoc, 15));
         // action on click
         mMap.setOnInfoWindowClickListener(this);
     }
