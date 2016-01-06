@@ -1,8 +1,13 @@
 package capstone2015project.bustool;
 
+import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.location.Location;
+import android.location.LocationManager;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.widget.Toast;
@@ -23,6 +28,7 @@ public class StopsMapActivity extends FragmentActivity implements OnMapReadyCall
     private static final Object KEY = "";
     private GoogleMap mMap;
     SQLiteHelper BsDb;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,7 +58,7 @@ public class StopsMapActivity extends FragmentActivity implements OnMapReadyCall
         Cursor res = BsDb.getData("SELECT * FROM busstops WHERE 1"); //limit 2 for testing
         res.moveToFirst();
         //iterate data
-        while(!res.isAfterLast()){
+        while (!res.isAfterLast()) {
             String id = res.getString(res.getColumnIndex("bs_id"));
             String name = res.getString(res.getColumnIndex("bs_nm"));
             double lat = res.getDouble(res.getColumnIndex("bs_lat"));
@@ -62,13 +68,35 @@ public class StopsMapActivity extends FragmentActivity implements OnMapReadyCall
             mMap.addMarker(new MarkerOptions().position(stops).title(name).snippet(KEY + id));
             res.moveToNext();
         }
+
+        double lat = 60.4491652;
+        double lon = 22.2933068;
+        LocationManager myLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        if (myLocationManager != null) {
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(StopsMapActivity.this,
+                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                        123);
+                return;
+            }
+            Location myLocation = myLocationManager
+                    .getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+            if (myLocation != null) {
+                lat = myLocation.getLatitude();
+                lon = myLocation.getLongitude();
+                //System.out.println("Lat: "+lat + " Lon: "+lon);
+            }
+
+        }
+
         //should not work this way
         //hard coded lon / lat for zoom and should be changed to current location of user
-        double hlat = 60.4491652;
-        double hlon= 22.2933068;
-        LatLng currentLoc = new LatLng(hlat,hlon);
+        //double hlat = 60.4491652;
+        //double hlon= 22.2933068;
+
+        LatLng currentLoc = new LatLng(lat,lon);
         mMap.moveCamera(CameraUpdateFactory.newLatLng(currentLoc));
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLoc, 13));
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLoc, 14));
         // action on click
         mMap.setOnInfoWindowClickListener(this);
     }
