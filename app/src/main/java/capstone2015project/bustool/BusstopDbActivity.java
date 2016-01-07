@@ -109,7 +109,7 @@ public class BusstopDbActivity extends AppCompatActivity {
                 stopsListView.setLayoutParams(p);
                 headView.setText(R.string.string_addfavorites);
                 // Db Control
-                ArrayList array_list = BsDb.getAllBSs();
+                ArrayList array_list = BsDb.getQuery("SELECT * FROM busstops WHERE bs_fav != 1");
                 ArrayAdapter<String> arrayAdapter=new ArrayAdapter<String>(BusstopDbActivity.this, android.R.layout.simple_list_item_1, array_list);
                 // Db to listView
                 stopsListView = (ListView) findViewById(R.id.DbView);
@@ -119,7 +119,7 @@ public class BusstopDbActivity extends AppCompatActivity {
                     public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
                         // when item on list is clicked
                         BsDb.addFav(BsDb.BsIdList.get(arg2));
-                        rButton0.performClick();
+                        rButton1.performClick();
 
 
                     }
@@ -273,10 +273,11 @@ public class BusstopDbActivity extends AppCompatActivity {
         BsDb = new SQLiteHelper(BusstopDbActivity.this);;
         switch (item.getItemId()) {
             case R.id.action_updatedb:
-                BsDb.DeleteAll();
-                final TextView headView = (TextView) findViewById(R.id.headView);
-                final RadioGroup group1 = (RadioGroup) findViewById(R.id.radioGroup);
-                final ListView lview = (ListView) findViewById(R.id.DbView);
+                TextView headView = (TextView) findViewById(R.id.headView);
+                RadioGroup group1 = (RadioGroup) findViewById(R.id.radioGroup);
+                ListView lview = (ListView) findViewById(R.id.DbView);
+                RadioButton rButton0 = (RadioButton)findViewById(R.id.radioButton0);
+                rButton0.performClick();
                 group1.setVisibility(View.INVISIBLE);
                 lview.setVisibility(View.INVISIBLE);
                 headView.setText(R.string.string_dl_wait);
@@ -336,13 +337,13 @@ public class BusstopDbActivity extends AppCompatActivity {
                 final ListView lview = (ListView) findViewById(R.id.DbView);
                 final RadioGroup group1 = (RadioGroup) findViewById(R.id.radioGroup);
                 final RadioButton button = (RadioButton) findViewById(R.id.radioButton0);
+                ArrayList array_list = BsDb.getQuery("SELECT * FROM busstops WHERE bs_fav = 1");
+                BsDb.DeleteAll();
                 try {
 
                     JSONObject stopsObject = new JSONObject(stream);
                     // Get the JSONArray stops
                     JSONArray stopsArray = stopsObject.toJSONArray(stopsObject.names());
-
-
                     for (int i = 0; i < stopsArray.length(); i++) {
                         JSONObject stop = stopsArray.getJSONObject(i);
 
@@ -353,13 +354,17 @@ public class BusstopDbActivity extends AppCompatActivity {
 
                         double lati = Double.parseDouble(lat);
                         double longi = Double.parseDouble(lon);
-
-                        BsDb.insertBS(stopNumber, stopName,lati, longi);
+                        BsDb.insertBS(stopNumber, stopName, lati, longi, "0");
 
                     }
 
                 } catch (JSONException e) {
                     e.printStackTrace();
+                }
+                int x=0;
+                while (x < BsDb.BsIdList.size()){
+                    BsDb.addFav(BsDb.BsIdList.get(x));
+                    x++;
                 }
                 group1.setVisibility(View.VISIBLE);
                 lview.setVisibility(View.VISIBLE);

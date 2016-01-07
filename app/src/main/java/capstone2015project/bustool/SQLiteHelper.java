@@ -47,13 +47,14 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         return db.rawQuery( query, null );
     }
 
-    public Boolean insertBS(String bs_id, String bs_name, double bs_lat, double bs_lon){
+    public Boolean insertBS(String bs_id, String bs_name, double bs_lat, double bs_lon, String bs_fav){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(BUSSTOP_ID,bs_id);
         contentValues.put(BUSSTOP_NAME, bs_name);
         contentValues.put(BUSSTOP_LAT, bs_lat);
         contentValues.put(BUSSTOP_LON, bs_lon);
+        contentValues.put(BUSSTOP_FAV, bs_fav);
         long result = db.insert(TABLE, null, contentValues);
         return result != -1;
     }
@@ -68,12 +69,13 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         return (int) DatabaseUtils.queryNumEntries(db, TABLE);
     }
 
-    public boolean updateBS (Integer id, String name, double bs_lat, double bs_lon) {
+    public boolean updateBS (Integer id, String bs_name, double bs_lat, double bs_lon, String bs_fav) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put(BUSSTOP_NAME, name);
+        contentValues.put(BUSSTOP_NAME, bs_name);
         contentValues.put(BUSSTOP_LAT, bs_lat);
         contentValues.put(BUSSTOP_LON, bs_lon);
+        contentValues.put(BUSSTOP_FAV, bs_fav);
         db.update(TABLE, contentValues, "id = ? ", new String[]{Integer.toString(id)});
         return true;
     }

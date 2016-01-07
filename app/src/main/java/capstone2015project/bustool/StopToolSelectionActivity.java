@@ -291,7 +291,7 @@ public class StopToolSelectionActivity extends AppCompatActivity {
                         double lati = Double.parseDouble(lat);
                         double longi = Double.parseDouble(lon);
 
-                        BsDb.insertBS(stopNumber, stopName,lati, longi);
+                        BsDb.insertBS(stopNumber, stopName,lati, longi, "0");
 
                     }
 
