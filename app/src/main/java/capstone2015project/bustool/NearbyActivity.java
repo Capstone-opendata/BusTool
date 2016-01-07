@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -28,6 +29,9 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -36,6 +40,12 @@ import java.util.ArrayList;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
+/**
+ * NearbyActivity is the class for getting a list of nearby bus stops
+ * displayed to the user in a distance filtered fashion from the closest
+ * stop to father away stops from the user's current location. User's
+ * location information is retrieved by GPS.
+ */
 public class NearbyActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         LocationListener {
@@ -45,10 +55,10 @@ public class NearbyActivity extends AppCompatActivity
 
     private boolean GPSenabled = false;     // is GPS enabled on user's device
 
-    ListView stopsListView;
-    Location myLocation;
-    LocationManager myLocationManager;
-    ArrayList<String> stopList;
+    ListView stopsListView;     // the list view where bus stops are shown
+    Location myLocation;        // variable to store user's current location
+    LocationManager myLocationManager;  //used for location retrieval
+    ArrayList<String> stopList;     //arraylist for storing list items
     private ProgressBar spinner;    // this will be displayed while retrieving data
 
     @Override
@@ -87,9 +97,7 @@ public class NearbyActivity extends AppCompatActivity
         // Get ListView object from xml
         stopsListView = (ListView) findViewById(R.id.listView);
         stopList = new ArrayList<String>();
-        //location of the stops data
-        //String url = "http://data.foli.fi/gtfs/v0/stops";
-        //new ProcessJSON().execute(url);
+
     }
 
     protected void onStart() {
@@ -124,22 +132,7 @@ public class NearbyActivity extends AppCompatActivity
             {
                 // GPS is enabled on user's device
                 if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                    /*
-                    if (ActivityCompat.shouldShowRequestPermissionRationale(NearbyActivity.this,
-                            Manifest.permission.ACCESS_FINE_LOCATION)) {
-                        showMessageOKCancel("You need to allow access to GPS",
-                                new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        ActivityCompat.requestPermissions(NearbyActivity.this,
-                                                new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                                                REQUEST_CODE_ASK_PERMISSIONS);
 
-                                    }
-                                }, null);
-                        return;
-                    }
-                    */
                     ActivityCompat.requestPermissions(NearbyActivity.this,
                             new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                             REQUEST_CODE_ASK_PERMISSIONS);
@@ -152,6 +145,17 @@ public class NearbyActivity extends AppCompatActivity
         }//if JSONretrievalStarted
 
     }// onStart
+
+    public void onStop()
+    {
+        super.onStop();
+
+        //stopping gps updates here to prevent gps staying on pointlessly in certain situations
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+        myLocationManager.removeUpdates(this);
+    }
 
     private void showMessageOKCancel(String message, DialogInterface.OnClickListener okListener,
                                      DialogInterface.OnClickListener cancelListener) {
@@ -238,9 +242,10 @@ public class NearbyActivity extends AppCompatActivity
         //myLocationManager.removeUpdates(this);
         //if data retrieval from foli hasn't been started and location's accuracy is better than 60m
         if (JSONretrievalStarted == false && location.getAccuracy() < 60) {
-            String url = "http://data.foli.fi/gtfs/v0/stops";
-            new ProcessJSON().execute(url);
+            //String url = "http://data.foli.fi/gtfs/v0/stops";
+            //new ProcessJSON().execute(url);
             JSONretrievalStarted = true;
+            handleBusStopData();
 
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 return;
@@ -249,6 +254,78 @@ public class NearbyActivity extends AppCompatActivity
         }
 
     }
+
+    /**
+     *  handleBusStopData will fetch bus stop data from database and use it
+     *  with GPS location to filter nearby stops. Distance filtered stops
+     *  are added to NearbyActivity's list.
+     */
+    private void handleBusStopData()
+    {
+        Location stopLocation = new Location("StopLoc");
+
+        // using SortedMap to sort the nearby stops
+        SortedMap<Integer, String> tempMap = new TreeMap<Integer, String>();
+
+        SQLiteHelper BsDb = new SQLiteHelper(NearbyActivity.this);
+        //fetch data
+        Cursor res = BsDb.getData("SELECT * FROM busstops WHERE 1"); //limit 2 for testing
+        res.moveToFirst();
+        //iterate data
+        while (!res.isAfterLast()) {
+            String id = res.getString(res.getColumnIndex("bs_id"));
+            String name = res.getString(res.getColumnIndex("bs_nm"));
+            double lat = res.getDouble(res.getColumnIndex("bs_lat"));
+            double lon = res.getDouble(res.getColumnIndex("bs_lon"));
+            stopLocation.setLatitude(lat);
+            stopLocation.setLongitude(lon);
+
+            float distance = myLocation.distanceTo(stopLocation);
+
+            //using hard coded distance filter of 2000m
+            if(distance <= 2000)
+            {
+                String stopDistance = ""+Math.round(distance);
+                tempMap.put(Integer.parseInt(stopDistance), id + " " + name + " " + stopDistance + "m");
+            }
+            res.moveToNext();
+        }
+
+        for(Integer distance : tempMap.keySet())
+        {
+            String stop = tempMap.get(distance);
+            stopList.add(stop);
+        }
+
+        spinner.setVisibility(View.GONE);
+        String[] values = stopList.toArray(new String[0]);
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(NearbyActivity.this,
+                android.R.layout.simple_list_item_1, android.R.id.text1, values);
+
+
+        // Assign adapter to ListView
+        stopsListView.setAdapter(adapter);
+
+        // ListView Item Click Listener
+        stopsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view,
+                                    int position, long id) {
+                Intent i = new Intent(getApplicationContext(), ResultActivity.class);
+
+                String numberString = (String) stopsListView.getItemAtPosition(position);
+                String arr[] = numberString.split("\\s+");
+                i.putExtra("busStopNumber",(String) arr[0]);
+                i.putExtra("busStopName",(String) arr[1]);
+                startActivity(i);
+
+            }
+
+        });
+
+    } // handleBusStopData method end
 
     @Override
     public void onStatusChanged(String provider, int status, Bundle extras) {
@@ -265,101 +342,4 @@ public class NearbyActivity extends AppCompatActivity
 
     }
 
-
-    //this class will handle processing the incoming json data
-    private class ProcessJSON extends AsyncTask<String, Void, String> {
-        protected String doInBackground(String... strings){
-            //String stream = null;
-            String urlString = strings[0];
-
-            HTTPDataHandler hh = new HTTPDataHandler();
-            String stream = hh.GetHTTPData(urlString);
-
-            // Return the data from specified url
-            return stream;
-        }
-
-        protected void onPostExecute(String stream){
-
-
-            if(stream !=null){
-                try{
-
-                    JSONObject stopsObject = new JSONObject(stream);
-                    // Get the JSONArray stops
-                    JSONArray stopsArray = stopsObject.toJSONArray(stopsObject.names());
-
-                    Location stopLocation = new Location("StopLoc");
-
-                    // using SortedMap to sort the nearby stops
-                    SortedMap<Integer, String> tempMap = new TreeMap<Integer, String>();
-
-                    for(int i = 0; i<stopsArray.length(); i++)
-                    {
-                        JSONObject stop = stopsArray.getJSONObject(i);
-
-                        stopLocation.setLatitude(Double.parseDouble(stop.getString("stop_lat")));
-                        stopLocation.setLongitude(Double.parseDouble(stop.getString("stop_lon")));
-                        float distance = myLocation.distanceTo(stopLocation);
-
-                        //System.out.println("DISTANCE "+ distance);
-                        //using hard coded distance filter of 500m
-                        if(distance <= 500)
-                        {
-                            String stopNumber = (String)stopsObject.names().get(i);
-                            String stopName = stop.getString("stop_name");
-                            String stopDistance = ""+Math.round(distance);
-                            //stopList.add(stopNumber + " " + stopName + " " + stopDistance + "m");
-                            //System.out.println("STOPLIST SIZE "+ stopList.size());
-
-                            tempMap.put(Integer.parseInt(stopDistance), stopNumber + " " + stopName + " " + stopDistance + "m");
-                        }
-
-                    }
-                    for(Integer distance : tempMap.keySet())
-                    {
-                        String stop = tempMap.get(distance);
-                        stopList.add(stop);
-                    }
-
-                }catch(JSONException e){
-                    e.printStackTrace();
-                }
-
-                spinner.setVisibility(View.GONE);
-                //Collections.sort(stopList);
-                //Collections.reverse(stopList);
-                String[] values = stopList.toArray(new String[0]);
-                //System.out.println("VALUES LENGTH "+values.length);
-
-
-
-                ArrayAdapter<String> adapter = new ArrayAdapter<String>(NearbyActivity.this,
-                        android.R.layout.simple_list_item_1, android.R.id.text1, values);
-
-
-                // Assign adapter to ListView
-                stopsListView.setAdapter(adapter);
-
-                // ListView Item Click Listener
-                stopsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view,
-                                            int position, long id) {
-                        Intent i = new Intent(getApplicationContext(), ResultActivity.class);
-
-                        String numberString = (String) stopsListView.getItemAtPosition(position);
-                        String arr[] = numberString.split("\\s+");
-                        i.putExtra("busStopNumber",(String) arr[0]);
-                        i.putExtra("busStopName",(String) arr[1]);
-                        startActivity(i);
-
-                    }
-
-                });
-
-            } // if statement end
-        } // onPostExecute() end
-    } // ProcessJSON class end
 }
