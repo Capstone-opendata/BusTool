@@ -178,9 +178,7 @@ public class BusstopDbActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (userInput.getText().toString().isEmpty()) {
-                    userInput.clearFocus();
-                } else {
+
                     String query = "SELECT * FROM busstops WHERE bs_id LIKE '%" + userInput.getText().toString() + "%' OR bs_nm LIKE '" + userInput.getText().toString() + "%' ";
                     ArrayList array_list = BsDb.getQuery(query);
                     ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(BusstopDbActivity.this, android.R.layout.simple_list_item_1, array_list);
@@ -190,10 +188,10 @@ public class BusstopDbActivity extends AppCompatActivity {
                         @Override
                         public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
                             BsDb.addFav(BsDb.BsIdList.get(arg2));
-                            rButton0.performClick();
+                            rButton1.performClick();
                         }
                     });
-                }
+
             }
         });
         userInput.setOnKeyListener(new View.OnKeyListener() {
