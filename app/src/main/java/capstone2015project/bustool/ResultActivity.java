@@ -264,12 +264,13 @@ public class ResultActivity extends AppCompatActivity
                             tvLine.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
                             tvLine.setTextColor(Color.parseColor("#FFFFFF"));
                             tvLine.setBackgroundResource(R.drawable.ic_bus_bg);
-                            //counting bus number length to fit in the bg
-                            //int len = busses_0_lineNumber.length();
-                            //if(len==3)
-                              //  tvLine.setPadding(15, 20, 0, 0);
-                            //else
-                              //  tvLine.setPadding(24, 20, 0, 0);
+                            /*counting bus number length to fit in the bg
+                            int len = busses_0_lineNumber.length();
+                            if(len==3)
+                              tvLine.setPadding(15, 20, 0, 0);
+                            else
+                               tvLine.setPadding(24, 20, 0, 0);
+                              */
                             tvLine.setHeight(85);
                             tvLine.setWidth(85);
                             //breaking destination on first word ... must be a better way to do this

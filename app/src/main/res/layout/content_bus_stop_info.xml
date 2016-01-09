@@ -118,8 +118,8 @@
                 android:layout_weight="0.4"
                 android:id="@+id/result_eta_3"/>
         </TableRow>
-
     </TableLayout>
+
     <Button
         android:layout_gravity="center"
         android:layout_width="wrap_content"
