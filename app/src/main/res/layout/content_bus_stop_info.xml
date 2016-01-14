@@ -9,16 +9,20 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:showIn="@layout/activity_bus_stop_info" tools:context=".BusStopInfoActivity">
 
+    <!--
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
         android:id="@+id/stop_number_text"
         android:text="00"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="38dp"
+        android:layout_marginTop="0dp"
         android:textStyle="bold" />
+        -->
 
+    <!--
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -27,97 +31,79 @@
         android:id="@+id/textView"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
+        -->
+
 
     <TableLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/stop_number_text"
-        android:layout_toStartOf="@+id/stop_number_text"
-        android:layout_toLeftOf="@id/stop_number_text"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:id="@+id/result_table_layout">
+        android:id="@+id/result_table_layout"
+        android:layout_above="@+id/LinearLayout02">
 
         <!-- The first title row -->
-        <TableRow>
+        <TableRow android:layout_width="match_parent"
+            android:layout_height="match_parent">
             <TextView
                 android:text="Line"
                 android:gravity="center"
-                android:padding="3dip" />
+                android:padding="3dip"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
             <TextView
                 android:text="Destination"
                 android:layout_width="0px"
                 android:layout_weight="0.4"
-                android:padding="3dip" />
+                android:padding="3dip"
+                android:layout_height="match_parent" />
             <TextView
                 android:text="ETA"
                 android:layout_width="0px"
                 android:layout_weight="0.4"
-                android:padding="3dip" />
+                android:padding="3dip"
+                android:layout_height="match_parent" />
         </TableRow>
 
-        <!-- The second row and first for stop data -->
-        <TableRow>
-            <TextView
-                android:text=""
-                android:padding="3dip"
-                android:gravity="center"
-                android:id="@+id/result_line_1"/>
-            <TextView
-                android:text=""
-                android:padding="3dip"
-                android:layout_width="0px"
-                android:layout_weight="0.4"
-                android:id="@+id/result_destination_1"/>
-            <TextView
-                android:text=""
-                android:padding="3dip"
-                android:layout_width="0px"
-                android:layout_weight="0.4"
-                android:id="@+id/result_eta_1"/>
-        </TableRow>
+        <ScrollView
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent"
+            android:scrollbars="vertical"
+            android:layout_above="@+id/LinearLayout02"
+            android:layout_alignParentTop="true">
 
-        <!-- The third row and second for stop data -->
-        <TableRow>
-            <TextView
-                android:text=""
-                android:padding="3dip"
-                android:gravity="center"
-                android:id="@+id/result_line_2"/>
-            <TextView
-                android:text=""
-                android:padding="3dip"
-                android:layout_width="0px"
-                android:layout_weight="0.4"
-                android:id="@+id/result_destination_2"/>
-            <TextView
-                android:text=""
-                android:padding="3dip"
-                android:layout_width="0px"
-                android:layout_weight="0.4"
-                android:id="@+id/result_eta_2"/>
-        </TableRow>
+            <TableLayout
+                android:id="@+id/ScrollableTableLayout"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:isScrollContainer="true">
 
-        <!-- The fourth row and third for stop data -->
-        <TableRow>
-            <TextView
-                android:text=""
-                android:padding="3dip"
-                android:gravity="center"
-                android:id="@+id/result_line_3"/>
-            <TextView
-                android:text=""
-                android:padding="3dip"
-                android:layout_width="0px"
-                android:layout_weight="0.4"
-                android:id="@+id/result_destination_3"/>
-            <TextView
-                android:text=""
-                android:padding="3dip"
-                android:layout_width="0px"
-                android:layout_weight="0.4"
-                android:id="@+id/result_eta_3"/>
-        </TableRow>
+            <!-- The second row and first for stop data -->
+                <!--
+            <TableRow android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <TextView
+                    android:text=""
+                    android:padding="3dip"
+                    android:gravity="center"
+                    android:id="@+id/result_line_1"/>
+                <TextView
+                    android:text=""
+                    android:padding="3dip"
+                    android:layout_width="0px"
+                    android:layout_weight="0.4"
+                    android:id="@+id/result_destination_1"/>
+                <TextView
+                    android:text=""
+                    android:padding="3dip"
+                    android:layout_width="0px"
+                    android:layout_weight="0.4"
+                    android:id="@+id/result_eta_1"/>
+            </TableRow>
+            -->
+
+            </TableLayout>
+        </ScrollView>
     </TableLayout>
 
     <LinearLayout
