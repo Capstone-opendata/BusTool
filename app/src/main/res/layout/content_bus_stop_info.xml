@@ -120,15 +120,32 @@
         </TableRow>
     </TableLayout>
 
-    <Button
-        android:layout_gravity="center"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/LinearLayout02"
         android:layout_height="wrap_content"
-        android:text="Back to search"
-        android:id="@+id/button6"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:onClick="GoToToolSelectionActivity" />
+        android:layout_width="fill_parent"
+        android:layout_alignParentBottom="true">
+
+        <Button
+            android:id="@+id/RefreshButton"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:onClick="ManualRefresh"
+            android:text="Refresh">
+        </Button>
+
+        <Button
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Back to search"
+            android:id="@+id/button6"
+            android:layout_weight="1"
+            android:onClick="GoToToolSelectionActivity" />
+
+    </LinearLayout>
 
 </RelativeLayout>
 

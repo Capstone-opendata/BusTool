@@ -188,7 +188,9 @@ public class ResultActivity extends AppCompatActivity
         Boolean add = BsDb.delFav(busStopNumber);
     }
 
-    //starts the stop data retrieval from foli
+    /**
+     * Starts SIRI JSON bus stop data retrieval from föli's database
+     */
     public void GetStopData()
     {
         String url = "http://data.foli.fi/siri/sm/"+busNumber;
@@ -197,6 +199,19 @@ public class ResultActivity extends AppCompatActivity
         new ProcessJSON().execute(url);
     }
 
+    /**
+     * Used to allow refresh button use GetStopData method
+     * @param view the current view
+     */
+    public void ManualRefresh(View view)
+    {
+        GetStopData();
+    }
+
+    /**
+     * Used to allow Go To Main Menu button start intent StopToolSelectionActivity
+     * @param view the current view
+     */
     public void GoToToolSelectionActivity(View view)
     {
         Intent i = new Intent(this, StopToolSelectionActivity.class);
