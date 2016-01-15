@@ -193,9 +193,12 @@ public class ResultActivity extends AppCompatActivity
 
     /**
      * Starts SIRI JSON bus stop data retrieval from föli's database
+     * and clears the previous data from scrollable tablelayout
      */
     public void GetStopData()
     {
+        TableLayout scrollableLayout = (TableLayout)findViewById(R.id.ScrollableTableLayout);
+        scrollableLayout.removeAllViews();
         String url = "http://data.foli.fi/siri/sm/"+busNumber;
         //EditText userInput = (EditText) findViewById(R.id.editText);
         //String url = "http://data.foli.fi/siri/sm/"+userInput.getText();
