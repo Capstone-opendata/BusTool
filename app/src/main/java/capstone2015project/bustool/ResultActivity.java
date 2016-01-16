@@ -37,6 +37,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.net.HttpURLConnection;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -297,8 +299,20 @@ public class ResultActivity extends AppCompatActivity
 
                             int seconds = (int) (eta / 1000) % 60 ;
                             int minutes = (int) ((eta / (1000*60)) % 60);
+                            int hours = (int) (eta / (1000 * 60 * 60)) % 24;
 
-                            String etaString = minutes+"m " +seconds+"s";
+                            String etaString;
+
+                            if (hours < 1)
+                            {
+                                etaString = minutes+"min " +seconds+"s";
+                            }
+                            else
+                            {
+                                SimpleDateFormat formatter = new SimpleDateFormat("HH:mm");
+                                etaString = formatter.format(new Date(Long.parseLong(busses_0_expectedTime)*1000));
+                            }
+
 
                             //tv.setText(tv.getText()+"\nLine "+busses_0_lineNumber+" "+busses_0_lineDestination+ " "+etaString);
 
