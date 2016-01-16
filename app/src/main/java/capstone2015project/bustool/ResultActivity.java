@@ -1,13 +1,18 @@
 package capstone2015project.bustool;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
+import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
 import android.util.TypedValue;
 import android.view.MenuInflater;
 import android.view.View;
@@ -20,6 +25,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -40,6 +46,7 @@ public class ResultActivity extends AppCompatActivity
     String busNumber;
     public String busStopNumber;
     public String busStopName;
+    int favorites;
     SQLiteHelper BsDb;
 
     @Override
@@ -48,16 +55,21 @@ public class ResultActivity extends AppCompatActivity
         setContentView(R.layout.activity_result);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-/*
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+
+
+        final ImageButton fav = (ImageButton) findViewById(R.id.imageButton);
+        fav.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                if(favorites==1){
+                    forget();
+                    fav.setImageDrawable(ContextCompat.getDrawable(ResultActivity.this, R.mipmap.ic_unfavorite_star));
+                }else {
+                    remember();
+                    fav.setImageDrawable(ContextCompat.getDrawable(ResultActivity.this, R.mipmap.ic_favorite_star));
+                }
             }
         });
-*/
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -150,6 +162,7 @@ public class ResultActivity extends AppCompatActivity
                 });
             }
         }, 0, 1000 * 60);
+
     }
 
     @Override
@@ -178,6 +191,21 @@ public class ResultActivity extends AppCompatActivity
         }
     }
 
+    @Override
+    protected  void onResume(){
+        super.onResume();
+        SQLiteHelper BsDb = new SQLiteHelper(ResultActivity.this);
+        final Cursor res = BsDb.getData("SELECT * FROM busstops WHERE bs_id LIKE "+busStopNumber);
+        res.moveToFirst();
+        ImageButton fav = (ImageButton) findViewById(R.id.imageButton);
+        favorites=res.getInt(res.getColumnIndex("bs_fav"));
+        if(favorites==1) {;
+            fav.setImageDrawable(ContextCompat.getDrawable(this, R.mipmap.ic_favorite_star));
+        }else{
+            fav.setImageDrawable(ContextCompat.getDrawable(this, R.mipmap.ic_unfavorite_star));
+        }
+    }
+
     public void remember(){
         BsDb = new SQLiteHelper(ResultActivity.this);
         Boolean del = BsDb.addFav(busStopNumber);
@@ -202,7 +230,6 @@ public class ResultActivity extends AppCompatActivity
         Intent i = new Intent(this, StopToolSelectionActivity.class);
         startActivity(i);
     }
-
 
     private class ProcessJSON extends AsyncTask<String, Void, String> {
         protected String doInBackground(String... strings){
