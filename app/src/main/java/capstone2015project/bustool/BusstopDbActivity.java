@@ -231,9 +231,7 @@ public class BusstopDbActivity extends AppCompatActivity implements NavigationVi
                     return true;
                 }
                 if ((keyevent.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_BACK)) {
-                    userInput.clearFocus();
-                    userInput.setText("");
-                    rButton1.performClick();
+                    rButton0.performClick();
                     return true;
                 }
                 return false;
