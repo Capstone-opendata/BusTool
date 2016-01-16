@@ -56,7 +56,7 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Nearby Stops"
+        android:text="@string/NbButton_text"
         android:id="@+id/button3"
         android:layout_below="@+id/textView2"
         android:layout_alignParentLeft="true"

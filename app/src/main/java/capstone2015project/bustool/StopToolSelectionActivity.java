@@ -51,7 +51,10 @@ public class StopToolSelectionActivity extends AppCompatActivity {
                }
           });*/
 
-        final Button DbButton = (Button) findViewById(R.id.button5);
+        final Button DbButton = (Button) findViewById(R.id.button5); // Database Button
+        final Button NbButton = (Button) findViewById(R.id.button3); // Nearby Button
+        final Button MpButton = (Button) findViewById(R.id.button4); // Map Button
+        
         final EditText userInput = (EditText) findViewById(R.id.editText_busID);
         BsDb = new SQLiteHelper(StopToolSelectionActivity.this);
         if(BsDb.numberOfRows()==0) {
@@ -144,23 +147,17 @@ public class StopToolSelectionActivity extends AppCompatActivity {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (hasFocus) {
-                    final Button button5 = (Button) findViewById(R.id.button5);
-                    final Button button3 = (Button) findViewById(R.id.button3);
-                    final Button button4 = (Button) findViewById(R.id.button4);
-                    button5.setVisibility(View.INVISIBLE);
-                    button3.setVisibility(View.INVISIBLE);
-                    button4.setVisibility(View.INVISIBLE);
                     RelativeLayout.LayoutParams p = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                     p.addRule(RelativeLayout.BELOW, R.id.input_layout_busID);
                     listViewX.setLayoutParams(p);
+                    DbButton.setVisibility(View.INVISIBLE);
+                    NbButton.setVisibility(View.INVISIBLE);
+                    MpButton.setVisibility(View.INVISIBLE);
 
                 } else {
-                    final Button button5 = (Button) findViewById(R.id.button5);
-                    final Button button3 = (Button) findViewById(R.id.button3);
-                    final Button button4 = (Button) findViewById(R.id.button4);
-                    button5.setVisibility(View.VISIBLE);
-                    button3.setVisibility(View.VISIBLE);
-                    button4.setVisibility(View.VISIBLE);
+                    DbButton.setVisibility(View.VISIBLE);
+                    NbButton.setVisibility(View.VISIBLE);
+                    MpButton.setVisibility(View.VISIBLE);
                     RelativeLayout.LayoutParams p = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                     p.addRule(RelativeLayout.BELOW, R.id.button5);
                     listViewX.setLayoutParams(p);
@@ -225,9 +222,9 @@ public class StopToolSelectionActivity extends AppCompatActivity {
 
     public void fetchDb(){
         final EditText userInput = (EditText) findViewById(R.id.editText_busID);
-        final Button button3 = (Button) findViewById(R.id.button3);button3.setEnabled(false);
-        final Button button4 = (Button) findViewById(R.id.button4);button4.setEnabled(false);
-        final Button button5 = (Button) findViewById(R.id.button5);button5.setEnabled(false);
+        final Button NbButton = (Button) findViewById(R.id.button3);NbButton.setEnabled(false);
+        final Button MpButton = (Button) findViewById(R.id.button4);MpButton.setEnabled(false);
+        final Button DbButton = (Button) findViewById(R.id.button5);DbButton.setEnabled(false);
         userInput.setEnabled(false);
         userInput.setText(R.string.string_dl_wait);
         String url = "http://data.foli.fi/gtfs/v0/stops";
@@ -299,10 +296,10 @@ public class StopToolSelectionActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
                 final EditText userInput = (EditText) findViewById(R.id.editText_busID);
-                final Button button3 = (Button) findViewById(R.id.button3);button3.setEnabled(true);
-                final Button button4 = (Button) findViewById(R.id.button4);button4.setEnabled(true);
-                final Button button5 = (Button) findViewById(R.id.button5);button5.setEnabled(true);
-                button5.setText(R.string.DbButton_text);
+                final Button NbButton = (Button) findViewById(R.id.button3);NbButton.setEnabled(true);
+                final Button MpButton = (Button) findViewById(R.id.button4);MpButton.setEnabled(true);
+                final Button DbButton = (Button) findViewById(R.id.button5);DbButton.setEnabled(true);
+                DbButton.setText(R.string.DbButton_text);
                 userInput.setEnabled(true);
                 userInput.setText("");
             } // if statement end
