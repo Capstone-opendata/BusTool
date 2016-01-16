@@ -65,9 +65,11 @@ public class ResultActivity extends AppCompatActivity
                 if(favorites==1){
                     forget();
                     fav.setImageDrawable(ContextCompat.getDrawable(ResultActivity.this, R.mipmap.ic_unfavorite_star));
+                    favorites=0;
                 }else {
                     remember();
                     fav.setImageDrawable(ContextCompat.getDrawable(ResultActivity.this, R.mipmap.ic_favorite_star));
+                    favorites=1;
                 }
             }
         });
