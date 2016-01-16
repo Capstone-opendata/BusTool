@@ -200,7 +200,7 @@ public class ResultActivity extends AppCompatActivity
     protected  void onResume(){
         super.onResume();
         SQLiteHelper BsDb = new SQLiteHelper(ResultActivity.this);
-        final Cursor res = BsDb.getData("SELECT * FROM busstops WHERE bs_id LIKE "+busStopNumber);
+        final Cursor res = BsDb.getData("SELECT * FROM busstops WHERE bs_id='"+busStopNumber+"' ");
         res.moveToFirst();
         ImageButton fav = (ImageButton) findViewById(R.id.imageButton);
         favorites=res.getInt(res.getColumnIndex("bs_fav"));
