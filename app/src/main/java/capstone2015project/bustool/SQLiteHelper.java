@@ -12,9 +12,15 @@ import android.database.sqlite.SQLiteDatabase;
  * Created by jani on 8.12.2015.
  *
  * Contains methods to handle database;
+ * file: busstop.db
+ * table: busstops
+ * columns:|    id  |   bs_id   |   bs_nm   |   bs_tag  |   bs_fav |    bs_lat |    bs_lon  |
  *
  */
 public class SQLiteHelper extends SQLiteOpenHelper {
+    /*
+    Database and Columns
+     */
     public static final String DATABASE = "busstop.db";
     public static final String TABLE = "busstops";
     public static final String ID = "id";
@@ -24,7 +30,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
     public static final String BUSSTOP_FAV = "bs_fav"; // true or false
     public static final String BUSSTOP_LAT = "bs_lat";
     public static final String BUSSTOP_LON = "bs_lon";
-    public final ArrayList<String> BsIdList = new ArrayList<String>();
+    public final ArrayList<String> BsIdList = new ArrayList<String>(); // list that contains latest fetched bsid items
 
     public SQLiteHelper(Context context) {
         super(context, DATABASE, null, 1);
@@ -32,6 +38,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+        // Create Database if doesn't exist
         db.execSQL("create table " + TABLE + " (" + ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + BUSSTOP_ID + " TEXT, " + BUSSTOP_NAME + " TEXT, " + BUSSTOP_TAGS + " TEXT, " + BUSSTOP_FAV + " INTEGER, " + BUSSTOP_LAT + " Decimal(9,6), " + BUSSTOP_LON + " Decimal(9,6))");
     }
 
@@ -43,11 +50,17 @@ public class SQLiteHelper extends SQLiteOpenHelper {
 
     public Cursor getData(String query)
     {
+        /*
+        To fetch simple query
+         */
         SQLiteDatabase db = this.getReadableDatabase();
         return db.rawQuery( query, null );
     }
 
     public Boolean insertBS(String bs_id, String bs_name, double bs_lat, double bs_lon, String bs_fav){
+        /*
+        Inserts Row with Bus Stop data
+         */
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(BUSSTOP_ID,bs_id);
@@ -59,17 +72,18 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         return result != -1;
     }
 
-    public Cursor readBS(int id){
-        SQLiteDatabase db = this.getReadableDatabase();
-        return db.rawQuery( "select * from "+TABLE+" where id="+id+"", null );
-    }
-
     public int numberOfRows(){
+        /*
+        Checks the number of rows in database
+         */
         SQLiteDatabase db = this.getReadableDatabase();
         return (int) DatabaseUtils.queryNumEntries(db, TABLE);
     }
 
     public boolean updateBS (Integer id, String bs_name, double bs_lat, double bs_lon, String bs_fav) {
+        /*
+        Update a row of data in database
+         */
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(BUSSTOP_NAME, bs_name);
@@ -81,22 +95,20 @@ public class SQLiteHelper extends SQLiteOpenHelper {
     }
 
     public boolean DeleteAll () {
+        /*
+        Drop table, deteles all data
+         */
         SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL("DROP TABLE " + TABLE);
         onCreate(db);
         return true;
     }
 
-    public Integer deleteBS (Integer id)
-    {
-        SQLiteDatabase db = this.getWritableDatabase();
-        return db.delete(TABLE,
-                "id = ? ",
-                new String[] { Integer.toString(id) });
-    }
-
     public ArrayList<String> getAllBSs()
     {
+        /*
+        Creates an array list of all Bus Stops, and updates BsIdList
+         */
         ArrayList<String> array_list = new ArrayList<String>();
 
         //hp = new HashMap();
@@ -114,7 +126,9 @@ public class SQLiteHelper extends SQLiteOpenHelper {
 
     public ArrayList<String> getQuery(String qString)
     {
-
+        /*
+        Creates an arrays list and updates BsIdList of items
+         */
         ArrayList<String> array_list = new ArrayList<String>();
         //hp = new HashMap();
         SQLiteDatabase db = this.getReadableDatabase();
@@ -131,6 +145,9 @@ public class SQLiteHelper extends SQLiteOpenHelper {
     }
 
     public Boolean addFav(String BsToAdd){
+        /*
+        Turns row's bs_fav column to 1, added to favorites
+         */
         SQLiteDatabase db = this.getReadableDatabase();
         // Get Id to Update
         Cursor res =  db.rawQuery("SELECT * FROM " + TABLE + " WHERE bs_id LIKE '" + BsToAdd + "' ", null);
@@ -144,6 +161,9 @@ public class SQLiteHelper extends SQLiteOpenHelper {
     }
 
     public Boolean delFav(String BsToDel){
+        /*
+        Turn row's bs_fav column to 0, deleted from favorites
+         */
         SQLiteDatabase db = this.getReadableDatabase();
         // Get Id to Update
         Cursor res =  db.rawQuery("SELECT * FROM "+TABLE+" WHERE bs_id LIKE '"+BsToDel+"' ", null);
