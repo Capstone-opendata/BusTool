@@ -12,6 +12,17 @@
     tools:context="capstone2015project.bustool.ResultActivity"
     tools:showIn="@layout/app_bar_result">
 
-    <include layout="@layout/content_bus_stop_info" />
+    <include layout="@layout/content_bus_stop_info"
+        android:id="@+id/include" />
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageButton"
+        android:layout_alignParentTop="true"
+        android:layout_alignRight="@+id/include"
+        android:layout_alignEnd="@+id/include"
+        android:src="@mipmap/ic_unfavorite_star"
+        android:background="#00000000" />
 
 </RelativeLayout>
