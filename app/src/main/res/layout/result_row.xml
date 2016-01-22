@@ -1,23 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <TableRow xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="match_parent">
-
     <TextView
         android:text=""
         android:padding="3dip"
+        android:textSize="16sp"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold"
+        android:layout_height="45sp"
+        android:layout_width="45sp"
+        android:background="@drawable/ic_bus_bg"
         android:gravity="center"
         android:id="@+id/result_line_1"/>
     <TextView
         android:text=""
         android:padding="3dip"
+        android:textSize="12sp"
         android:layout_width="0px"
-        android:layout_weight="0.4"
+        android:layout_weight="0.6"
         android:id="@+id/result_destination_1"/>
     <TextView
         android:text=""
         android:padding="3dip"
+        android:textSize="12sp"
         android:layout_width="0px"
-        android:layout_weight="0.4"
+        android:layout_weight="0.3"
         android:id="@+id/result_eta_1"/>
-
 </TableRow>

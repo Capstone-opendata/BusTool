@@ -313,9 +313,7 @@ public class ResultActivity extends AppCompatActivity
                                 etaString = formatter.format(new Date(Long.parseLong(busses_0_expectedTime)*1000));
                             }
 
-
                             //tv.setText(tv.getText()+"\nLine "+busses_0_lineNumber+" "+busses_0_lineDestination+ " "+etaString);
-
                             // using row plus 1 means that we dont mess with the title row
                             //TableRow row = (TableRow)table.getChildAt(i+1);
                             TableRow row = (TableRow) LayoutInflater.from(ResultActivity.this).inflate(R.layout.result_row, null);
@@ -323,34 +321,14 @@ public class ResultActivity extends AppCompatActivity
                             TextView tvLine = (TextView)row.getChildAt(0);  //the first column of this row
                             TextView tvDest = (TextView)row.getChildAt(1);  //the second
                             TextView tvEta = (TextView)row.getChildAt(2);   //the third
-
                             // setting the text data in the table cells
                             tvLine.setText(busses_0_lineNumber);
-			                //applying styles on first column
-                            tvLine.setTypeface(Typeface.SANS_SERIF, Typeface.BOLD);
-                            tvLine.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
-                            tvLine.setTextColor(Color.parseColor("#FFFFFF"));
-                            tvLine.setBackgroundResource(R.drawable.ic_bus_bg);
-                            /*counting bus number length to fit in the bg
-                            int len = busses_0_lineNumber.length();
-                            if(len==3)
-                              tvLine.setPadding(15, 20, 0, 0);
-                            else
-                               tvLine.setPadding(24, 20, 0, 0);
-                              */
-                            tvLine.setHeight(85);
-                            tvLine.setWidth(85);
                             //breaking destination on first word ... must be a better way to do this
                             String[] strArr = busses_0_lineDestination.split("\\s+",0);
 				            tvDest.setText(strArr[0]);
 				            tvDest.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
-                            //tvDest.setMinWidth(380);
-                            tvDest.setPadding(10, 0, 10, 0);
-                            
 				            tvEta.setText(etaString);
 				            tvEta.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
-                            //tvEta.setMinWidth(320);
-
                         }
 
                     }
