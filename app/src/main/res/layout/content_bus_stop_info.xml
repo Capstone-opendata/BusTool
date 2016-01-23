@@ -33,6 +33,33 @@
         android:layout_centerHorizontal="true" />
         -->
 
+    <LinearLayout
+        android:id="@+id/LinearLayout01"
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:orientation="horizontal"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:gravity="center_horizontal"
+        android:layout_alignParentTop="true">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textSize="16sp"
+            android:textColor="#000000"
+            android:text="@string/filterTextView" />
+
+        <Spinner
+            android:id="@+id/filter_spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="5dip">
+
+        </Spinner>
+
+    </LinearLayout>
 
     <TableLayout
         android:layout_width="match_parent"
@@ -40,7 +67,8 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:id="@+id/result_table_layout"
-        android:layout_above="@+id/LinearLayout02">
+        android:layout_above="@+id/LinearLayout02"
+        android:layout_below="@+id/LinearLayout01">
 
         <!-- The first title row -->
         <TableRow android:layout_width="match_parent"

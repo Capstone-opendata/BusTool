@@ -21,4 +21,6 @@
     <string name="MapButton_text">View on Map</string>
     <string name="title_activity_stops_map">Stops on Map</string>
     <string name="NbButton_text">Nearby Stops</string>
+    <string name="filterTextView">Show</string>
+    <string name="filterSpinnerAll">All</string>
 </resources>

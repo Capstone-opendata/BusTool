@@ -25,9 +25,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -38,20 +41,27 @@ import org.json.JSONObject;
 
 import java.net.HttpURLConnection;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
 public class ResultActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener,
+        AdapterView.OnItemSelectedListener {
 
     HttpURLConnection urlConnection;
-    Timer timer;
-    String busNumber;
-    public String busStopNumber;
-    public String busStopName;
+    Timer timer;    // used for automatic result refreshing
+    String busNumber;   // used for storing bus stop number
+    public String busStopNumber;    //the number of the bus stop eg 449
+    public String busStopName;      //the name of the bus stop eg Korvalankatu
     int favorites;
     SQLiteHelper BsDb;
+    private Spinner filterSpinner;  //used for selecting which bus lines should be filtered
+    private String lastSpinnerSelection;    //used to store filter selection between updates
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +95,10 @@ public class ResultActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        //giving filter spinner select listener
+        filterSpinner = (Spinner) findViewById(R.id.filter_spinner);
+        filterSpinner.setOnItemSelectedListener(this);
+
         //getting the passed bus number
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
@@ -97,6 +111,64 @@ public class ResultActivity extends AppCompatActivity
             //stopNumberText.setText(busStopNumber+": "+busStopName);
             toolbar.setSubtitle(busStopNumber+": "+busStopName);
         }
+    }
+
+    /**
+     * Adds items dynamically to filter spinner.
+     * @param busLineList is list of bus line numbers in String format
+     */
+    private void addItemsOnSpinner(List<String> busLineList) {
+
+        //filterSpinner = (Spinner) findViewById(R.id.filter_spinner);
+        List<String> list = new ArrayList<String>();
+        list.add(String.valueOf(getResources().getText(R.string.filterSpinnerAll)));
+        for(int i = 0; i < busLineList.size(); i++)
+        {
+            list.add(busLineList.get(i));
+        }
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_spinner_item, list);
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        filterSpinner.setAdapter(dataAdapter);
+    }
+
+    /**
+     * Filters result table rows by given bus line. Filtered bus lines are
+     * hidden. If given bus line is null then all result table rows are shown.
+     * @param busLine is the bus line number which will be shown in results
+     */
+    private void filterResultTable(String busLine)
+    {
+
+        TableLayout scrollableLayout = (TableLayout)findViewById(R.id.ScrollableTableLayout);
+        //if busLine isn't null show only wanted bus line else show all
+        if(busLine != null)
+        {
+            CharSequence line = busLine;
+            for(int i = 0; i < scrollableLayout.getChildCount(); i++)
+            {
+                TableRow row = (TableRow) scrollableLayout.getChildAt(i);
+                if(((TextView) row.getChildAt(0)).getText().equals(line))
+                {
+                    row.setVisibility(View.VISIBLE);
+                }
+                else
+                {
+                    row.setVisibility(View.GONE);
+                }
+            }
+        }
+        else
+        {
+            for(int i = 0; i < scrollableLayout.getChildCount(); i++)
+            {
+                TableRow row = (TableRow) scrollableLayout.getChildAt(i);
+                row.setVisibility(View.VISIBLE);
+            }
+        }
+        //setting table to visible because it was set invisible in data retrieval
+        scrollableLayout.setVisibility(View.VISIBLE);
+
     }
 
     @Override
@@ -256,6 +328,30 @@ public class ResultActivity extends AppCompatActivity
         startActivity(i);
     }
 
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        // An item was selected. You can retrieve the selected item using
+        // parent.getItemAtPosition(pos)
+
+        // if spinner value isn't "All" then filter by given item else remove filter
+        if((String) parent.getItemAtPosition(position) != String.valueOf(getResources().getText(R.string.filterSpinnerAll)))
+        {
+            filterResultTable((String) parent.getItemAtPosition(position));
+            lastSpinnerSelection = (String) parent.getItemAtPosition(position);
+        }
+        else
+        {
+            filterResultTable(null);
+            lastSpinnerSelection = (String) parent.getItemAtPosition(position);
+        }
+
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+        // Another interface callback
+    }
+
     private class ProcessJSON extends AsyncTask<String, Void, String> {
         protected String doInBackground(String... strings){
             //String stream = null;
@@ -274,7 +370,8 @@ public class ResultActivity extends AppCompatActivity
             // increasing the table size requires addition of rows in content_bus_stop_info.xml
             //TableLayout table = (TableLayout)findViewById(R.id.result_table_layout);
             TableLayout scrollableLayout = (TableLayout)findViewById(R.id.ScrollableTableLayout);
-
+            //setting table invisible to avoid showing filtering during updates. Set to visible after filtering.
+            scrollableLayout.setVisibility(View.GONE);
             if(stream !=null){
                 try{
                     // Get the full HTTP Data as JSONObject
@@ -282,6 +379,8 @@ public class ResultActivity extends AppCompatActivity
                     //tv.setText("."+reader+".");
                     // Get the JSONArray busses
                     JSONArray bussesArray = reader.getJSONArray("result");
+                    //store temporarily all line numbers in this list
+                    List<String> allLinesList = new ArrayList<String>();
 
                     // using i<5 means that only 5 next busses will be displayed
                     for(int i = 0; i<20; i++)
@@ -293,6 +392,8 @@ public class ResultActivity extends AppCompatActivity
                             String busses_0_lineNumber = busses_object_0.getString("lineref");
                             String busses_0_lineDestination = busses_object_0.getString("destinationdisplay");
                             String busses_0_expectedTime = busses_object_0.getString("expectedarrivaltime");
+
+                            allLinesList.add(busses_0_lineNumber);
 
                             long timestamp = System.currentTimeMillis();
                             long eta = Long.parseLong(busses_0_expectedTime)*1000 - timestamp;
@@ -333,6 +434,20 @@ public class ResultActivity extends AppCompatActivity
 
                     }
 
+                    if(allLinesList != null)
+                    {
+                        List<String> newList = new ArrayList<String>(new HashSet<String>(allLinesList));
+                        Collections.sort(newList);
+                        addItemsOnSpinner(newList);
+                        if(lastSpinnerSelection != null)
+                        {
+                            for (int i = 0; i < filterSpinner.getCount(); i++) {
+                                if (filterSpinner.getItemAtPosition(i).equals(lastSpinnerSelection)) {
+                                    filterSpinner.setSelection(i);
+                                }
+                            }
+                        }
+                    }
 
 
                 }catch(JSONException e){
