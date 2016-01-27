@@ -23,4 +23,5 @@
     <string name="NbButton_text">Nearby Stops</string>
     <string name="filterTextView">Show</string>
     <string name="filterSpinnerAll">All</string>
+    <string name="Nearby_Wait_Message">Waiting for GPS</string>
 </resources>

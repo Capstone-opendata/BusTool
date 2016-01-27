@@ -25,4 +25,14 @@
         android:id="@+id/progressBar"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/Nearby_Wait_Message"
+        android:id="@+id/NearbyWaitMessage"
+        android:layout_below="@+id/progressBar"
+        android:layout_centerHorizontal="true" />
+
+
 </RelativeLayout>

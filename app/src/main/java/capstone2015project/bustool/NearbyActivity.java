@@ -28,6 +28,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -60,6 +61,7 @@ public class NearbyActivity extends AppCompatActivity
     LocationManager myLocationManager;  //used for location retrieval
     ArrayList<String> stopList;     //arraylist for storing list items
     private ProgressBar spinner;    // this will be displayed while retrieving data
+    private TextView waitText;      // used to display a wait message along with progress spinner
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,6 +90,8 @@ public class NearbyActivity extends AppCompatActivity
 
         spinner = (ProgressBar)findViewById(R.id.progressBar);
         spinner.setVisibility(View.GONE);
+        waitText = (TextView)findViewById(R.id.NearbyWaitMessage);
+        waitText.setVisibility(View.GONE);
 
         //hard coding myLocation for testing
         myLocation = new Location("MyLoc");
@@ -140,6 +144,7 @@ public class NearbyActivity extends AppCompatActivity
                 }
                 myLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
                 spinner.setVisibility(View.VISIBLE);
+                waitText.setVisibility(View.VISIBLE);
             }// else
 
         }//if JSONretrievalStarted
@@ -298,6 +303,7 @@ public class NearbyActivity extends AppCompatActivity
         }
 
         spinner.setVisibility(View.GONE);
+        waitText.setVisibility(View.GONE);
         String[] values = stopList.toArray(new String[0]);
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(NearbyActivity.this,
