@@ -9,9 +9,10 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteDatabase;
 
 /**
+ * Contains methods to handle database.
+ *
  * Created by jani on 8.12.2015.
  *
- * Contains methods to handle database;
  * file: busstop.db
  * table: busstops
  * columns:|    id  |   bs_id   |   bs_nm   |   bs_tag  |   bs_fav |    bs_lat |    bs_lon  |
@@ -48,6 +49,11 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
+    /**
+     * Fetches a simple query.
+     * @param query String of the query.
+     * @return the query result.
+     */
     public Cursor getData(String query)
     {
         /*
@@ -57,6 +63,15 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         return db.rawQuery( query, null );
     }
 
+    /**
+     * Inserts row with bus stop data.
+     * @param bs_id Integer of bus stop id
+     * @param bs_name String of bus stop name
+     * @param bs_lat double bus stop latitude
+     * @param bs_lon double bus stop longitude
+     * @param bs_fav String of bus stop favorite status
+     * @return
+     */
     public Boolean insertBS(String bs_id, String bs_name, double bs_lat, double bs_lon, String bs_fav){
         /*
         Inserts Row with Bus Stop data
@@ -72,6 +87,10 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         return result != -1;
     }
 
+    /**
+     * Checks the number of rows in database.
+     * @return int number of rows.
+     */
     public int numberOfRows(){
         /*
         Checks the number of rows in database
@@ -80,6 +99,15 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         return (int) DatabaseUtils.queryNumEntries(db, TABLE);
     }
 
+    /**
+     *  Updates a row of data in database.
+     * @param id Integer bus stop id
+     * @param bs_name String of bus stop name
+     * @param bs_lat double bus stop latitude
+     * @param bs_lon double bus stop longitude
+     * @param bs_fav String of favorite status
+     * @return boolean true
+     */
     public boolean updateBS (Integer id, String bs_name, double bs_lat, double bs_lon, String bs_fav) {
         /*
         Update a row of data in database
@@ -94,6 +122,10 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         return true;
     }
 
+    /**
+     * Drops table, deletes all data.
+     * @return boolean true
+     */
     public boolean DeleteAll () {
         /*
         Drop table, deteles all data
@@ -104,6 +136,10 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         return true;
     }
 
+    /**
+     * Creates an array list of all Bus Stops, and updates BsIdList.
+     * @return String array list of all bus stops.
+     */
     public ArrayList<String> getAllBSs()
     {
         /*
@@ -124,6 +160,11 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         return array_list;
     }
 
+    /**
+     * Creates an arrays list and updates BsIdList of items.
+     * @param qString String of the query.
+     * @return String array list of the query result.
+     */
     public ArrayList<String> getQuery(String qString)
     {
         /*
@@ -144,6 +185,11 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         return array_list;
     }
 
+    /**
+     * Turns row's bs_fav column to 1, meaning it will be added to favorites.
+     * @param BsToAdd String of bus stop which to add to favorites.
+     * @return boolean true.
+     */
     public Boolean addFav(String BsToAdd){
         /*
         Turns row's bs_fav column to 1, added to favorites
@@ -160,6 +206,11 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         return true;
     }
 
+    /**
+     * Turns row's bs_fav column to 0, meaning it will be deleted from favorites.
+     * @param BsToDel String of bus stop which to delete from favorites.
+     * @return boolean true.
+     */
     public Boolean delFav(String BsToDel){
         /*
         Turn row's bs_fav column to 0, deleted from favorites

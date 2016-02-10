@@ -28,12 +28,19 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+/**
+ * Acts as the main menu for different ways to search a bus stop.
+ */
 public class StopToolSelectionActivity extends AppCompatActivity {
     SQLiteHelper BsDb;
     ListView listViewX;
     boolean textChanged = true;
 
 
+    /**
+     * Initializes the activity.
+     * @param savedInstanceState saved data of previous state.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -169,6 +176,9 @@ public class StopToolSelectionActivity extends AppCompatActivity {
         BsDb.close();
     }
 
+    /**
+     * Clears userInput text field and calls favorites to be displayed.
+     */
     @Override
     protected void onResume(){
         final EditText userInput = (EditText) findViewById(R.id.editText_busID);
@@ -178,6 +188,9 @@ public class StopToolSelectionActivity extends AppCompatActivity {
         showFavorites();
     }
 
+    /**
+     * Clears userInput text field and calls favorites to be displayed.
+     */
     @Override
     public void onBackPressed(){
         super.onBackPressed();
@@ -220,6 +233,9 @@ public class StopToolSelectionActivity extends AppCompatActivity {
         BsDb.close();
     }
 
+    /**
+     *  Starts source data retrieval for local database.
+     */
     public void fetchDb(){
         final EditText userInput = (EditText) findViewById(R.id.editText_busID);
         final Button NbButton = (Button) findViewById(R.id.button3);NbButton.setEnabled(false);
@@ -231,6 +247,9 @@ public class StopToolSelectionActivity extends AppCompatActivity {
         new ProcessJSON().execute(url);
     }
 
+    /**
+     * Creates a list of favorite bus stops from database and displays them.
+     */
     public void showFavorites(){
         ArrayList array_list = BsDb.getQuery("SELECT * FROM busstops WHERE bs_fav = 1");
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(StopToolSelectionActivity.this, android.R.layout.simple_list_item_1, array_list);

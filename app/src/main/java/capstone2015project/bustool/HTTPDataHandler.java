@@ -10,7 +10,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 /**
- *
+ *  Handles http connections.
  */
 public class HTTPDataHandler {
     static String stream = null;
@@ -18,6 +18,11 @@ public class HTTPDataHandler {
     public HTTPDataHandler(){
     }
 
+    /**
+     * Connects to a specified url and retrieves data.
+     * @param urlString is the location where to retrieve data.
+     * @return data from specified url.
+     */
     public String GetHTTPData(String urlString){
         try {
             URL url = new URL(urlString);

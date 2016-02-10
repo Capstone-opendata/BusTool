@@ -49,6 +49,9 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+/**
+ * Displays information about incoming buses to a certain bus stop.
+ */
 public class ResultActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         AdapterView.OnItemSelectedListener {
@@ -63,6 +66,10 @@ public class ResultActivity extends AppCompatActivity
     private Spinner filterSpinner;  //used for selecting which bus lines should be filtered
     private String lastSpinnerSelection;    //used to store filter selection between updates
 
+    /**
+     * Initializes the activity.
+     * @param savedInstanceState saved data of previous state.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -223,6 +230,9 @@ public class ResultActivity extends AppCompatActivity
         return true;
     }
 
+    /**
+     * Starts timed refresh for new bus stop info.
+     */
     @Override
     protected void onStart()
     {
@@ -244,6 +254,9 @@ public class ResultActivity extends AppCompatActivity
 
     }
 
+    /**
+     * Stops timed refresh for new bust stop info.
+     */
     @Override
     protected void onStop()
     {
@@ -253,6 +266,11 @@ public class ResultActivity extends AppCompatActivity
         timer.cancel();
     }
 
+    /**
+     * Handles action bar's favorite buttons.
+     * @param item the pressed item.
+     * @return boolean true.
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -270,6 +288,9 @@ public class ResultActivity extends AppCompatActivity
         }
     }
 
+    /**
+     * Instantiates favorite button accordingly.
+     */
     @Override
     protected  void onResume(){
         super.onResume();
@@ -285,11 +306,17 @@ public class ResultActivity extends AppCompatActivity
         }
     }
 
+    /**
+     * Adds busStopNumber to favorite database.
+     */
     public void remember(){
         BsDb = new SQLiteHelper(ResultActivity.this);
         Boolean del = BsDb.addFav(busStopNumber);
     }
 
+    /**
+     * Removes busStopNumber from favorite database.
+     */
     public void forget(){
         BsDb = new SQLiteHelper(ResultActivity.this);
         Boolean add = BsDb.delFav(busStopNumber);
@@ -319,7 +346,7 @@ public class ResultActivity extends AppCompatActivity
     }
 
     /**
-     * Used to allow Go To Main Menu button start intent StopToolSelectionActivity
+     * Allows buttons to start intent StopToolSelectionActivity
      * @param view the current view
      */
     public void GoToToolSelectionActivity(View view)
@@ -328,6 +355,13 @@ public class ResultActivity extends AppCompatActivity
         startActivity(i);
     }
 
+    /**
+     * Filters result page's result table by chosen item in the spinner.
+     * @param parent the spinner used for selecting a bus line.
+     * @param view the current view.
+     * @param position the position in the spinner.
+     * @param id the id.
+     */
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         // An item was selected. You can retrieve the selected item using
@@ -352,6 +386,9 @@ public class ResultActivity extends AppCompatActivity
         // Another interface callback
     }
 
+    /**
+     * Retrieves JSON information and processes it accordingly for the result activity
+     */
     private class ProcessJSON extends AsyncTask<String, Void, String> {
         protected String doInBackground(String... strings){
             //String stream = null;
@@ -393,10 +430,17 @@ public class ResultActivity extends AppCompatActivity
                             String busses_0_lineDestination = busses_object_0.getString("destinationdisplay");
                             String busses_0_expectedTime = busses_object_0.getString("expectedarrivaltime");
 
-                            allLinesList.add(busses_0_lineNumber);
 
                             long timestamp = System.currentTimeMillis();
                             long eta = Long.parseLong(busses_0_expectedTime)*1000 - timestamp;
+
+                            //if the eta is negative, skip adding it
+                            if(eta < 0)
+                            {
+                                continue;
+                            }
+                            //adding this bus in the temp list for results filtering
+                            allLinesList.add(busses_0_lineNumber);
 
                             int seconds = (int) (eta / 1000) % 60 ;
                             int minutes = (int) ((eta / (1000*60)) % 60);

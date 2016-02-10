@@ -30,6 +30,9 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
 
+/**
+ * Displays a map which is used for bus stop searching.
+ */
 public class StopsMapActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener,
         NavigationView.OnNavigationItemSelectedListener{
 
@@ -37,6 +40,10 @@ public class StopsMapActivity extends AppCompatActivity implements OnMapReadyCal
     private GoogleMap mMap;
     SQLiteHelper BsDb;
 
+    /**
+     * Initializes the activity.
+     * @param savedInstanceState saved data of previous state.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -121,6 +128,11 @@ public class StopsMapActivity extends AppCompatActivity implements OnMapReadyCal
         mMap.setOnInfoWindowClickListener(this);
     }
 
+    /**
+     * Handles clicks on marker info windows and starts result activity using
+     * marker window's info.
+     * @param marker the clicked marker on the map.
+     */
     @Override
     public void onInfoWindowClick(Marker marker) {
         String s = marker.getSnippet();

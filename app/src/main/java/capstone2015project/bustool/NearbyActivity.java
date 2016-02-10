@@ -42,10 +42,8 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 
 /**
- * NearbyActivity is the class for getting a list of nearby bus stops
- * displayed to the user in a distance filtered fashion from the closest
- * stop to father away stops from the user's current location. User's
- * location information is retrieved by GPS.
+ * Retrieves and displays a distance sorted list of nearby bus stops.
+ * User's location information is retrieved by GPS.
  */
 public class NearbyActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
@@ -63,6 +61,10 @@ public class NearbyActivity extends AppCompatActivity
     private ProgressBar spinner;    // this will be displayed while retrieving data
     private TextView waitText;      // used to display a wait message along with progress spinner
 
+    /**
+     * Initializes the activity.
+     * @param savedInstanceState saved data of previous state.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -104,6 +106,9 @@ public class NearbyActivity extends AppCompatActivity
 
     }
 
+    /**
+     * Starts GPS location retrieval.
+     */
     protected void onStart() {
         super.onStart();
 
@@ -151,6 +156,9 @@ public class NearbyActivity extends AppCompatActivity
 
     }// onStart
 
+    /**
+     * Stops GPS location retrieval.
+     */
     public void onStop()
     {
         super.onStop();
@@ -240,6 +248,11 @@ public class NearbyActivity extends AppCompatActivity
         return true;
     }
 
+    /**
+     * Listens to gps coordinate changes and if location update is more accurate than
+     * 60 meters, the nearby stops list is generated using that location.
+     * @param location location of the user.
+     */
     @Override
     public void onLocationChanged(Location location) {
         myLocation = location;
@@ -261,7 +274,7 @@ public class NearbyActivity extends AppCompatActivity
     }
 
     /**
-     *  handleBusStopData will fetch bus stop data from database and use it
+     *  Fetches bus stop data from database and uses it
      *  with GPS location to filter nearby stops. Distance filtered stops
      *  are added to NearbyActivity's list.
      */

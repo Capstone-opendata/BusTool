@@ -53,6 +53,9 @@ import java.util.TreeMap;
 
 import static android.R.layout.simple_list_item_1;
 
+/**
+ * Used for handling user's favorites.
+ */
 public class BusstopDbActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
     ListView stopsListView;
     ArrayList<String> stopList;
@@ -64,6 +67,10 @@ public class BusstopDbActivity extends AppCompatActivity implements NavigationVi
      */
     private GoogleApiClient client;
 
+    /**
+     * Initializes the activity.
+     * @param savedInstanceState saved data of previous state.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
