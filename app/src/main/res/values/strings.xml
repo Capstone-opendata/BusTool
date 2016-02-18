@@ -24,4 +24,5 @@
     <string name="filterTextView">Show</string>
     <string name="filterSpinnerAll">All</string>
     <string name="Nearby_Wait_Message">Waiting for GPS</string>
+    <string name="Nearby_Fail_Message">Having trouble finding GPS satellites. Use last known position instead?</string>
 </resources>

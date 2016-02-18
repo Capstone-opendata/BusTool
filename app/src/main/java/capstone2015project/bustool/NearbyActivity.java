@@ -12,6 +12,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
@@ -153,6 +154,42 @@ public class NearbyActivity extends AppCompatActivity
             }// else
 
         }//if JSONretrievalStarted
+
+        new CountDownTimer(30000, 1000) {
+
+            public void onTick(long millisUntilFinished) {
+                if (JSONretrievalStarted)
+                {
+                    cancel();
+                }
+            }
+
+            public void onFinish() {
+                showMessageOKCancel(getResources().getString(R.string.Nearby_Fail_Message),
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                if (ActivityCompat.checkSelfPermission(NearbyActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(NearbyActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                                    ActivityCompat.requestPermissions(NearbyActivity.this,
+                                            new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                                            123);
+                                    return;
+                                }
+                                Location myLocation = myLocationManager
+                                        .getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+                                myLocation.setAccuracy(59);
+                                onLocationChanged(myLocation);
+
+                            }
+                        },
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.cancel();
+                            }
+                        });
+            }
+        }.start();
 
     }// onStart
 
