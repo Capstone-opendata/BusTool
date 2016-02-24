@@ -52,7 +52,7 @@
         <RadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/ct_bsdb_Show"
+            android:text="@string/ct_bsdb_Add"
             android:id="@+id/radioButton1"
             android:checked="false" />
         <RadioButton
