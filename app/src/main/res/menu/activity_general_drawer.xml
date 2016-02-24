@@ -4,19 +4,19 @@
         <item
             android:id="@+id/nav_home"
             android:icon="@android:drawable/ic_menu_search"
-            android:title="Search" />
+            android:title="@string/ic_menu_search" />
         <item
             android:id="@+id/nav_nearby"
             android:icon="@android:drawable/ic_menu_mylocation"
-            android:title="Nearby stops" />
+            android:title="@string/title_activity_nearby" />
         <item
             android:id="@+id/nav_map"
             android:icon="@android:drawable/ic_menu_mapmode"
-            android:title="Map" />
+            android:title="@string/MapButton_text" />
         <item
             android:id="@+id/nav_favorites"
             android:icon="@android:drawable/ic_menu_myplaces"
-            android:title="Favorites" />
+            android:title="@string/string_favorites" />
     </group>
 <!--
     <item android:title="Placeholder">
