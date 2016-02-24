@@ -17,6 +17,7 @@
     <string name="string_addfavorites">Add</string>
     <string name="string_delfavorites">Delete</string>
     <string name="string_dl_wait">Downloading... please wait</string>
+    <string name="setText_db">Download Database</string>
     <string name="DbButton_text">Organize Favorites</string>
     <string name="MapButton_text">View on Map</string>
     <string name="title_activity_stops_map">Stops on Map</string>
@@ -25,4 +26,18 @@
     <string name="filterSpinnerAll">All</string>
     <string name="Nearby_Wait_Message">Waiting for GPS</string>
     <string name="Nearby_Fail_Message">Having trouble finding GPS satellites. Use last known position instead?</string>
+    <string name="Enable_GPS_Message">You need to enable GPS</string>
+    <string name="nav_header_text">by Bus Catchers</string>
+    <string name="ct_stop_tool_selection_header">Bus Stops</string>
+    <string name="ct_stop_tool_selection_inputField">stop name or number</string>
+    <string name="ct_bsi_line">Line</string>
+    <string name="ct_bsi_Destination">Destination</string>
+    <string name="ct_bsi_ETA">ETA</string>
+    <string name="ct_bsdb_Show">Show</string>
+    <string name="ct_bsdb_Add">Add</string>
+    <string name="ct_bsdb_Remove">Remove</string>
+    <string name="ct_bsi_Refresh">Refresh</string>
+    <string name="ct_bsi_BTS">Back to search</string>
+    <string name="OK_button">OK</string>
+    <string name="Cancel_button">Cancel</string>
 </resources>

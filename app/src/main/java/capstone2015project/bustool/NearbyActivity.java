@@ -122,7 +122,8 @@ public class NearbyActivity extends AppCompatActivity
             {
                 // GPS is not enabled on user's device
 
-                showMessageOKCancel("You need to enable GPS",
+
+                showMessageOKCancel(getResources().getString(R.string.Enable_GPS_Message),
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
@@ -209,10 +210,11 @@ public class NearbyActivity extends AppCompatActivity
 
     private void showMessageOKCancel(String message, DialogInterface.OnClickListener okListener,
                                      DialogInterface.OnClickListener cancelListener) {
+
         new AlertDialog.Builder(NearbyActivity.this)
                 .setMessage(message)
-                .setPositiveButton("OK", okListener)
-                .setNegativeButton("Cancel", null)
+                .setPositiveButton(getResources().getString(R.string.OK_button), okListener)
+                .setNegativeButton(getResources().getString(R.string.Cancel_button), null)
                 .create()
                 .show();
     }

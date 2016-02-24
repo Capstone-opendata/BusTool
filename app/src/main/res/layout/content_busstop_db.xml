@@ -46,19 +46,19 @@
         <RadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Show"
+            android:text="@string/ct_bsdb_Show"
             android:id="@+id/radioButton0"
             android:checked="true" />
         <RadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Add"
+            android:text="@string/ct_bsdb_Show"
             android:id="@+id/radioButton1"
             android:checked="false" />
         <RadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Remove"
+            android:text="@string/ct_bsdb_Remove"
             android:id="@+id/radioButton2"
             android:checked="false" />
     </RadioGroup>

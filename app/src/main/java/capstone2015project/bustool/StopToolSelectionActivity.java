@@ -65,7 +65,7 @@ public class StopToolSelectionActivity extends AppCompatActivity {
         final EditText userInput = (EditText) findViewById(R.id.editText_busID);
         BsDb = new SQLiteHelper(StopToolSelectionActivity.this);
         if(BsDb.numberOfRows()==0) {
-            DbButton.setText("Download Database");
+            DbButton.setText(R.string.setText_db);
             userInput.setEnabled(false);
         }
         userInput.addTextChangedListener(new TextWatcher() {
@@ -200,7 +200,10 @@ public class StopToolSelectionActivity extends AppCompatActivity {
         showFavorites();
     }
 
-    //changes the active activity to NearbyStopsActivity
+    /**
+     *  changes the active activity to NearbyStopsActivity
+     */
+
     public void GoToNearbyStopsActivity(View view)
     {
         Intent i = new Intent(StopToolSelectionActivity.this, NearbyActivity.class);
