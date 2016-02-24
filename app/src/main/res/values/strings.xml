@@ -40,4 +40,6 @@
     <string name="ct_bsi_BTS">Back to search</string>
     <string name="OK_button">OK</string>
     <string name="Cancel_button">Cancel</string>
+    <string name="resact_sb_add">The bus stop is now added to the favorites</string>
+    <string name="resact_sb_remove">The bus stop is now removed from the favorites</string>
 </resources>

@@ -85,13 +85,13 @@ public class ResultActivity extends AppCompatActivity
                     forget();
                     fav.setImageDrawable(ContextCompat.getDrawable(ResultActivity.this, R.mipmap.ic_unfavorite_star));
                     favorites=0;
-                    Snackbar.make(v, "The bus stop is now removed from the favorites", Snackbar.LENGTH_LONG)
+                    Snackbar.make(v, R.string.resact_sb_remove, Snackbar.LENGTH_LONG)
                             .setAction("Action", null).show();
                 }else {
                     remember();
                     fav.setImageDrawable(ContextCompat.getDrawable(ResultActivity.this, R.mipmap.ic_favorite_star));
                     favorites=1;
-                    Snackbar.make(v, "The bus stop is now added to the favorites", Snackbar.LENGTH_LONG)
+                    Snackbar.make(v, R.string.resact_sb_add, Snackbar.LENGTH_LONG)
                             .setAction("Action", null).show();
                 }
             }

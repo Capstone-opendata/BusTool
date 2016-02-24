@@ -40,4 +40,6 @@
     <string name="ct_bsi_BTS">Takaisin hakuun</string>
     <string name="OK_button">OK</string>
     <string name="Cancel_button">Peruuta</string>
+    <string name="resact_sb_add">Pysäkki lisätty suosikkeihin</string>
+    <string name="resact_sb_remove">Pysäkki poistettu suosikeista</string>
 </resources>
