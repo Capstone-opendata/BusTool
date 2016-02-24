@@ -30,7 +30,7 @@
         android:inputType="textVisiblePassword"
         android:ems="10"
         android:id="@+id/editTextDb"
-        android:hint="stop name or number"
+        android:hint="@string/ct_stop_tool_selection_inputField"
         android:clickable="false"
         android:layout_below="@+id/headView"
         android:layout_centerHorizontal="true" />
