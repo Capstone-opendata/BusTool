@@ -1,5 +1,7 @@
 package capstone2015project.bustool;
 
+import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.AsyncTask;
@@ -12,7 +14,11 @@ import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.FocusFinder;
+import android.view.Gravity;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -20,6 +26,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 
 import org.json.JSONArray;
@@ -35,7 +42,9 @@ public class StopToolSelectionActivity extends AppCompatActivity {
     SQLiteHelper BsDb;
     ListView listViewX;
     boolean textChanged = true;
-
+    private PopupWindow popup;
+    private Button close_popup_button;
+    private AlertDialog dialog;
 
     /**
      * Initializes the activity.
@@ -198,6 +207,41 @@ public class StopToolSelectionActivity extends AppCompatActivity {
         userInput.clearFocus();
         userInput.setText("");
         showFavorites();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.tool_selection, menu);
+        return true;
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_info) {
+            showInfoDialog();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * Creates an info/credit dialog popup.
+     */
+    private void showInfoDialog()
+    {
+        dialog = new AlertDialog.Builder(StopToolSelectionActivity.this)
+                .setTitle(StopToolSelectionActivity.this.getResources().getString(R.string.app_name))
+                .setMessage(StopToolSelectionActivity.this.getResources().getString(R.string.info_text))
+                .setIcon(R.mipmap.ic_launcher)
+                .setPositiveButton("OK", null)
+                .show();
     }
 
     /**
