@@ -61,6 +61,7 @@ public class NearbyActivity extends AppCompatActivity
     ArrayList<String> stopList;     //arraylist for storing list items
     private ProgressBar spinner;    // this will be displayed while retrieving data
     private TextView waitText;      // used to display a wait message along with progress spinner
+    private CountDownTimer myTimer; // used to time the failed gps connection popup
 
     /**
      * Initializes the activity.
@@ -156,7 +157,7 @@ public class NearbyActivity extends AppCompatActivity
 
         }//if JSONretrievalStarted
 
-        new CountDownTimer(30000, 1000) {
+        myTimer = new CountDownTimer(10000, 1000) {
 
             public void onTick(long millisUntilFinished) {
                 if (JSONretrievalStarted)
@@ -201,6 +202,7 @@ public class NearbyActivity extends AppCompatActivity
     {
         super.onStop();
 
+        myTimer.cancel();
         //stopping gps updates here to prevent gps staying on pointlessly in certain situations
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
@@ -295,7 +297,7 @@ public class NearbyActivity extends AppCompatActivity
     @Override
     public void onLocationChanged(Location location) {
         myLocation = location;
-        System.out.println("My coordinates: " + location.getLatitude() + " ," + location.getLongitude() + " Accuracy: " + location.getAccuracy());
+        //System.out.println("My coordinates: " + location.getLatitude() + " ," + location.getLongitude() + " Accuracy: " + location.getAccuracy());
         //myLocationManager.removeUpdates(this);
         //if data retrieval from foli hasn't been started and location's accuracy is better than 60m
         if (JSONretrievalStarted == false && location.getAccuracy() < 60) {
