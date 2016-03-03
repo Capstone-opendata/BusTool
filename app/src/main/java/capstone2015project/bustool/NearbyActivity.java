@@ -157,7 +157,7 @@ public class NearbyActivity extends AppCompatActivity
 
         }//if JSONretrievalStarted
 
-        myTimer = new CountDownTimer(10000, 1000) {
+        myTimer = new CountDownTimer(4000, 1000) {
 
             public void onTick(long millisUntilFinished) {
                 if (JSONretrievalStarted)
