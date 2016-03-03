@@ -44,4 +44,7 @@
     <string name="resact_sb_remove">Pysäkki poistettu suosikeista</string>
     <string name="info_label">Lisätietoja</string>
     <string name="info_text">Versio 1.0 \n\n Tiimi Bus Catchers: \n Jani Silvander \n Mikko Ruskamo \n Santtu Alatalo \n Waqar Ahmed</string>
+    <string name="action_first_time_setup_startDownload">Aloita lataus</string>
+    <string name="title_activity_first_time_setup">Ensimmäisen käyttökerran asetus</string>
+    <string name="First_time_use_message">Tervetuloa PysäKit-ohjelmaan!\n Tämä on ensimmäisen käyttökerran asetusruutu, jossa ladataan uusimmat bussipysäkkitiedot laitteellesi.</string>
 </resources>

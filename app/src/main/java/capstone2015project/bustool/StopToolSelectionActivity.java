@@ -3,6 +3,7 @@ package capstone2015project.bustool;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -45,6 +46,7 @@ public class StopToolSelectionActivity extends AppCompatActivity {
     private PopupWindow popup;
     private Button close_popup_button;
     private AlertDialog dialog;
+    public static final String PREFS_NAME = "MyPrefsFile";
 
     /**
      * Initializes the activity.
@@ -56,6 +58,16 @@ public class StopToolSelectionActivity extends AppCompatActivity {
         setContentView(R.layout.activity_stop_tool_selection);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        // Restore preferences
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+        boolean firstTimeSetup = settings.getBoolean("firstTimeSetupDone", false);
+        if(!firstTimeSetup)
+        {
+            Intent i = new Intent(StopToolSelectionActivity.this, FirstTimeSetupActivity.class);
+            startActivity(i);
+            finish();
+        }
 
 /*        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setVisibility(View.INVISIBLE);

@@ -27,8 +27,8 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".NearbyActivity"
-            android:label="@string/title_activity_nearby"
             android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/title_activity_nearby"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".BusstopDbActivity"
@@ -56,6 +56,12 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
+
+        <activity
+            android:name=".FirstTimeSetupActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/title_activity_first_time_setup"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>
