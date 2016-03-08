@@ -25,6 +25,7 @@ public class FirstTimeSetupActivity extends AppCompatActivity {
     private ProgressBar spinner;    // this will be displayed while retrieving data
     private TextView progressText;      // used to display a progress message along with progress spinner
     public static final String PREFS_NAME = "MyPrefsFile";
+    public AsyncTask a=new ProcessJSON();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,13 +33,22 @@ public class FirstTimeSetupActivity extends AppCompatActivity {
         setContentView(R.layout.activity_first_time_setup);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        spinner = (ProgressBar)findViewById(R.id.downloadSpinner);
-        spinner.setVisibility(View.GONE);
-        progressText = (TextView) findViewById(R.id.downloadProgressText);
-        progressText.setVisibility(View.GONE);
-
         downloadButton = (Button) findViewById(R.id.downloadButton);
+        if(a.getStatus()==ProcessJSON.Status.RUNNING){
+            downloadButton.setVisibility(View.GONE);
+            spinner.setVisibility(View.VISIBLE);
+            progressText.setVisibility(View.VISIBLE);
+        }else{
+            spinner = (ProgressBar)findViewById(R.id.downloadSpinner);
+            spinner.setVisibility(View.GONE);
+            progressText = (TextView) findViewById(R.id.downloadProgressText);
+            progressText.setVisibility(View.GONE);
+
+    }
+    }
+    @Override
+    public void onBackPressed() {
+        moveTaskToBack(true);
     }
 
     /**
@@ -57,10 +67,10 @@ public class FirstTimeSetupActivity extends AppCompatActivity {
     /**
      *  Starts source data retrieval for local database.
      */
-    private void fetchDb()
+    public void fetchDb()
     {
         String url = "http://data.foli.fi/gtfs/v0/stops";
-        new ProcessJSON().execute(url);
+        a=new ProcessJSON().execute(url);
     }
 
     private class ProcessJSON extends AsyncTask<String, Void, String> {

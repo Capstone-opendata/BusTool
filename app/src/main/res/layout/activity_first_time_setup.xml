@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="capstone2015project.bustool.FirstTimeSetupActivity">
+    tools:context="capstone2015project.bustool.FirstTimeSetupActivity"
+    android:background="@mipmap/graph">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"

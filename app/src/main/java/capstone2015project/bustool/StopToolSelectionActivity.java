@@ -82,6 +82,11 @@ public class StopToolSelectionActivity extends AppCompatActivity {
         boolean firstTimeSetup = settings.getBoolean("firstTimeSetupDone", false);
         if(!firstTimeSetup || (BsDb.numberOfRows()==0))
         {
+            settings = getSharedPreferences(PREFS_NAME, 0);
+            SharedPreferences.Editor editor = settings.edit();
+            editor.putBoolean("firstTimeSetupDone", false);
+
+            editor.commit();
             Intent i = new Intent(StopToolSelectionActivity.this, FirstTimeSetupActivity.class);
             startActivity(i);
             finish();
