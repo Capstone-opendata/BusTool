@@ -61,13 +61,7 @@ public class StopToolSelectionActivity extends AppCompatActivity {
 
         // Restore preferences
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
-        boolean firstTimeSetup = settings.getBoolean("firstTimeSetupDone", false);
-        if(!firstTimeSetup)
-        {
-            Intent i = new Intent(StopToolSelectionActivity.this, FirstTimeSetupActivity.class);
-            startActivity(i);
-            finish();
-        }
+
 
 /*        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setVisibility(View.INVISIBLE);
@@ -85,6 +79,13 @@ public class StopToolSelectionActivity extends AppCompatActivity {
         
         final EditText userInput = (EditText) findViewById(R.id.editText_busID);
         BsDb = new SQLiteHelper(StopToolSelectionActivity.this);
+        boolean firstTimeSetup = settings.getBoolean("firstTimeSetupDone", false);
+        if(!firstTimeSetup || (BsDb.numberOfRows()==0))
+        {
+            Intent i = new Intent(StopToolSelectionActivity.this, FirstTimeSetupActivity.class);
+            startActivity(i);
+            finish();
+        }
         if(BsDb.numberOfRows()==0) {
             DbButton.setText(R.string.setText_db);
             userInput.setEnabled(false);
