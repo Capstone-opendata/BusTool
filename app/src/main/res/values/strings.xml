@@ -1,11 +1,11 @@
 <resources>
-    <string name="app_name">Bus Catchers</string>
+    <string name="app_name">PysäKit</string>
     <string name="action_addFavs">Add to Favorites</string>
     <string name="action_delFavs">Remove from Favorites</string>
     <string name="action_settings">Settings</string>
     <string name="action_updatedb">Download Data</string>
     <string name="action_deletedb">Delete Data</string>
-    <string name="title_activity_stop_tool_selection">Bus Catchers</string>
+    <string name="title_activity_stop_tool_selection">PysäKit</string>
     <string name="title_activity_nearby_stops">Nearby Stops</string>
     <string name="title_activity_result">Results</string>
     <string name="navigation_drawer_open">Main Menu</string>

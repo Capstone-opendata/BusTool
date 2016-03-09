@@ -1,11 +1,11 @@
 <resources>
-    <string name="app_name">Bus Catchers</string>
+    <string name="app_name">PysäKit</string>
     <string name="action_addFavs">Lisää suosikkeihin</string>
     <string name="action_delFavs">Poista suosikeista</string>
     <string name="action_settings">Asetukset</string>
     <string name="action_updatedb">Lataa tiedot</string>
     <string name="action_deletedb">Poista tiedot</string>
-    <string name="title_activity_stop_tool_selection">Bus Catchers</string>
+    <string name="title_activity_stop_tool_selection">PysäKit</string>
     <string name="title_activity_nearby_stops">Lähellä olevat pysäkit</string>
     <string name="title_activity_result">Tulokset</string>
     <string name="navigation_drawer_open">Päävalikko</string>
