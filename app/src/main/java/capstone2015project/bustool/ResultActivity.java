@@ -283,9 +283,13 @@ public class ResultActivity extends AppCompatActivity
         switch (item.getItemId()) {
             case R.id.action_addFavs:
                 remember();
+                finish();
+                startActivity(getIntent());
                 return true;
             case R.id.action_delFavs:
                 forget();
+                finish();
+                startActivity(getIntent());
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
