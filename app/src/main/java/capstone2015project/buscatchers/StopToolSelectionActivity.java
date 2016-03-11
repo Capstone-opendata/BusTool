@@ -1,23 +1,16 @@
-package capstone2015project.bustool;
+package capstone2015project.buscatchers;
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.SystemClock;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.FocusFinder;
-import android.view.Gravity;
 import android.view.KeyEvent;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -40,13 +33,13 @@ import java.util.ArrayList;
  * Acts as the main menu for different ways to search a bus stop.
  */
 public class StopToolSelectionActivity extends AppCompatActivity {
+    public static final String PREFS_NAME = "MyPrefsFile";
     SQLiteHelper BsDb;
     ListView listViewX;
     boolean textChanged = true;
     private PopupWindow popup;
     private Button close_popup_button;
     private AlertDialog dialog;
-    public static final String PREFS_NAME = "MyPrefsFile";
 
     /**
      * Initializes the activity.

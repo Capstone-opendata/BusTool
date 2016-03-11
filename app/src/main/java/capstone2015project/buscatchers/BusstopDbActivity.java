@@ -1,14 +1,10 @@
-package capstone2015project.bustool;
+package capstone2015project.buscatchers;
 
-import android.app.ActionBar;
 import android.content.Intent;
-import android.location.Location;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -23,7 +19,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -39,19 +34,8 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
-import java.io.BufferedInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLConnection;
 import java.util.ArrayList;
-import java.util.SortedMap;
-import java.util.TreeMap;
-
-import static android.R.layout.simple_list_item_1;
 
 /**
  * Used for handling user's favorites.
@@ -59,8 +43,8 @@ import static android.R.layout.simple_list_item_1;
 public class BusstopDbActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
     ListView stopsListView;
     ArrayList<String> stopList;
-    private ProgressBar spinner;
     SQLiteHelper BsDb;
+    private ProgressBar spinner;
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -264,7 +248,7 @@ public class BusstopDbActivity extends AppCompatActivity implements NavigationVi
                 // Otherwise, set the URL to null.
                 Uri.parse("http://host/path"),
                 // TODO: Make sure this auto-generated app deep link URI is correct.
-                Uri.parse("android-app://capstone2015project.bustool/http/host/path")
+                Uri.parse("android-app://capstone2015project.buscatchers/http/host/path")
         );
         AppIndex.AppIndexApi.start(client, viewAction);
     }
@@ -333,7 +317,7 @@ public class BusstopDbActivity extends AppCompatActivity implements NavigationVi
                 // Otherwise, set the URL to null.
                 Uri.parse("http://host/path"),
                 // TODO: Make sure this auto-generated app deep link URI is correct.
-                Uri.parse("android-app://capstone2015project.bustool/http/host/path")
+                Uri.parse("android-app://capstone2015project.buscatchers/http/host/path")
         );
         AppIndex.AppIndexApi.end(client, viewAction);
         client.disconnect();

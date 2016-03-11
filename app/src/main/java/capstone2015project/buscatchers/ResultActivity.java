@@ -1,35 +1,26 @@
-package capstone2015project.bustool;
+package capstone2015project.buscatchers;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.database.Cursor;
-import android.graphics.Color;
-import android.graphics.Typeface;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
-import android.util.TypedValue;
-import android.view.LayoutInflater;
-import android.view.MenuInflater;
-import android.view.View;
-import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.TypedValue;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -56,11 +47,11 @@ public class ResultActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         AdapterView.OnItemSelectedListener {
 
+    public String busStopNumber;    //the number of the bus stop eg 449
+    public String busStopName;      //the name of the bus stop eg Korvalankatu
     HttpURLConnection urlConnection;
     Timer timer;    // used for automatic result refreshing
     String busNumber;   // used for storing bus stop number
-    public String busStopNumber;    //the number of the bus stop eg 449
-    public String busStopName;      //the name of the bus stop eg Korvalankatu
     int favorites;
     SQLiteHelper BsDb;
     private Spinner filterSpinner;  //used for selecting which bus lines should be filtered
@@ -307,7 +298,7 @@ public class ResultActivity extends AppCompatActivity
         res.moveToFirst();
         ImageButton fav = (ImageButton) findViewById(R.id.imageButton);
         favorites=res.getInt(res.getColumnIndex("bs_fav"));
-        if(favorites==1) {;
+        if (favorites == 1) {
             fav.setImageDrawable(ContextCompat.getDrawable(this, R.mipmap.ic_favorite_star));
         }else{
             fav.setImageDrawable(ContextCompat.getDrawable(this, R.mipmap.ic_unfavorite_star));
@@ -376,7 +367,7 @@ public class ResultActivity extends AppCompatActivity
         // parent.getItemAtPosition(pos)
 
         // if spinner value isn't "All" then filter by given item else remove filter
-        if((String) parent.getItemAtPosition(position) != String.valueOf(getResources().getText(R.string.filterSpinnerAll)))
+        if (parent.getItemAtPosition(position) != String.valueOf(getResources().getText(R.string.filterSpinnerAll)))
         {
             filterResultTable((String) parent.getItemAtPosition(position));
             lastSpinnerSelection = (String) parent.getItemAtPosition(position);

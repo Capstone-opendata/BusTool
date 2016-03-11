@@ -1,4 +1,4 @@
-package capstone2015project.bustool;
+package capstone2015project.buscatchers;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

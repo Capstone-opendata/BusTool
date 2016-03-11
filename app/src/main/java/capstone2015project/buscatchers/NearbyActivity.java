@@ -1,4 +1,4 @@
-package capstone2015project.bustool;
+package capstone2015project.buscatchers;
 
 import android.Manifest;
 import android.app.AlertDialog;
@@ -10,14 +10,10 @@ import android.database.Cursor;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.ActivityCompat;
-import android.view.View;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -25,18 +21,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.SortedMap;
@@ -51,14 +41,12 @@ public class NearbyActivity extends AppCompatActivity
         LocationListener {
 
     final private int REQUEST_CODE_ASK_PERMISSIONS = 123;   // for permission requesting
-    private boolean JSONretrievalStarted = false;   // for stopping multiple data retrievals from foli
-
-    private boolean GPSenabled = false;     // is GPS enabled on user's device
-
     ListView stopsListView;     // the list view where bus stops are shown
     Location myLocation;        // variable to store user's current location
     LocationManager myLocationManager;  //used for location retrieval
     ArrayList<String> stopList;     //arraylist for storing list items
+    private boolean JSONretrievalStarted = false;   // for stopping multiple data retrievals from foli
+    private boolean GPSenabled = false;     // is GPS enabled on user's device
     private ProgressBar spinner;    // this will be displayed while retrieving data
     private TextView waitText;      // used to display a wait message along with progress spinner
     private CountDownTimer myTimer; // used to time the failed gps connection popup
@@ -377,8 +365,8 @@ public class NearbyActivity extends AppCompatActivity
 
                 String numberString = (String) stopsListView.getItemAtPosition(position);
                 String arr[] = numberString.split("\\s+");
-                i.putExtra("busStopNumber",(String) arr[0]);
-                i.putExtra("busStopName",(String) arr[1]);
+                i.putExtra("busStopNumber", arr[0]);
+                i.putExtra("busStopName", arr[1]);
                 startActivity(i);
 
             }

@@ -9,7 +9,7 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="capstone2015project.bustool.NearbyActivity"
+    tools:context="capstone2015project.buscatchers.NearbyActivity"
     tools:showIn="@layout/app_bar_nearby">
 
     <include layout="@layout/content_nearby_stops" />

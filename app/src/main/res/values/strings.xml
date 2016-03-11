@@ -1,11 +1,11 @@
 <resources>
-    <string name="app_name">PysäKit</string>
+    <string name="app_name">Turku Föli PysäKit</string>
     <string name="action_addFavs">Add to Favorites</string>
     <string name="action_delFavs">Remove from Favorites</string>
     <string name="action_settings">Settings</string>
     <string name="action_updatedb">Download Data</string>
     <string name="action_deletedb">Delete Data</string>
-    <string name="title_activity_stop_tool_selection">PysäKit</string>
+    <string name="title_activity_stop_tool_selection">Föli PysäKit</string>
     <string name="title_activity_nearby_stops">Nearby Stops</string>
     <string name="title_activity_result">Results</string>
     <string name="navigation_drawer_open">Main Menu</string>
@@ -43,7 +43,7 @@
     <string name="resact_sb_add">The bus stop is now added to the favorites</string>
     <string name="resact_sb_remove">The bus stop is now removed from the favorites</string>
     <string name="info_label">About</string>
-    <string name="info_text">Version 1.0 \n\n Team Bus Catchers: \n Jani Silvander \n Mikko Ruskamo \n Santtu Alatalo \n Waqar Ahmed</string>
+    <string name="info_text">Version 1.0 \n\nTeam Bus Catchers: \nJani Silvander \nMikko Ruskamo \nSanttu Alatalo \nWaqar Ahmed</string>
     <string name="title_activity_first_time_setup">First Time Setup</string>
     <string name="action_first_time_setup_startDownload">Start download</string>
     <string name="First_time_use_message">Welcome to PysäKit!\nThis is a first time setup which will download the latest bus stop data to your device.</string>

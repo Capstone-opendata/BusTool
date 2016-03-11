@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="capstone2015project.bustool">
+    package="capstone2015project.buscatchers">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
@@ -12,7 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".StopToolSelectionActivity"
+            android:name="capstone2015project.buscatchers.StopToolSelectionActivity"
             android:label="@string/title_activity_stop_tool_selection"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -22,20 +22,20 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ResultActivity"
+            android:name="capstone2015project.buscatchers.ResultActivity"
             android:label="@string/title_activity_result"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".NearbyActivity"
+            android:name="capstone2015project.buscatchers.NearbyActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_nearby"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".BusstopDbActivity"
+            android:name="capstone2015project.buscatchers.BusstopDbActivity"
             android:label="@string/title_activity_busstop_db"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".StopsMapActivity"
+            android:name="capstone2015project.buscatchers.StopsMapActivity"
             android:label="@string/title_activity_stops_map"
             android:theme="@style/AppTheme.NoActionBar" />
         <!--
@@ -55,10 +55,10 @@
         -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="@string/google_maps_key" />
+            android:value="AIzaSyAIkfOawhkoNmxl0kInxSzVyq1S859P3JI" />
 
         <activity
-            android:name=".FirstTimeSetupActivity"
+            android:name="capstone2015project.buscatchers.FirstTimeSetupActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_first_time_setup"
             android:theme="@style/AppTheme.NoActionBar"></activity>

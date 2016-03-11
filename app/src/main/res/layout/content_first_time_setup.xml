@@ -9,44 +9,44 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="capstone2015project.bustool.FirstTimeSetupActivity"
+    tools:context="capstone2015project.buscatchers.FirstTimeSetupActivity"
     tools:showIn="@layout/activity_first_time_setup">
 
     <TextView
+        android:id="@+id/welcomeMessage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="@string/First_time_use_message"
-        android:id="@+id/welcomeMessage"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:textAlignment="center" />
+        android:text="@string/First_time_use_message"
+        android:textAlignment="center"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <ProgressBar
+        android:id="@+id/downloadSpinner"
         style="?android:attr/progressBarStyleLarge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/downloadSpinner"
-        android:indeterminate="false"
-        android:layout_gravity="center_horizontal"
+        android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_gravity="center_horizontal"
+        android:indeterminate="false" />
 
     <Button
+        android:id="@+id/downloadButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/action_first_time_setup_startDownload"
-        android:id="@+id/downloadButton"
-        android:onClick="startDownload"
-        android:layout_gravity="center_horizontal"
+        android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_gravity="center_horizontal"
+        android:onClick="startDownload"
+        android:text="@string/action_first_time_setup_startDownload" />
 
     <TextView
+        android:id="@+id/downloadProgressText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/string_dl_wait"
-        android:id="@+id/downloadProgressText"
         android:layout_below="@+id/downloadSpinner"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:text="@string/string_dl_wait" />
 </RelativeLayout>

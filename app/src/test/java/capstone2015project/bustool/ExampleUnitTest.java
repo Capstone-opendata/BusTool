@@ -1,4 +1,4 @@
-package capstone2015project.bustool;
+package capstone2015project.buscatchers;
 
 import org.junit.Test;
 

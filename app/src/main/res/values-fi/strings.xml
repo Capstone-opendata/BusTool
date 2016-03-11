@@ -1,11 +1,11 @@
 <resources>
-    <string name="app_name">PysäKit</string>
+    <string name="app_name">Turku Föli PysäKit</string>
     <string name="action_addFavs">Lisää suosikkeihin</string>
     <string name="action_delFavs">Poista suosikeista</string>
     <string name="action_settings">Asetukset</string>
     <string name="action_updatedb">Lataa tiedot</string>
     <string name="action_deletedb">Poista tiedot</string>
-    <string name="title_activity_stop_tool_selection">PysäKit</string>
+    <string name="title_activity_stop_tool_selection">Föli PysäKit</string>
     <string name="title_activity_nearby_stops">Lähellä olevat pysäkit</string>
     <string name="title_activity_result">Tulokset</string>
     <string name="navigation_drawer_open">Päävalikko</string>
@@ -43,7 +43,7 @@
     <string name="resact_sb_add">Pysäkki lisätty suosikkeihin</string>
     <string name="resact_sb_remove">Pysäkki poistettu suosikeista</string>
     <string name="info_label">Lisätietoja</string>
-    <string name="info_text">Versio 1.0 \n\n Tiimi Bus Catchers: \n Jani Silvander \n Mikko Ruskamo \n Santtu Alatalo \n Waqar Ahmed</string>
+    <string name="info_text">Versio 1.0 \n\nTiimi Bus Catchers: \nJani Silvander \nMikko Ruskamo \nSanttu Alatalo \nWaqar Ahmed</string>
     <string name="action_first_time_setup_startDownload">Aloita lataus</string>
     <string name="title_activity_first_time_setup">Ensimmäisen käyttökerran asetus</string>
     <string name="First_time_use_message">Tervetuloa PysäKit-ohjelmaan!\n Tämä on ensimmäisen käyttökerran asetusruutu, jossa ladataan uusimmat bussipysäkkitiedot laitteellesi.</string>

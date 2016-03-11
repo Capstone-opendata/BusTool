@@ -9,74 +9,74 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="capstone2015project.bustool.BusstopDbActivity"
+    tools:context="capstone2015project.buscatchers.BusstopDbActivity"
     tools:showIn="@layout/activity_busstop_db">
 
     <android.support.design.widget.TextInputLayout
         android:id="@+id/input_layout_busID"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:focusable="false"
-        android:focusableInTouchMode="false"
-        android:layout_below="@+id/textView2"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true">
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/textView2"
+        android:focusable="false"
+        android:focusableInTouchMode="false">
 
     </android.support.design.widget.TextInputLayout>
 
     <EditText
+        android:id="@+id/editTextDb"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="textVisiblePassword"
-        android:ems="10"
-        android:id="@+id/editTextDb"
-        android:hint="@string/ct_stop_tool_selection_inputField"
-        android:clickable="false"
         android:layout_below="@+id/headView"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:clickable="false"
+        android:ems="10"
+        android:hint="@string/ct_stop_tool_selection_inputField"
+        android:inputType="textVisiblePassword" />
 
     <RadioGroup
+        android:id="@+id/radioGroup"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:id="@+id/radioGroup">
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:orientation="horizontal">
         <RadioButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/ct_bsdb_Show"
             android:id="@+id/radioButton0"
-            android:checked="true" />
-        <RadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/ct_bsdb_Add"
+            android:checked="true"
+            android:text="@string/ct_bsdb_Show" />
+        <RadioButton
             android:id="@+id/radioButton1"
-            android:checked="false" />
-        <RadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/ct_bsdb_Remove"
+            android:checked="false"
+            android:text="@string/ct_bsdb_Add" />
+        <RadioButton
             android:id="@+id/radioButton2"
-            android:checked="false" />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="false"
+            android:text="@string/ct_bsdb_Remove" />
     </RadioGroup>
 
     <TextView
+        android:id="@+id/headView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="@string/string_favorites"
-        android:id="@+id/headView"
-        android:layout_below="@+id/radioGroup"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/radioGroup"
+        android:text="@string/string_favorites"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <ListView
+        android:id="@+id/DbView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/DbView"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignTop="@+id/editTextDb" />

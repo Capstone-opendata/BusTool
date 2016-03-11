@@ -4,9 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@mipmap/graph"
     android:fitsSystemWindows="true"
-    tools:context="capstone2015project.bustool.FirstTimeSetupActivity"
-    android:background="@mipmap/graph">
+    tools:context="capstone2015project.buscatchers.FirstTimeSetupActivity">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
