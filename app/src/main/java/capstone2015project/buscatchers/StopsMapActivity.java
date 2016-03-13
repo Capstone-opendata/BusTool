@@ -118,6 +118,8 @@ public class StopsMapActivity extends AppCompatActivity implements OnMapReadyCal
 
         LatLng currentLoc = new LatLng(lat,lon);
         mMap.moveCamera(CameraUpdateFactory.newLatLng(currentLoc));
+        // show current location marker
+        mMap.setMyLocationEnabled(true);
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLoc, 15));
         // action on click
         mMap.setOnInfoWindowClickListener(this);

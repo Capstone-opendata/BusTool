@@ -55,7 +55,7 @@
         -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyAIkfOawhkoNmxl0kInxSzVyq1S859P3JI" />
+            android:value="AIzaSyAcibZ8p9FRUwriaDIEiA1-bN86oRMbqTI" />
 
         <activity
             android:name="capstone2015project.buscatchers.FirstTimeSetupActivity"
