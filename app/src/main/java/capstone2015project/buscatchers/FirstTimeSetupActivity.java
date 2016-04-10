@@ -31,18 +31,19 @@ public class FirstTimeSetupActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         downloadButton = (Button) findViewById(R.id.downloadButton);
-        if(a.getStatus()==ProcessJSON.Status.RUNNING){
+        if (a.getStatus() == ProcessJSON.Status.RUNNING) {
             downloadButton.setVisibility(View.GONE);
             spinner.setVisibility(View.VISIBLE);
             progressText.setVisibility(View.VISIBLE);
-        }else{
-            spinner = (ProgressBar)findViewById(R.id.downloadSpinner);
+        } else {
+            spinner = (ProgressBar) findViewById(R.id.downloadSpinner);
             spinner.setVisibility(View.GONE);
             progressText = (TextView) findViewById(R.id.downloadProgressText);
             progressText.setVisibility(View.GONE);
 
+        }
     }
-    }
+
     @Override
     public void onBackPressed() {
         moveTaskToBack(true);
@@ -50,28 +51,25 @@ public class FirstTimeSetupActivity extends AppCompatActivity {
 
     /**
      * Function for starting bus stop data download for local database.
+     *
      * @param view the current view.
      */
-    public void startDownload(View view)
-    {
+    public void startDownload(View view) {
         downloadButton.setVisibility(View.GONE);
         spinner.setVisibility(View.VISIBLE);
         progressText.setVisibility(View.VISIBLE);
-
         fetchDb();
     }
 
     /**
-     *  Starts source data retrieval for local database.
+     * Starts source data retrieval for local database.
      */
-    public void fetchDb()
-    {
-        String url = "http://data.foli.fi/gtfs/v0/stops";
-        a=new ProcessJSON().execute(url);
+    public void fetchDb() {
+        String url = AppConfig.FOLI_STOPS_URL;
+        a = new ProcessJSON().execute(url);
     }
 
     private class ProcessJSON extends AsyncTask<String, Void, String> {
-
 
         protected String doInBackground(String... strings) {
 
@@ -80,7 +78,7 @@ public class FirstTimeSetupActivity extends AppCompatActivity {
             HTTPDataHandler hh = new HTTPDataHandler();
             String stream = hh.GetHTTPData(urlString);
 
-            BsDb = new SQLiteHelper(FirstTimeSetupActivity.this);
+            BsDb = SQLiteHelper.getInstance(FirstTimeSetupActivity.this);
             if (stream != null) {
                 try {
 
@@ -100,15 +98,13 @@ public class FirstTimeSetupActivity extends AppCompatActivity {
                         double lati = Double.parseDouble(lat);
                         double longi = Double.parseDouble(lon);
 
-                        BsDb.insertBS(stopNumber, stopName,lati, longi, "0");
+                        BsDb.insertBS(stopNumber, stopName, lati, longi, "0");
 
                     }
 
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
-
 
             } // if statement end
             BsDb.close();
@@ -119,7 +115,6 @@ public class FirstTimeSetupActivity extends AppCompatActivity {
         protected void onPostExecute(String stream) {
 
             //download completed, mark first setup done and allow user to proceed.
-
             SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
             SharedPreferences.Editor editor = settings.edit();
             editor.putBoolean("firstTimeSetupDone", true);

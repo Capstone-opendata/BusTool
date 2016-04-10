@@ -11,13 +11,12 @@ import java.util.ArrayList;
 
 /**
  * Contains methods to handle database.
- *
+ * <p/>
  * Created by jani on 8.12.2015.
- *
+ * <p/>
  * file: busstop.db
  * table: busstops
  * columns:|    id  |   bs_id   |   bs_nm   |   bs_tag  |   bs_fav |    bs_lat |    bs_lon  |
- *
  */
 public class SQLiteHelper extends SQLiteOpenHelper {
     /*
@@ -34,9 +33,18 @@ public class SQLiteHelper extends SQLiteOpenHelper {
     public static final String BUSSTOP_LON = "bs_lon";
     public final ArrayList<String> BsIdList = new ArrayList<String>(); // list that contains latest fetched bsid items
 
-    public SQLiteHelper(Context context) {
+    /** Applying singleton design pattern **/
+    private static SQLiteHelper instance = null;
+    private SQLiteHelper(Context context) {
         super(context, DATABASE, null, 1);
     }
+    public static SQLiteHelper getInstance(Context context) {
+        if(instance == null) {
+            instance = new SQLiteHelper(context);
+        }
+        return instance;
+    }
+    /** end singleton design pattern **/
 
     @Override
     public void onCreate(SQLiteDatabase db) {
@@ -52,34 +60,63 @@ public class SQLiteHelper extends SQLiteOpenHelper {
 
     /**
      * Fetches a simple query.
+     *
      * @param query String of the query.
      * @return the query result.
      */
-    public Cursor getData(String query)
-    {
+    public Cursor getData(String query) {
         /*
         To fetch simple query
          */
         SQLiteDatabase db = this.getReadableDatabase();
-        return db.rawQuery( query, null );
+        return db.rawQuery(query, null);
+    }
+
+    /**
+     * Fetches all bus stops from db
+     *
+     * @return result of all bus stops.
+     */
+    public Cursor getAllStops() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        return db.rawQuery("SELECT * FROM busstops WHERE 1", null);
+    }
+
+    /**
+     * Fetches favorite bus stops from db
+     *
+     * @param isFav int indicating whether or not the favorite
+     * @return result of all bus stops.
+     */
+    public ArrayList<String> getFavoriteStops(boolean isFav) {
+        String query;
+        // if stop is marked favorite
+        if(isFav==true){
+            query = "SELECT * FROM busstops WHERE bs_fav = 1";
+        }
+        else{ //stops not marked favorite
+            query = "SELECT * FROM busstops WHERE bs_fav != 1";
+        }
+        return getQuery(query);
     }
 
     /**
      * Inserts row with bus stop data.
-     * @param bs_id Integer of bus stop id
+     *
+     * @param bs_id   Integer of bus stop id
      * @param bs_name String of bus stop name
-     * @param bs_lat double bus stop latitude
-     * @param bs_lon double bus stop longitude
-     * @param bs_fav String of bus stop favorite status
+     * @param bs_lat  double bus stop latitude
+     * @param bs_lon  double bus stop longitude
+     * @param bs_fav  String of bus stop favorite status
      * @return
      */
-    public Boolean insertBS(String bs_id, String bs_name, double bs_lat, double bs_lon, String bs_fav){
+    public Boolean insertBS(String bs_id, String bs_name, double bs_lat, double bs_lon, String bs_fav) {
         /*
         Inserts Row with Bus Stop data
          */
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put(BUSSTOP_ID,bs_id);
+        contentValues.put(BUSSTOP_ID, bs_id);
         contentValues.put(BUSSTOP_NAME, bs_name);
         contentValues.put(BUSSTOP_LAT, bs_lat);
         contentValues.put(BUSSTOP_LON, bs_lon);
@@ -90,9 +127,10 @@ public class SQLiteHelper extends SQLiteOpenHelper {
 
     /**
      * Checks the number of rows in database.
+     *
      * @return int number of rows.
      */
-    public int numberOfRows(){
+    public int numberOfRows() {
         /*
         Checks the number of rows in database
          */
@@ -101,15 +139,16 @@ public class SQLiteHelper extends SQLiteOpenHelper {
     }
 
     /**
-     *  Updates a row of data in database.
-     * @param id Integer bus stop id
+     * Updates a row of data in database.
+     *
+     * @param id      Integer bus stop id
      * @param bs_name String of bus stop name
-     * @param bs_lat double bus stop latitude
-     * @param bs_lon double bus stop longitude
-     * @param bs_fav String of favorite status
+     * @param bs_lat  double bus stop latitude
+     * @param bs_lon  double bus stop longitude
+     * @param bs_fav  String of favorite status
      * @return boolean true
      */
-    public boolean updateBS (Integer id, String bs_name, double bs_lat, double bs_lon, String bs_fav) {
+    public boolean updateBS(Integer id, String bs_name, double bs_lat, double bs_lon, String bs_fav) {
         /*
         Update a row of data in database
          */
@@ -125,9 +164,10 @@ public class SQLiteHelper extends SQLiteOpenHelper {
 
     /**
      * Drops table, deletes all data.
+     *
      * @return boolean true
      */
-    public boolean DeleteAll () {
+    public boolean DeleteAll() {
         /*
         Drop table, deteles all data
          */
@@ -139,10 +179,10 @@ public class SQLiteHelper extends SQLiteOpenHelper {
 
     /**
      * Creates an array list of all Bus Stops, and updates BsIdList.
+     *
      * @return String array list of all bus stops.
      */
-    public ArrayList<String> getAllBSs()
-    {
+    public ArrayList<String> getAllBSs() {
         /*
         Creates an array list of all Bus Stops, and updates BsIdList
          */
@@ -150,12 +190,12 @@ public class SQLiteHelper extends SQLiteOpenHelper {
 
         //hp = new HashMap();
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res =  db.rawQuery("select * from " + TABLE, null);
+        Cursor res = db.rawQuery("select * from " + TABLE, null);
         res.moveToFirst();
         BsIdList.clear();
-        while(!res.isAfterLast()){
+        while (!res.isAfterLast()) {
             BsIdList.add(res.getString(res.getColumnIndex(BUSSTOP_ID)));
-            array_list.add(res.getString(res.getColumnIndex(BUSSTOP_ID))+"\t\t"+res.getString(res.getColumnIndex(BUSSTOP_NAME)));
+            array_list.add(res.getString(res.getColumnIndex(BUSSTOP_ID)) + "\t\t" + res.getString(res.getColumnIndex(BUSSTOP_NAME)));
             res.moveToNext();
         }
         return array_list;
@@ -163,11 +203,11 @@ public class SQLiteHelper extends SQLiteOpenHelper {
 
     /**
      * Creates an arrays list and updates BsIdList of items.
+     *
      * @param qString String of the query.
      * @return String array list of the query result.
      */
-    public ArrayList<String> getQuery(String qString)
-    {
+    public ArrayList<String> getQuery(String qString) {
         /*
         Creates an arrays list and updates BsIdList of items
          */
@@ -175,12 +215,12 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         //hp = new HashMap();
         SQLiteDatabase db = this.getReadableDatabase();
         db.execSQL("PRAGMA case_sensitive_like=OFF;");
-        Cursor res =  db.rawQuery(qString, null);
+        Cursor res = db.rawQuery(qString, null);
         res.moveToFirst();
         BsIdList.clear();
-        while(!res.isAfterLast()){
+        while (!res.isAfterLast()) {
             BsIdList.add(res.getString(res.getColumnIndex(BUSSTOP_ID)));
-            array_list.add(res.getString(res.getColumnIndex(BUSSTOP_ID))+"\t\t"+res.getString(res.getColumnIndex(BUSSTOP_NAME)));
+            array_list.add(res.getString(res.getColumnIndex(BUSSTOP_ID)) + "\t\t" + res.getString(res.getColumnIndex(BUSSTOP_NAME)));
             res.moveToNext();
         }
         return array_list;
@@ -188,16 +228,17 @@ public class SQLiteHelper extends SQLiteOpenHelper {
 
     /**
      * Turns row's bs_fav column to 1, meaning it will be added to favorites.
+     *
      * @param BsToAdd String of bus stop which to add to favorites.
      * @return boolean true.
      */
-    public Boolean addFav(String BsToAdd){
+    public Boolean addFav(String BsToAdd) {
         /*
         Turns row's bs_fav column to 1, added to favorites
          */
         SQLiteDatabase db = this.getReadableDatabase();
         // Get Id to Update
-        Cursor res =  db.rawQuery("SELECT * FROM " + TABLE + " WHERE bs_id LIKE '" + BsToAdd + "' ", null);
+        Cursor res = db.rawQuery("SELECT * FROM " + TABLE + " WHERE bs_id LIKE '" + BsToAdd + "' ", null);
         res.moveToFirst();
         String id = res.getString(res.getColumnIndex(ID));
         // Update Bs_Fav
@@ -209,17 +250,19 @@ public class SQLiteHelper extends SQLiteOpenHelper {
 
     /**
      * Turns row's bs_fav column to 0, meaning it will be deleted from favorites.
+     *
      * @param BsToDel String of bus stop which to delete from favorites.
      * @return boolean true.
      */
-    public Boolean delFav(String BsToDel){
+    public Boolean delFav(String BsToDel) {
         /*
         Turn row's bs_fav column to 0, deleted from favorites
          */
         SQLiteDatabase db = this.getReadableDatabase();
         // Get Id to Update
-        Cursor res =  db.rawQuery("SELECT * FROM "+TABLE+" WHERE bs_id LIKE '"+BsToDel+"' ", null);
-        res.moveToFirst();String id = res.getString(res.getColumnIndex(ID));
+        Cursor res = db.rawQuery("SELECT * FROM " + TABLE + " WHERE bs_id LIKE '" + BsToDel + "' ", null);
+        res.moveToFirst();
+        String id = res.getString(res.getColumnIndex(ID));
         // Update Bs_Fav
         ContentValues contentValues = new ContentValues();
         contentValues.put(BUSSTOP_FAV, 0);

@@ -29,7 +29,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
  * Displays a map which is used for bus stop searching.
  */
 public class StopsMapActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener,
-        NavigationView.OnNavigationItemSelectedListener{
+        NavigationView.OnNavigationItemSelectedListener {
 
     private static final Object KEY = "";
     SQLiteHelper BsDb;
@@ -37,6 +37,7 @@ public class StopsMapActivity extends AppCompatActivity implements OnMapReadyCal
 
     /**
      * Initializes the activity.
+     *
      * @param savedInstanceState saved data of previous state.
      */
     @Override
@@ -65,19 +66,14 @@ public class StopsMapActivity extends AppCompatActivity implements OnMapReadyCal
     /**
      * Manipulates the map once available.
      * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
      */
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        BsDb = new SQLiteHelper(StopsMapActivity.this);
-        //fetch data
-        Cursor res = BsDb.getData("SELECT * FROM busstops WHERE 1"); //limit 2 for testing
+        BsDb = SQLiteHelper.getInstance(StopsMapActivity.this);
+        //fetch all stops data
+        Cursor res = BsDb.getAllStops(); //limit 2 for testing
         res.moveToFirst();
         //iterate data
         while (!res.isAfterLast()) {
@@ -90,9 +86,9 @@ public class StopsMapActivity extends AppCompatActivity implements OnMapReadyCal
             mMap.addMarker(new MarkerOptions().position(stops).title(name).snippet(KEY + id));
             res.moveToNext();
         }
-
-        double lat = 60.4491652;
-        double lon = 22.2933068;
+        //Default latitude and longitude
+        double lat = AppConfig.DEFAULT_LAT;
+        double lon = AppConfig.DEFAULT_LON;
         LocationManager myLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         if (myLocationManager != null) {
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -110,14 +106,11 @@ public class StopsMapActivity extends AppCompatActivity implements OnMapReadyCal
             }
 
         }
-
         //should not work this way
-        //hard coded lon / lat for zoom and should be changed to current location of user
-        //double hlat = 60.4491652;
-        //double hlon= 22.2933068;
-
-        LatLng currentLoc = new LatLng(lat,lon);
+        LatLng currentLoc = new LatLng(lat, lon);
         mMap.moveCamera(CameraUpdateFactory.newLatLng(currentLoc));
+        // show current location marker
+        mMap.setMyLocationEnabled(true);
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLoc, 15));
         // action on click
         mMap.setOnInfoWindowClickListener(this);
@@ -126,6 +119,7 @@ public class StopsMapActivity extends AppCompatActivity implements OnMapReadyCal
     /**
      * Handles clicks on marker info windows and starts result activity using
      * marker window's info.
+     *
      * @param marker the clicked marker on the map.
      */
     @Override
@@ -135,11 +129,9 @@ public class StopsMapActivity extends AppCompatActivity implements OnMapReadyCal
         Intent i = new Intent(getApplicationContext(), ResultActivity.class);
         if (!s.isEmpty()) {
             i.putExtra("busStopNumber", s);
-            i.putExtra("busStopName",name);
+            i.putExtra("busStopName", name);
             startActivity(i);
         }
-        //Toast.makeText(getBaseContext(), "Stop Number: " + s,
-        //      Toast.LENGTH_SHORT).show();
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -162,19 +154,15 @@ public class StopsMapActivity extends AppCompatActivity implements OnMapReadyCal
             startActivity(i);
 
         } else if (id == R.id.nav_favorites) {
-            Intent i = new Intent(this, BusstopDbActivity.class);
+            Intent i = new Intent(this, FavoritesActivity.class);
             startActivity(i);
-/*
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-*/
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

@@ -31,7 +31,7 @@
             android:label="@string/title_activity_nearby"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name="capstone2015project.buscatchers.BusstopDbActivity"
+            android:name="capstone2015project.buscatchers.FavoritesActivity"
             android:label="@string/title_activity_busstop_db"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
@@ -55,7 +55,7 @@
         -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyAIkfOawhkoNmxl0kInxSzVyq1S859P3JI" />
+            android:value="AIzaSyAcibZ8p9FRUwriaDIEiA1-bN86oRMbqTI" />
 
         <activity
             android:name="capstone2015project.buscatchers.FirstTimeSetupActivity"

@@ -59,6 +59,7 @@ public class ResultActivity extends AppCompatActivity
 
     /**
      * Initializes the activity.
+     *
      * @param savedInstanceState saved data of previous state.
      */
     @Override
@@ -72,16 +73,16 @@ public class ResultActivity extends AppCompatActivity
         final ImageButton fav = (ImageButton) findViewById(R.id.imageButton);
         fav.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                if(favorites==1){
+                if (favorites == 1) {
                     forget();
                     fav.setImageDrawable(ContextCompat.getDrawable(ResultActivity.this, R.mipmap.ic_unfavorite_star));
-                    favorites=0;
+                    favorites = 0;
                     Snackbar.make(v, R.string.resact_sb_remove, Snackbar.LENGTH_LONG)
                             .setAction("Action", null).show();
-                }else {
+                } else {
                     remember();
                     fav.setImageDrawable(ContextCompat.getDrawable(ResultActivity.this, R.mipmap.ic_favorite_star));
-                    favorites=1;
+                    favorites = 1;
                     Snackbar.make(v, R.string.resact_sb_add, Snackbar.LENGTH_LONG)
                             .setAction("Action", null).show();
                 }
@@ -107,16 +108,14 @@ public class ResultActivity extends AppCompatActivity
             busStopNumber = extras.getString("busStopNumber");
             busStopName = extras.getString("busStopName");
             busNumber = busStopNumber;
-
             // text field where the searched stop number is displayed
-            //TextView stopNumberText = (TextView) findViewById(R.id.stop_number_text);
-            //stopNumberText.setText(busStopNumber+": "+busStopName);
-            toolbar.setSubtitle(busStopNumber+": "+busStopName);
+            toolbar.setSubtitle(busStopNumber + ": " + busStopName);
         }
     }
 
     /**
      * Adds items dynamically to filter spinner.
+     *
      * @param busLineList is list of bus line numbers in String format
      */
     private void addItemsOnSpinner(List<String> busLineList) {
@@ -124,8 +123,7 @@ public class ResultActivity extends AppCompatActivity
         //filterSpinner = (Spinner) findViewById(R.id.filter_spinner);
         List<String> list = new ArrayList<String>();
         list.add(String.valueOf(getResources().getText(R.string.filterSpinnerAll)));
-        for(int i = 0; i < busLineList.size(); i++)
-        {
+        for (int i = 0; i < busLineList.size(); i++) {
             list.add(busLineList.get(i));
         }
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
@@ -137,33 +135,25 @@ public class ResultActivity extends AppCompatActivity
     /**
      * Filters result table rows by given bus line. Filtered bus lines are
      * hidden. If given bus line is null then all result table rows are shown.
+     *
      * @param busLine is the bus line number which will be shown in results
      */
-    private void filterResultTable(String busLine)
-    {
+    private void filterResultTable(String busLine) {
 
-        TableLayout scrollableLayout = (TableLayout)findViewById(R.id.ScrollableTableLayout);
+        TableLayout scrollableLayout = (TableLayout) findViewById(R.id.ScrollableTableLayout);
         //if busLine isn't null show only wanted bus line else show all
-        if(busLine != null)
-        {
+        if (busLine != null) {
             CharSequence line = busLine;
-            for(int i = 0; i < scrollableLayout.getChildCount(); i++)
-            {
+            for (int i = 0; i < scrollableLayout.getChildCount(); i++) {
                 TableRow row = (TableRow) scrollableLayout.getChildAt(i);
-                if(((TextView) row.getChildAt(0)).getText().equals(line))
-                {
+                if (((TextView) row.getChildAt(0)).getText().equals(line)) {
                     row.setVisibility(View.VISIBLE);
-                }
-                else
-                {
+                } else {
                     row.setVisibility(View.GONE);
                 }
             }
-        }
-        else
-        {
-            for(int i = 0; i < scrollableLayout.getChildCount(); i++)
-            {
+        } else {
+            for (int i = 0; i < scrollableLayout.getChildCount(); i++) {
                 TableRow row = (TableRow) scrollableLayout.getChildAt(i);
                 row.setVisibility(View.VISIBLE);
             }
@@ -211,13 +201,8 @@ public class ResultActivity extends AppCompatActivity
             startActivity(i);
 
         } else if (id == R.id.nav_favorites) {
-            Intent i = new Intent(this, BusstopDbActivity.class);
+            Intent i = new Intent(this, FavoritesActivity.class);
             startActivity(i);
-/*
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-*/
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -229,8 +214,7 @@ public class ResultActivity extends AppCompatActivity
      * Starts timed refresh for new bus stop info.
      */
     @Override
-    protected void onStart()
-    {
+    protected void onStart() {
         super.onStart();
 
         //start the timed refresh for getting new stop info
@@ -253,8 +237,7 @@ public class ResultActivity extends AppCompatActivity
      * Stops timed refresh for new bust stop info.
      */
     @Override
-    protected void onStop()
-    {
+    protected void onStop() {
         super.onStop();
 
         //stopping the timed refresh for bus stop info
@@ -263,6 +246,7 @@ public class ResultActivity extends AppCompatActivity
 
     /**
      * Handles action bar's favorite buttons.
+     *
      * @param item the pressed item.
      * @return boolean true.
      */
@@ -291,16 +275,16 @@ public class ResultActivity extends AppCompatActivity
      * Instantiates favorite button accordingly.
      */
     @Override
-    protected  void onResume(){
+    protected void onResume() {
         super.onResume();
-        SQLiteHelper BsDb = new SQLiteHelper(ResultActivity.this);
-        final Cursor res = BsDb.getData("SELECT * FROM busstops WHERE bs_id='"+busStopNumber+"' ");
+        SQLiteHelper BsDb = SQLiteHelper.getInstance(ResultActivity.this);
+        final Cursor res = BsDb.getData("SELECT * FROM busstops WHERE bs_id='" + busStopNumber + "' ");
         res.moveToFirst();
         ImageButton fav = (ImageButton) findViewById(R.id.imageButton);
-        favorites=res.getInt(res.getColumnIndex("bs_fav"));
+        favorites = res.getInt(res.getColumnIndex("bs_fav"));
         if (favorites == 1) {
             fav.setImageDrawable(ContextCompat.getDrawable(this, R.mipmap.ic_favorite_star));
-        }else{
+        } else {
             fav.setImageDrawable(ContextCompat.getDrawable(this, R.mipmap.ic_unfavorite_star));
         }
     }
@@ -308,16 +292,16 @@ public class ResultActivity extends AppCompatActivity
     /**
      * Adds busStopNumber to favorite database.
      */
-    public void remember(){
-        BsDb = new SQLiteHelper(ResultActivity.this);
+    public void remember() {
+        BsDb = SQLiteHelper.getInstance(ResultActivity.this);
         Boolean del = BsDb.addFav(busStopNumber);
     }
 
     /**
      * Removes busStopNumber from favorite database.
      */
-    public void forget(){
-        BsDb = new SQLiteHelper(ResultActivity.this);
+    public void forget() {
+        BsDb = SQLiteHelper.getInstance(ResultActivity.this);
         Boolean add = BsDb.delFav(busStopNumber);
     }
 
@@ -325,55 +309,47 @@ public class ResultActivity extends AppCompatActivity
      * Starts SIRI JSON bus stop data retrieval from föli's database
      * and clears the previous data from scrollable tablelayout
      */
-    public void GetStopData()
-    {
-        TableLayout scrollableLayout = (TableLayout)findViewById(R.id.ScrollableTableLayout);
+    public void GetStopData() {
+        TableLayout scrollableLayout = (TableLayout) findViewById(R.id.ScrollableTableLayout);
         scrollableLayout.removeAllViews();
-        String url = "http://data.foli.fi/siri/sm/"+busNumber;
-        //EditText userInput = (EditText) findViewById(R.id.editText);
-        //String url = "http://data.foli.fi/siri/sm/"+userInput.getText();
+        String url = AppConfig.FOLI_REALTIME_STOPS_URL + busNumber;
         new ProcessJSON().execute(url);
     }
 
     /**
      * Used to allow refresh button use GetStopData method
+     *
      * @param view the current view
      */
-    public void ManualRefresh(View view)
-    {
+    public void ManualRefresh(View view) {
         GetStopData();
     }
 
     /**
      * Allows buttons to start intent StopToolSelectionActivity
+     *
      * @param view the current view
      */
-    public void GoToToolSelectionActivity(View view)
-    {
+    public void GoToToolSelectionActivity(View view) {
         Intent i = new Intent(this, StopToolSelectionActivity.class);
         startActivity(i);
     }
 
     /**
      * Filters result page's result table by chosen item in the spinner.
-     * @param parent the spinner used for selecting a bus line.
-     * @param view the current view.
+     *
+     * @param parent   the spinner used for selecting a bus line.
+     * @param view     the current view.
      * @param position the position in the spinner.
-     * @param id the id.
+     * @param id       the id.
      */
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        // An item was selected. You can retrieve the selected item using
-        // parent.getItemAtPosition(pos)
-
         // if spinner value isn't "All" then filter by given item else remove filter
-        if (parent.getItemAtPosition(position) != String.valueOf(getResources().getText(R.string.filterSpinnerAll)))
-        {
+        if (parent.getItemAtPosition(position) != String.valueOf(getResources().getText(R.string.filterSpinnerAll))) {
             filterResultTable((String) parent.getItemAtPosition(position));
             lastSpinnerSelection = (String) parent.getItemAtPosition(position);
-        }
-        else
-        {
+        } else {
             filterResultTable(null);
             lastSpinnerSelection = (String) parent.getItemAtPosition(position);
         }
@@ -389,7 +365,7 @@ public class ResultActivity extends AppCompatActivity
      * Retrieves JSON information and processes it accordingly for the result activity
      */
     private class ProcessJSON extends AsyncTask<String, Void, String> {
-        protected String doInBackground(String... strings){
+        protected String doInBackground(String... strings) {
             //String stream = null;
             String urlString = strings[0];
 
@@ -400,61 +376,49 @@ public class ResultActivity extends AppCompatActivity
             return stream;
         }
 
-        protected void onPostExecute(String stream){
-
+        protected void onPostExecute(String stream) {
             //  table is the 4x3 table which displays incoming bus data
-            // increasing the table size requires addition of rows in content_bus_stop_info.xml
-            //TableLayout table = (TableLayout)findViewById(R.id.result_table_layout);
-            TableLayout scrollableLayout = (TableLayout)findViewById(R.id.ScrollableTableLayout);
+            TableLayout scrollableLayout = (TableLayout) findViewById(R.id.ScrollableTableLayout);
             //setting table invisible to avoid showing filtering during updates. Set to visible after filtering.
             scrollableLayout.setVisibility(View.GONE);
-            if(stream !=null){
-                try{
+            if (stream != null) {
+                try {
                     // Get the full HTTP Data as JSONObject
-                    JSONObject reader= new JSONObject(stream);
-                    //tv.setText("."+reader+".");
+                    JSONObject reader = new JSONObject(stream);
                     // Get the JSONArray busses
                     JSONArray bussesArray = reader.getJSONArray("result");
                     //store temporarily all line numbers in this list
                     List<String> allLinesList = new ArrayList<String>();
-
-                    // using i<5 means that only 5 next busses will be displayed
-                    for(int i = 0; i<20; i++)
-                    {
-                        if(i<bussesArray.length())
-                        {
+                    // using i<20 means that only 20 next buses will be displayed
+                    for (int i = 0; i < 20; i++) {
+                        if (i < bussesArray.length()) {
                             // Get the busses array first JSONObject
                             JSONObject busses_object_0 = bussesArray.getJSONObject(i);
                             String busses_0_lineNumber = busses_object_0.getString("lineref");
                             String busses_0_lineDestination = busses_object_0.getString("destinationdisplay");
                             String busses_0_expectedTime = busses_object_0.getString("expectedarrivaltime");
 
-
                             long timestamp = System.currentTimeMillis();
-                            long eta = Long.parseLong(busses_0_expectedTime)*1000 - timestamp;
+                            long eta = Long.parseLong(busses_0_expectedTime) * 1000 - timestamp;
 
                             //if the eta is negative, skip adding it
-                            if(eta < 0)
-                            {
+                            if (eta < 0) {
                                 continue;
                             }
                             //adding this bus in the temp list for results filtering
                             allLinesList.add(busses_0_lineNumber);
 
-                            int seconds = (int) (eta / 1000) % 60 ;
-                            int minutes = (int) ((eta / (1000*60)) % 60);
+                            int seconds = (int) (eta / 1000) % 60;
+                            int minutes = (int) ((eta / (1000 * 60)) % 60);
                             int hours = (int) (eta / (1000 * 60 * 60)) % 24;
 
                             String etaString;
 
-                            if (hours < 1)
-                            {
-                                etaString = minutes+"min " +seconds+"s";
-                            }
-                            else
-                            {
+                            if (hours < 1) {
+                                etaString = minutes + "min " + seconds + "s";
+                            } else {
                                 SimpleDateFormat formatter = new SimpleDateFormat("HH:mm");
-                                etaString = formatter.format(new Date(Long.parseLong(busses_0_expectedTime)*1000));
+                                etaString = formatter.format(new Date(Long.parseLong(busses_0_expectedTime) * 1000));
                             }
 
                             //tv.setText(tv.getText()+"\nLine "+busses_0_lineNumber+" "+busses_0_lineDestination+ " "+etaString);
@@ -462,28 +426,26 @@ public class ResultActivity extends AppCompatActivity
                             //TableRow row = (TableRow)table.getChildAt(i+1);
                             TableRow row = (TableRow) LayoutInflater.from(ResultActivity.this).inflate(R.layout.result_row, null);
                             scrollableLayout.addView(row);
-                            TextView tvLine = (TextView)row.getChildAt(0);  //the first column of this row
-                            TextView tvDest = (TextView)row.getChildAt(1);  //the second
-                            TextView tvEta = (TextView)row.getChildAt(2);   //the third
+                            TextView tvLine = (TextView) row.getChildAt(0);  //the first column of this row
+                            TextView tvDest = (TextView) row.getChildAt(1);  //the second
+                            TextView tvEta = (TextView) row.getChildAt(2);   //the third
                             // setting the text data in the table cells
                             tvLine.setText(busses_0_lineNumber);
                             //breaking destination on first word ... must be a better way to do this
-                            String[] strArr = busses_0_lineDestination.split("\\s+",0);
-				            tvDest.setText(strArr[0]);
-				            tvDest.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
-				            tvEta.setText(etaString);
-				            tvEta.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
+                            String[] strArr = busses_0_lineDestination.split("\\s+", 0);
+                            tvDest.setText(strArr[0]);
+                            tvDest.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
+                            tvEta.setText(etaString);
+                            tvEta.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
                         }
 
                     }
 
-                    if(allLinesList != null)
-                    {
+                    if (allLinesList != null) {
                         List<String> newList = new ArrayList<String>(new HashSet<String>(allLinesList));
                         Collections.sort(newList);
                         addItemsOnSpinner(newList);
-                        if(lastSpinnerSelection != null)
-                        {
+                        if (lastSpinnerSelection != null) {
                             for (int i = 0; i < filterSpinner.getCount(); i++) {
                                 if (filterSpinner.getItemAtPosition(i).equals(lastSpinnerSelection)) {
                                     filterSpinner.setSelection(i);
@@ -493,7 +455,7 @@ public class ResultActivity extends AppCompatActivity
                     }
 
 
-                }catch(JSONException e){
+                } catch (JSONException e) {
                     e.printStackTrace();
                 }
 

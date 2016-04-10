@@ -40,19 +40,20 @@ public class NearbyActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         LocationListener {
 
-    final private int REQUEST_CODE_ASK_PERMISSIONS = 123;   // for permission requesting
-    ListView stopsListView;     // the list view where bus stops are shown
-    Location myLocation;        // variable to store user's current location
-    LocationManager myLocationManager;  //used for location retrieval
-    ArrayList<String> stopList;     //arraylist for storing list items
-    private boolean JSONretrievalStarted = false;   // for stopping multiple data retrievals from foli
-    private boolean GPSenabled = false;     // is GPS enabled on user's device
-    private ProgressBar spinner;    // this will be displayed while retrieving data
-    private TextView waitText;      // used to display a wait message along with progress spinner
+    final private int REQUEST_CODE_ASK_PERMISSIONS = 123; // for permission requesting
+    ListView stopsListView; // the list view where bus stops are shown
+    Location myLocation; // variable to store user's current location
+    LocationManager myLocationManager; //used for location retrieval
+    ArrayList<String> stopList; //arraylist for storing list items
+    private boolean JSONretrievalStarted = false; // for stopping multiple data retrievals from foli
+    private boolean GPSenabled = false; // is GPS enabled on user's device
+    private ProgressBar spinner; // this will be displayed while retrieving data
+    private TextView waitText; // used to display a wait message along with progress spinner
     private CountDownTimer myTimer; // used to time the failed gps connection popup
 
     /**
      * Initializes the activity.
+     *
      * @param savedInstanceState saved data of previous state.
      */
     @Override
@@ -61,16 +62,7 @@ public class NearbyActivity extends AppCompatActivity
         setContentView(R.layout.activity_nearby);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-/*
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-*/
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -80,16 +72,13 @@ public class NearbyActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        spinner = (ProgressBar)findViewById(R.id.progressBar);
+        spinner = (ProgressBar) findViewById(R.id.progressBar);
         spinner.setVisibility(View.GONE);
-        waitText = (TextView)findViewById(R.id.NearbyWaitMessage);
+        waitText = (TextView) findViewById(R.id.NearbyWaitMessage);
         waitText.setVisibility(View.GONE);
 
         //hard coding myLocation for testing
         myLocation = new Location("MyLoc");
-        //myLocation.setLatitude(60.4491652);
-        //myLocation.setLongitude(22.2933068);
-
         // Get ListView object from xml
         stopsListView = (ListView) findViewById(R.id.listView);
         stopList = new ArrayList<String>();
@@ -102,16 +91,12 @@ public class NearbyActivity extends AppCompatActivity
     protected void onStart() {
         super.onStart();
 
-        if(JSONretrievalStarted == false)
-        {
+        if (JSONretrievalStarted == false) {
             myLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
             GPSenabled = myLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
 
-            if(GPSenabled == false)
-            {
+            if (GPSenabled == false) {
                 // GPS is not enabled on user's device
-
-
                 showMessageOKCancel(getResources().getString(R.string.Enable_GPS_Message),
                         new DialogInterface.OnClickListener() {
                             @Override
@@ -127,29 +112,28 @@ public class NearbyActivity extends AppCompatActivity
                             }
                         });
                 //return;
-            }
-            else
-            {
+            } else {
                 // GPS is enabled on user's device
                 if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
                     ActivityCompat.requestPermissions(NearbyActivity.this,
-                            new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                            new String[]{
+                                    Manifest.permission.ACCESS_FINE_LOCATION
+                            },
                             REQUEST_CODE_ASK_PERMISSIONS);
                     return;
                 }
                 myLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
                 spinner.setVisibility(View.VISIBLE);
                 waitText.setVisibility(View.VISIBLE);
-            }// else
+            } // else
 
-        }//if JSONretrievalStarted
+        } //if JSONretrievalStarted
 
         myTimer = new CountDownTimer(4000, 1000) {
 
             public void onTick(long millisUntilFinished) {
-                if (JSONretrievalStarted)
-                {
+                if (JSONretrievalStarted) {
                     cancel();
                 }
             }
@@ -161,7 +145,9 @@ public class NearbyActivity extends AppCompatActivity
                             public void onClick(DialogInterface dialog, int which) {
                                 if (ActivityCompat.checkSelfPermission(NearbyActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(NearbyActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                                     ActivityCompat.requestPermissions(NearbyActivity.this,
-                                            new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                                            new String[]{
+                                                    Manifest.permission.ACCESS_FINE_LOCATION
+                                            },
                                             123);
                                     return;
                                 }
@@ -181,13 +167,12 @@ public class NearbyActivity extends AppCompatActivity
             }
         }.start();
 
-    }// onStart
+    } // onStart
 
     /**
      * Stops GPS location retrieval.
      */
-    public void onStop()
-    {
+    public void onStop() {
         super.onStop();
 
         myTimer.cancel();
@@ -236,7 +221,7 @@ public class NearbyActivity extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_info) {
             return true;
         }
 
@@ -263,13 +248,8 @@ public class NearbyActivity extends AppCompatActivity
             startActivity(i);
 
         } else if (id == R.id.nav_favorites) {
-            Intent i = new Intent(this, BusstopDbActivity.class);
+            Intent i = new Intent(this, FavoritesActivity.class);
             startActivity(i);
-/*
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-*/
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -280,13 +260,12 @@ public class NearbyActivity extends AppCompatActivity
     /**
      * Listens to gps coordinate changes and if location update is more accurate than
      * 60 meters, the nearby stops list is generated using that location.
+     *
      * @param location location of the user.
      */
     @Override
     public void onLocationChanged(Location location) {
         myLocation = location;
-        //System.out.println("My coordinates: " + location.getLatitude() + " ," + location.getLongitude() + " Accuracy: " + location.getAccuracy());
-        //myLocationManager.removeUpdates(this);
         //if data retrieval from foli hasn't been started and location's accuracy is better than 60m
         if (JSONretrievalStarted == false && location.getAccuracy() < 60) {
             //String url = "http://data.foli.fi/gtfs/v0/stops";
@@ -303,20 +282,19 @@ public class NearbyActivity extends AppCompatActivity
     }
 
     /**
-     *  Fetches bus stop data from database and uses it
-     *  with GPS location to filter nearby stops. Distance filtered stops
-     *  are added to NearbyActivity's list.
+     * Fetches bus stop data from database and uses it
+     * with GPS location to filter nearby stops. Distance filtered stops
+     * are added to NearbyActivity's list.
      */
-    private void handleBusStopData()
-    {
+    private void handleBusStopData() {
         Location stopLocation = new Location("StopLoc");
 
         // using SortedMap to sort the nearby stops
         SortedMap<Integer, String> tempMap = new TreeMap<Integer, String>();
 
-        SQLiteHelper BsDb = new SQLiteHelper(NearbyActivity.this);
+        SQLiteHelper BsDb = SQLiteHelper.getInstance(NearbyActivity.this);
         //fetch data
-        Cursor res = BsDb.getData("SELECT * FROM busstops WHERE 1"); //limit 2 for testing
+        Cursor res = BsDb.getAllStops(); //getData("SELECT * FROM busstops WHERE 1"); //limit 2 for testing
         res.moveToFirst();
         //iterate data
         while (!res.isAfterLast()) {
@@ -330,16 +308,14 @@ public class NearbyActivity extends AppCompatActivity
             float distance = myLocation.distanceTo(stopLocation);
 
             //using hard coded distance filter of 2000m
-            if(distance <= 2000)
-            {
-                String stopDistance = ""+Math.round(distance);
+            if (distance <= 2000) {
+                String stopDistance = "" + Math.round(distance);
                 tempMap.put(Integer.parseInt(stopDistance), id + " " + name + " " + stopDistance + "m");
             }
             res.moveToNext();
         }
 
-        for(Integer distance : tempMap.keySet())
-        {
+        for (Integer distance : tempMap.keySet()) {
             String stop = tempMap.get(distance);
             stopList.add(stop);
         }

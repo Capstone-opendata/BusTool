@@ -43,6 +43,7 @@ public class StopToolSelectionActivity extends AppCompatActivity {
 
     /**
      * Initializes the activity.
+     *
      * @param savedInstanceState saved data of previous state.
      */
     @Override
@@ -54,27 +55,14 @@ public class StopToolSelectionActivity extends AppCompatActivity {
 
         // Restore preferences
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
-
-
-/*        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setVisibility(View.INVISIBLE);
-           fab.setOnClickListener(new View.OnClickListener() {
-               @Override
-               public void onClick(View view) {
-                   Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                           .setAction("Action", null).show();
-               }
-          });*/
-
         final Button DbButton = (Button) findViewById(R.id.button5); // Database Button
         final Button NbButton = (Button) findViewById(R.id.button3); // Nearby Button
         final Button MpButton = (Button) findViewById(R.id.button4); // Map Button
-        
+
         final EditText userInput = (EditText) findViewById(R.id.editText_busID);
-        BsDb = new SQLiteHelper(StopToolSelectionActivity.this);
+        BsDb = SQLiteHelper.getInstance(StopToolSelectionActivity.this);
         boolean firstTimeSetup = settings.getBoolean("firstTimeSetupDone", false);
-        if(!firstTimeSetup || (BsDb.numberOfRows()==0))
-        {
+        if (!firstTimeSetup || (BsDb.numberOfRows() == 0)) {
             settings = getSharedPreferences(PREFS_NAME, 0);
             SharedPreferences.Editor editor = settings.edit();
             editor.putBoolean("firstTimeSetupDone", false);
@@ -84,7 +72,7 @@ public class StopToolSelectionActivity extends AppCompatActivity {
             startActivity(i);
             finish();
         }
-        if(BsDb.numberOfRows()==0) {
+        if (BsDb.numberOfRows() == 0) {
             DbButton.setText(R.string.setText_db);
             userInput.setEnabled(false);
         }
@@ -108,6 +96,7 @@ public class StopToolSelectionActivity extends AppCompatActivity {
                     listViewX.setAdapter(arrayAdapter);
 
                 } else {
+                    //should have used prepared statements for sqlite ...
                     String query = "SELECT * FROM busstops WHERE bs_id LIKE '%" + userInput.getText().toString() + "%' OR bs_nm LIKE '" + userInput.getText().toString() + "%' ";
                     ArrayList array_list = BsDb.getQuery(query);
                     ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(StopToolSelectionActivity.this, android.R.layout.simple_list_item_1, array_list);
@@ -118,7 +107,7 @@ public class StopToolSelectionActivity extends AppCompatActivity {
                         public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
                             Intent i = new Intent(getApplicationContext(), ResultActivity.class);
                             i.putExtra("busStopNumber", BsDb.BsIdList.get(arg2));
-                            Cursor res = BsDb.getData("SELECT bs_nm FROM busstops WHERE bs_id='"+BsDb.BsIdList.get(arg2)+"'");
+                            Cursor res = BsDb.getData("SELECT bs_nm FROM busstops WHERE bs_id='" + BsDb.BsIdList.get(arg2) + "'");
                             res.moveToFirst();
                             //check
                             String name = res.getString(res.getColumnIndex("bs_nm"));
@@ -140,7 +129,7 @@ public class StopToolSelectionActivity extends AppCompatActivity {
                     if (!BsDb.BsIdList.isEmpty()) {
                         // pick first one on the list
                         i.putExtra("busStopNumber", BsDb.BsIdList.get(0).toString());
-                        Cursor res = BsDb.getData("SELECT bs_nm FROM busstops WHERE bs_id='"+BsDb.BsIdList.get(0).toString()+"'");
+                        Cursor res = BsDb.getData("SELECT bs_nm FROM busstops WHERE bs_id='" + BsDb.BsIdList.get(0).toString() + "'");
                         res.moveToFirst();
                         //check
                         String name = res.getString(res.getColumnIndex("bs_nm"));
@@ -158,7 +147,7 @@ public class StopToolSelectionActivity extends AppCompatActivity {
                     return true;
                 }
                 if (keyevent.getAction() == KeyEvent.ACTION_UP) {
-                    textChanged=false;
+                    textChanged = false;
                 }
                 if ((keyevent.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_BACK)) {
                     userInput.clearFocus();
@@ -200,7 +189,7 @@ public class StopToolSelectionActivity extends AppCompatActivity {
      * Clears userInput text field and calls favorites to be displayed.
      */
     @Override
-    protected void onResume(){
+    protected void onResume() {
         final EditText userInput = (EditText) findViewById(R.id.editText_busID);
         userInput.setText("");
         userInput.clearFocus();
@@ -212,7 +201,7 @@ public class StopToolSelectionActivity extends AppCompatActivity {
      * Clears userInput text field and calls favorites to be displayed.
      */
     @Override
-    public void onBackPressed(){
+    public void onBackPressed() {
         super.onBackPressed();
         final EditText userInput = (EditText) findViewById(R.id.editText_busID);
         userInput.clearFocus();
@@ -226,6 +215,7 @@ public class StopToolSelectionActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.tool_selection, menu);
         return true;
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -245,8 +235,7 @@ public class StopToolSelectionActivity extends AppCompatActivity {
     /**
      * Creates an info/credit dialog popup.
      */
-    private void showInfoDialog()
-    {
+    private void showInfoDialog() {
         dialog = new AlertDialog.Builder(StopToolSelectionActivity.this)
                 .setTitle(StopToolSelectionActivity.this.getResources().getString(R.string.app_name))
                 .setMessage(StopToolSelectionActivity.this.getResources().getString(R.string.info_text))
@@ -256,60 +245,61 @@ public class StopToolSelectionActivity extends AppCompatActivity {
     }
 
     /**
-     *  changes the active activity to NearbyStopsActivity
+     * changes the active activity to NearbyStopsActivity
      */
 
-    public void GoToNearbyStopsActivity(View view)
-    {
+    public void GoToNearbyStopsActivity(View view) {
         Intent i = new Intent(StopToolSelectionActivity.this, NearbyActivity.class);
         startActivity(i);
     }
 
-    public void GoToStopsMapActivity(View view)
-    {
-        BsDb = new SQLiteHelper(StopToolSelectionActivity.this);
-        if(BsDb.numberOfRows()==0) {
+    public void GoToStopsMapActivity(View view) {
+        BsDb = SQLiteHelper.getInstance(StopToolSelectionActivity.this);
+        if (BsDb.numberOfRows() == 0) {
             BsDb.DeleteAll();
             fetchDb();
-        }else {
+        } else {
             Intent i = new Intent(StopToolSelectionActivity.this, StopsMapActivity.class);
             startActivity(i);
         }
         BsDb.close();
     }
 
-    public void GoToDbActivity(View view)
-    {
-        BsDb = new SQLiteHelper(StopToolSelectionActivity.this);
-        if(BsDb.numberOfRows()==0) {
+    public void GoToDbActivity(View view) {
+        BsDb = SQLiteHelper.getInstance(StopToolSelectionActivity.this);
+        if (BsDb.numberOfRows() == 0) {
             BsDb.DeleteAll();
             fetchDb();
-        }else {
-            Intent i = new Intent(StopToolSelectionActivity.this, BusstopDbActivity.class);
+        } else {
+            Intent i = new Intent(StopToolSelectionActivity.this, FavoritesActivity.class);
             startActivity(i);
         }
         BsDb.close();
     }
 
     /**
-     *  Starts source data retrieval for local database.
+     * Starts source data retrieval for local database.
      */
-    public void fetchDb(){
+    public void fetchDb() {
         final EditText userInput = (EditText) findViewById(R.id.editText_busID);
-        final Button NbButton = (Button) findViewById(R.id.button3);NbButton.setEnabled(false);
-        final Button MpButton = (Button) findViewById(R.id.button4);MpButton.setEnabled(false);
-        final Button DbButton = (Button) findViewById(R.id.button5);DbButton.setEnabled(false);
+        final Button NbButton = (Button) findViewById(R.id.button3);
+        NbButton.setEnabled(false);
+        final Button MpButton = (Button) findViewById(R.id.button4);
+        MpButton.setEnabled(false);
+        final Button DbButton = (Button) findViewById(R.id.button5);
+        DbButton.setEnabled(false);
         userInput.setEnabled(false);
         userInput.setText(R.string.string_dl_wait);
-        String url = "http://data.foli.fi/gtfs/v0/stops";
+        //String url = "http://data.foli.fi/gtfs/v0/stops";
+        String url = AppConfig.FOLI_STOPS_URL;
         new ProcessJSON().execute(url);
     }
 
     /**
      * Creates a list of favorite bus stops from database and displays them.
      */
-    public void showFavorites(){
-        ArrayList array_list = BsDb.getQuery("SELECT * FROM busstops WHERE bs_fav = 1");
+    public void showFavorites() {
+        ArrayList array_list = BsDb.getFavoriteStops(true);
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(StopToolSelectionActivity.this, android.R.layout.simple_list_item_1, array_list);
         listViewX = (ListView) findViewById(R.id.listViewX);
         listViewX.setAdapter(arrayAdapter);
@@ -345,7 +335,7 @@ public class StopToolSelectionActivity extends AppCompatActivity {
 
         protected void onPostExecute(String stream) {
 
-            BsDb = new SQLiteHelper(StopToolSelectionActivity.this);
+            BsDb = SQLiteHelper.getInstance(StopToolSelectionActivity.this);
             if (stream != null) {
                 try {
 
@@ -365,7 +355,7 @@ public class StopToolSelectionActivity extends AppCompatActivity {
                         double lati = Double.parseDouble(lat);
                         double longi = Double.parseDouble(lon);
 
-                        BsDb.insertBS(stopNumber, stopName,lati, longi, "0");
+                        BsDb.insertBS(stopNumber, stopName, lati, longi, "0");
 
                     }
 
@@ -373,9 +363,12 @@ public class StopToolSelectionActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
                 final EditText userInput = (EditText) findViewById(R.id.editText_busID);
-                final Button NbButton = (Button) findViewById(R.id.button3);NbButton.setEnabled(true);
-                final Button MpButton = (Button) findViewById(R.id.button4);MpButton.setEnabled(true);
-                final Button DbButton = (Button) findViewById(R.id.button5);DbButton.setEnabled(true);
+                final Button NbButton = (Button) findViewById(R.id.button3);
+                NbButton.setEnabled(true);
+                final Button MpButton = (Button) findViewById(R.id.button4);
+                MpButton.setEnabled(true);
+                final Button DbButton = (Button) findViewById(R.id.button5);
+                DbButton.setEnabled(true);
                 DbButton.setText(R.string.DbButton_text);
                 userInput.setEnabled(true);
                 userInput.setText("");
