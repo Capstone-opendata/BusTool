@@ -8,6 +8,7 @@ import android.os.Handler;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.media.MediaBrowserServiceCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -281,11 +282,15 @@ public class ResultActivity extends AppCompatActivity
         final Cursor res = BsDb.getData("SELECT * FROM busstops WHERE bs_id='" + busStopNumber + "' ");
         res.moveToFirst();
         ImageButton fav = (ImageButton) findViewById(R.id.imageButton);
-        favorites = res.getInt(res.getColumnIndex("bs_fav"));
-        if (favorites == 1) {
-            fav.setImageDrawable(ContextCompat.getDrawable(this, R.mipmap.ic_favorite_star));
-        } else {
+        //favorites = res.getInt(res.getColumnIndex("bs_fav"));
+        String stopName = res.getString(res.getColumnIndex("bs_nm"));
+        FavoritesFactory favoritesFactoryObject = new FavoritesFactory(ResultActivity.this);
+        AbstractFavorites favoriteStop = favoritesFactoryObject.getFavorite(stopName);
+        String favStop = favoriteStop.favorite;
+        if (favStop==null) {
             fav.setImageDrawable(ContextCompat.getDrawable(this, R.mipmap.ic_unfavorite_star));
+        } else {
+            fav.setImageDrawable(ContextCompat.getDrawable(this, R.mipmap.ic_favorite_star));
         }
     }
 
@@ -312,7 +317,7 @@ public class ResultActivity extends AppCompatActivity
     public void GetStopData() {
         TableLayout scrollableLayout = (TableLayout) findViewById(R.id.ScrollableTableLayout);
         scrollableLayout.removeAllViews();
-        String url = AppConfig.FOLI_REALTIME_STOPS_URL + busNumber;
+        String url = AppConfig.getFoliRealtimeStopsUrl() + busNumber;
         new ProcessJSON().execute(url);
     }
 

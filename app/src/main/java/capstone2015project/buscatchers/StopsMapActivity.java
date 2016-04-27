@@ -87,8 +87,8 @@ public class StopsMapActivity extends AppCompatActivity implements OnMapReadyCal
             res.moveToNext();
         }
         //Default latitude and longitude
-        double lat = AppConfig.DEFAULT_LAT;
-        double lon = AppConfig.DEFAULT_LON;
+        double lat = AppConfig.getDefaultLat();
+        double lon = AppConfig.getDefaultLon();
         LocationManager myLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         if (myLocationManager != null) {
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {

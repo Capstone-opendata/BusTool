@@ -6,8 +6,10 @@ import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 
 /**
  * Contains methods to handle database.
@@ -40,7 +42,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
     }
     public static SQLiteHelper getInstance(Context context) {
         if(instance == null) {
-            instance = new SQLiteHelper(context);
+            instance = new SQLiteHelper(context.getApplicationContext());
         }
         return instance;
     }
@@ -98,6 +100,18 @@ public class SQLiteHelper extends SQLiteOpenHelper {
             query = "SELECT * FROM busstops WHERE bs_fav != 1";
         }
         return getQuery(query);
+    }
+
+    public String[] favoriteStops() {
+        ArrayList favStops = getFavoriteStops(true);
+        String[] favStopName = new String[favStops.size()];
+        for (int i = 0; i < favStops.size(); i++) {
+            String fav = favStops.get(i).toString();
+            String[] stopName = fav.split("\t\t");
+            String name = stopName[1];
+            favStopName[i] = name;
+        }
+        return favStopName;
     }
 
     /**

@@ -65,7 +65,7 @@ public class FirstTimeSetupActivity extends AppCompatActivity {
      * Starts source data retrieval for local database.
      */
     public void fetchDb() {
-        String url = AppConfig.FOLI_STOPS_URL;
+        String url = AppConfig.getFoliStopsUrl();
         a = new ProcessJSON().execute(url);
     }
 

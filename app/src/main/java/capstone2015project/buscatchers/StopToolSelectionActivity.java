@@ -291,7 +291,7 @@ public class StopToolSelectionActivity extends AppCompatActivity {
         userInput.setEnabled(false);
         userInput.setText(R.string.string_dl_wait);
         //String url = "http://data.foli.fi/gtfs/v0/stops";
-        String url = AppConfig.FOLI_STOPS_URL;
+        String url = AppConfig.getFoliStopsUrl();
         new ProcessJSON().execute(url);
     }
 
